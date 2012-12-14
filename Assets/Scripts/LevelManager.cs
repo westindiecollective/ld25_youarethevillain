@@ -18,6 +18,8 @@ public class LevelManager : MonoBehaviour {
 	
 	void LoadLevel(int _level)
 	{
+		m_LoadingLevel = true;
+		
 		Application.LoadLevel(_level);
 	}
 	
