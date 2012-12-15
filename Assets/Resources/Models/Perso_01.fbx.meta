@@ -1,0 +1,112 @@
+fileFormatVersion: 2
+guid: 6afcf752a2c17462c86ecc2092c71d0b
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: pCube1
+    100002: pCube2
+    100004: pCube3
+    100006: pCylinder1
+    100008: pCylinder2
+    100010: //RootNode
+    100012: polySurface1
+    100014: transform1
+    100016: transform2
+    100018: transform3
+    100020: transform4
+    100022: transform5
+    400000: pCube1
+    400002: pCube2
+    400004: pCube3
+    400006: pCylinder1
+    400008: pCylinder2
+    400010: //RootNode
+    400012: polySurface1
+    400014: transform1
+    400016: transform2
+    400018: transform3
+    400020: transform4
+    400022: transform5
+    2300000: pCube3
+    2300002: pCylinder2
+    2300004: polySurface1
+    2300006: transform1
+    2300008: transform2
+    2300010: transform3
+    2300012: transform4
+    2300014: transform5
+    2300016: //RootNode
+    3300000: pCube3
+    3300002: pCylinder2
+    3300004: polySurface1
+    3300006: transform1
+    3300008: transform2
+    3300010: transform3
+    3300012: transform4
+    3300014: transform5
+    3300016: //RootNode
+    4300000: transform5
+    4300002: transform4
+    4300004: transform3
+    4300006: pCylinder2
+    4300008: transform2
+    4300010: pCube3
+    4300012: transform1
+    4300014: polySurface1
+    4300016: Perso
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton:
+    - name: Perso_01
+      position: {x: .000782220392, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: .99999994}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 0
+  animationType: 3
+  userData: 
