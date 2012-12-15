@@ -108,6 +108,7 @@ ModelImporter:
     4300016: Perso
     4300018: pCube1
     7400000: Run
+    7400002: Jump
     9500000: //RootNode
     11100000: //RootNode
     13700000: Perso
@@ -122,7 +123,7 @@ ModelImporter:
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
-    animationWrapMode: 0
+    animationWrapMode: 2
     clipAnimations:
     - name: Run
       takeName: Take 001
@@ -146,10 +147,32 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       skeletonMaskElements: []
+    - name: Jump
+      takeName: Take 001
+      firstFrame: 17
+      lastFrame: 29
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      keepAdditionalBonesAnimation: 1
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      skeletonMaskElements: []
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: .170000002
     meshCompression: 0
     addColliders: 0
     swapUVChannels: 0
