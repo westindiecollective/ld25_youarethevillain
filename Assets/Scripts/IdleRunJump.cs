@@ -24,11 +24,11 @@ public class IdleRunJump : MonoBehaviour {
 	{
 		if (m_Animator)
 		{
-			AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);			
+			//AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);			
 
-			if (stateInfo.IsName("Base Layer.Run"))
+			if (Input.GetButton("Fire1"))
 			{
-				if (Input.GetButton("Fire1")) m_Animator.SetBool("Jump", true);                
+				m_Animator.SetBool("Jump", true);
             }
 			else
 			{
@@ -39,7 +39,6 @@ public class IdleRunJump : MonoBehaviour {
 			{
 				m_Animator.SetBool("Hi", !m_Animator.GetBool("Hi"));
 			}
-			
 		
       		float h = Input.GetAxis("Horizontal");
         	float v = Mathf.Max( m_SpeedAuto, Input.GetAxis("Vertical") );
