@@ -13,6 +13,9 @@ public class Inventory : MonoBehaviour
 	Useable m_ItemToUse;
 	int m_ItemUseCount;
 	
+	private Texture2D m_CurrentIcon;
+	public Texture2D m_IconBranch, m_IconSnake, m_IconSquirrel, m_IconVampireBat, m_IconPoisonedBerry, m_IconDragonCub, m_IconLavaStone, m_IconDemonFlower;
+	
 	void Start()
 	{
 	
@@ -30,6 +33,17 @@ public class Inventory : MonoBehaviour
 				RemoveUsable();
 			}
         }
+	}
+
+	void OnGUI () {
+		if (m_CurrentIcon)
+		{
+			GUI.Box(new Rect(Screen.width / 2 - 40, Screen.height - 100, 80, 75), m_CurrentIcon);
+		}
+		else
+		{
+			GUI.Box(new Rect(Screen.width / 2 - 40, Screen.height - 100, 80, 75), "\nInventory\nEmpty");
+		}
 	}
 	
 	public bool AddPickup(Pickable.PickupType _PickupType, int _PickupCount)
@@ -56,34 +70,42 @@ public class Inventory : MonoBehaviour
 			case Pickable.PickupType.E_PickupBranch:
 				m_ItemToUse = AddSwingable(Swingable.SwingableType.E_SwingableBranch);
 				m_ItemUseCount = _PickupCount * m_SwingCountPerBranch;
+				m_CurrentIcon = m_IconBranch;
 				break;
 			case Pickable.PickupType.E_PickupSnake:
 				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableSnake);
 				m_ItemUseCount = _PickupCount;
+				m_CurrentIcon = m_IconSnake;
 				break;
 			case Pickable.PickupType.E_PickupSquirrel:
 				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableSquirrel);
 				m_ItemUseCount = _PickupCount;
+				m_CurrentIcon = m_IconSquirrel;
 				break;
 			case Pickable.PickupType.E_PickupVampireBat:
 				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableVampireBat);
 				m_ItemUseCount = _PickupCount;
+				m_CurrentIcon = m_IconVampireBat;
 				break;
 			case Pickable.PickupType.E_PickupPoisonedBerry:
 				m_ItemToUse = AddFireable(Fireable.FireableType.E_FireablePoisonedBerry);
 				m_ItemUseCount = _PickupCount;
+				m_CurrentIcon = m_IconPoisonedBerry;
 				break;
 			case Pickable.PickupType.E_PickupDragonCub:
 				m_ItemToUse = AddFireable(Fireable.FireableType.E_FireableDragonCub);
 				m_ItemUseCount = _PickupCount;
+				m_CurrentIcon = m_IconDragonCub;
 				break;
 			case Pickable.PickupType.E_PickupLavaStone:
 				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableLavaStone);
 				m_ItemUseCount = _PickupCount;
+				m_CurrentIcon = m_IconLavaStone;
 				break;
 			case Pickable.PickupType.E_PickupDemonFlower:
 				m_ItemToUse = AddPlaceable(Placeable.PlaceableType.E_PlaceableDemonFlower);
 				m_ItemUseCount = _PickupCount;
+				m_CurrentIcon = m_IconDemonFlower;
 				break;
 			}
 
@@ -132,6 +154,7 @@ public class Inventory : MonoBehaviour
 	void RemoveUsable()
 	{		
 		Destroy(m_ItemToUse);
+		Destroy (m_CurrentIcon);
 		m_ItemToUse = null;
 		m_ItemUseCount = 0;
 	}
