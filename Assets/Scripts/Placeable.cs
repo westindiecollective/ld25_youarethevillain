@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Placeable : Useable
 {
-	public enum PlaceableType { E_PlaceableNone, E_PlaceableDemonFlower };
+	public enum PlaceableType { E_PlaceableNone, E_PlaceableVampireBat, E_PlaceableDemonFlower };
 	PlaceableType m_PlaceableType;
 	
 	public void SetPlaceableType(PlaceableType _PlaceableType)

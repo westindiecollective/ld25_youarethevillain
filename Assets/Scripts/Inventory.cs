@@ -7,6 +7,16 @@ public class Inventory : MonoBehaviour
 	
 	public int m_SwingCountPerBranch = -1;
 	public float m_FireDurationPerDragonCub = 10.0f;
+	public float m_ShootDurationPerPoisonBerries = 4.0f;
+	public GameObject m_SnakeProjectilePrefab = null;
+	public float m_SnakeProjectileVelocity = 1.0f;
+	public GameObject m_SquirrelProjectilePrefab = null;
+	public float m_SquirrelProjectileVelocity = 1.0f;
+	public GameObject m_LavaStoneProjectilePrefab = null;
+	public float m_LavaStoneProjectileVelocity = 1.0f;
+
+	public Transform m_UseableBoneOrigin = null;
+	public float m_ProjectileDurationInSeconds = 1.0f;
 	
 	public bool m_DropPreviousIfNewPickup = false;
 	
@@ -73,22 +83,22 @@ public class Inventory : MonoBehaviour
 				m_CurrentIcon = m_IconBranch;
 				break;
 			case Pickable.PickupType.E_PickupSnake:
-				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableSnake);
+				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableSnake, m_SnakeProjectilePrefab, m_UseableBoneOrigin, m_SnakeProjectileVelocity, m_ProjectileDurationInSeconds);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconSnake;
 				break;
 			case Pickable.PickupType.E_PickupSquirrel:
-				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableSquirrel);
+				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableSquirrel, m_SquirrelProjectilePrefab, m_UseableBoneOrigin, m_SquirrelProjectileVelocity, m_ProjectileDurationInSeconds);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconSquirrel;
 				break;
 			case Pickable.PickupType.E_PickupVampireBat:
-				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableVampireBat);
+				m_ItemToUse = AddPlaceable(Placeable.PlaceableType.E_PlaceableVampireBat);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconVampireBat;
 				break;
 			case Pickable.PickupType.E_PickupPoisonedBerry:
-				m_ItemToUse = AddFireable(Fireable.FireableType.E_FireablePoisonedBerry);
+				m_ItemToUse = AddFireable(Fireable.FireableType.E_FireablePoisonedBerries);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconPoisonedBerry;
 				break;
@@ -98,7 +108,7 @@ public class Inventory : MonoBehaviour
 				m_CurrentIcon = m_IconDragonCub;
 				break;
 			case Pickable.PickupType.E_PickupLavaStone:
-				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableLavaStone);
+				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableLavaStone, m_LavaStoneProjectilePrefab, m_UseableBoneOrigin, m_LavaStoneProjectileVelocity, m_ProjectileDurationInSeconds);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconLavaStone;
 				break;
@@ -114,8 +124,6 @@ public class Inventory : MonoBehaviour
 			added = (m_ItemToUse != null);
 		}
 		
-		
-		
 		return added;
 	}
 	
@@ -127,10 +135,10 @@ public class Inventory : MonoBehaviour
 		return addedItem;
 	}
 	
-	Useable AddThrowable(Throwable.ThrowableType _ThrowableType)
+	Useable AddThrowable(Throwable.ThrowableType _ThrowableType, GameObject _ProjectilePrefab, Transform _ProjectileOrigin, float _ProjectileVelocity, float _ProjectileDurationInSeconds)
 	{
 		Throwable addedItem = gameObject.AddComponent<Throwable>();
-		addedItem.SetThrowableType(_ThrowableType);
+		addedItem.InitThrowable(_ThrowableType, _ProjectilePrefab, _ProjectileOrigin, _ProjectileVelocity, _ProjectileDurationInSeconds);
 		
 		return addedItem;
 	}
