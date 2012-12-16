@@ -1,7 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : MonoBehaviour
+{
+	public int m_CreditSceneIndex = 0;
+	public int m_FirstLevelSceneIndex = 0;
 
 	void OnGUI ()
 	{
@@ -10,16 +13,27 @@ public class MainMenu : MonoBehaviour {
 		if (GUI.Button(new Rect(Screen.width / 2 - 80, Screen.height / 2, 160, 40), "Play"))
 		{
 			// Play Game
+			LevelManager instance = (LevelManager)FindObjectOfType(typeof(LevelManager));
+			if (instance)
+			{
+				instance.LoadLevel(m_FirstLevelSceneIndex);
+			}
 		}
 
 		if (GUI.Button(new Rect(Screen.width / 2 - 80, Screen.height / 2 + 60, 160, 40), "About"))
 		{
 			// About Game
+			LevelManager instance = (LevelManager)FindObjectOfType(typeof(LevelManager));
+			if (instance)
+			{
+				instance.LoadLevel(m_CreditSceneIndex);
+			}
 		}
 
 		if (GUI.Button(new Rect(Screen.width / 2 - 80, Screen.height / 2 + 120, 160, 40), "Exit"))
 		{
 			// Exit Game
+			Application.Quit();
 		}
 	}
 }
