@@ -547,6 +547,37 @@ ModelImporter:
             tangentMode: 0
           preInfinity: 2
           postInfinity: 2
+      - name: GravityWeight
+        curve:
+          serializedVersion: 2
+          curve:
+          - time: 0
+            value: .0499812327
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+          - time: .117154807
+            value: -1.8763385e-05
+            inSlope: Infinity
+            outSlope: Infinity
+            tangentMode: 0
+          - time: .49995935
+            value: 8.19870911e-06
+            inSlope: .00489191618
+            outSlope: .00489191618
+            tangentMode: 0
+          - time: .648262262
+            value: .0502509102
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+          - time: .999913216
+            value: .0501741543
+            inSlope: -.00220157625
+            outSlope: -.00220157625
+            tangentMode: 0
+          preInfinity: 2
+          postInfinity: 2
       skeletonMaskElements: []
     isReadable: 1
   meshes:

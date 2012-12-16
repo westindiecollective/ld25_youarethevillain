@@ -9,7 +9,10 @@ public class IdleRunJump : MonoBehaviour {
 	public bool m_ApplyGravity = true;
 	public float m_SpeedFactor = 1.0f;
 	public float m_SpeedAuto = 0.5f;
-
+	
+	public bool m_StartedJump = false;
+	public bool m_StartedSayingHi = false;
+	
 	// Use this for initialization
 	void Start () 
 	{
@@ -29,15 +32,23 @@ public class IdleRunJump : MonoBehaviour {
 			if (Input.GetButton("Fire1"))
 			{
 				m_Animator.SetBool("Jump", true);
+				m_StartedJump = true;
             }
-			else
+			else if ( m_StartedJump )
 			{
-				m_Animator.SetBool("Jump", false);                
+				m_Animator.SetBool("Jump", false);
+				m_StartedJump = false;
             }
 
-			if(Input.GetButtonDown("Fire2") && m_Animator.layerCount >= 2)
+			if (Input.GetButtonDown("Fire2") && m_Animator.layerCount >= 2)
 			{
-				m_Animator.SetBool("Hi", !m_Animator.GetBool("Hi"));
+				m_Animator.SetBool("Hi", true);
+				m_StartedSayingHi = true;
+			}
+			else if (m_StartedSayingHi)
+			{
+				m_Animator.SetBool("Hi", false);
+				m_StartedSayingHi = false;
 			}
 		
       		float h = Input.GetAxis("Horizontal");
