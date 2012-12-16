@@ -1476,10 +1476,10 @@ GameObject:
   - 124: {fileID: 99683958}
   - 81: {fileID: 99683957}
   - 114: {fileID: 99683962}
-  - 114: {fileID: 99683963}
   - 114: {fileID: 99683964}
   - 114: {fileID: 99683965}
   - 114: {fileID: 99683966}
+  - 114: {fileID: 99683967}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1535,7 +1535,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_HDR: 0
+  m_HDR: 1
 --- !u!4 &99683961
 Transform:
   m_ObjectHideFlags: 0
@@ -1543,7 +1543,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 99683956}
   m_LocalRotation: {x: .142731115, y: -.0194679908, z: -.00281789224, w: .989566088}
-  m_LocalPosition: {x: .025737524, y: 1.44580698, z: -79.3981781}
+  m_LocalPosition: {x: .025737524, y: 2.04542398, z: -131.245087}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1553,7 +1553,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 99683956}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a773099f140e846f7835d27351846623, type: 3}
   m_Name: 
@@ -1585,37 +1585,6 @@ MonoBehaviour:
   blurAndFlaresShader: {fileID: 4800000, guid: be6e39cf196f146d5be72fbefb18ed75, type: 3}
   brightPassFilterShader: {fileID: 4800000, guid: 0aeaa4cb29f5d4e9c8455f04c8575c8c,
     type: 3}
---- !u!114 &99683963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 99683956}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7db9ec1392f34265817a55853e6ab07, type: 3}
-  m_Name: 
-  filterType: 2
-  preview: 0
-  previewScale: {x: 1, y: 1, z: 1}
-  movementScale: 0
-  rotationScale: 1
-  maxVelocity: 8
-  maxNumSamples: 17
-  minVelocity: .100000001
-  velocityScale: .375
-  softZDistance: .00499999989
-  velocityDownsample: 1
-  excludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  shader: {fileID: 4800000, guid: 85a88efa8c871af4a9d17c64791b6f4f, type: 3}
-  dx11MotionBlurShader: {fileID: 4800000, guid: f1b13d7a80660504a858ea24cfa418c6,
-    type: 3}
-  replacementClear: {fileID: 4800000, guid: 7699c5fbfa27745a1abe111ab7bf9785, type: 3}
-  noiseTexture: {fileID: 2800000, guid: 31f5a8611c4ed1245b18456206e798dc, type: 3}
-  showVelocity: 0
-  showVelocityScale: 1
 --- !u!114 &99683964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1631,18 +1600,18 @@ MonoBehaviour:
     m_Curve:
     - time: 0
       value: 0
-      inSlope: .826078236
-      outSlope: .826078236
+      inSlope: .733068764
+      outSlope: .733068764
       tangentMode: 10
-    - time: .547204375
-      value: .452033639
-      inSlope: 1.01813149
-      outSlope: 1.01813149
+    - time: .57408607
+      value: .420844555
+      inSlope: 1.04643166
+      outSlope: 1.04643166
       tangentMode: 10
     - time: 1
       value: 1
-      inSlope: 1.21018469
-      outSlope: 1.21018469
+      inSlope: 1.35979462
+      outSlope: 1.35979462
       tangentMode: 10
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1651,18 +1620,18 @@ MonoBehaviour:
     m_Curve:
     - time: .00179211469
       value: 0
-      inSlope: 1.01174653
-      outSlope: 1.01174653
+      inSlope: 1.11955023
+      outSlope: 1.11955023
       tangentMode: 10
-    - time: .49963814
-      value: .503693998
-      inSlope: 1.04054832
-      outSlope: 1.04054832
+    - time: .474908233
+      value: .529677272
+      inSlope: 1.0433054
+      outSlope: 1.0433054
       tangentMode: 10
     - time: .987455189
       value: 1.02534115
-      inSlope: 1.06935
-      outSlope: 1.06935
+      inSlope: .967060447
+      outSlope: .967060447
       tangentMode: 10
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1671,18 +1640,18 @@ MonoBehaviour:
     m_Curve:
     - time: 0
       value: -.00194931752
-      inSlope: 1.14475346
-      outSlope: 1.14475346
+      inSlope: 1.3811543
+      outSlope: 1.3811543
       tangentMode: 10
-    - time: .466330528
-      value: .531884193
-      inSlope: 1.0091325
-      outSlope: 1.0091325
+    - time: .416151315
+      value: .572819889
+      inSlope: 1.05419528
+      outSlope: 1.05419528
       tangentMode: 10
-    - time: 1
-      value: .99805069
-      inSlope: .873511612
-      outSlope: .873511612
+    - time: .992831588
+      value: .992202759
+      inSlope: .727236331
+      outSlope: .727236331
       tangentMode: 10
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1790,15 +1759,48 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0923359e9e352a4b9b11c7b7161ad67, type: 3}
   m_Name: 
-  m_Radius: .270000011
+  m_Radius: .209999993
   m_SampleCount: 1
-  m_OcclusionIntensity: 2.82999992
+  m_OcclusionIntensity: 2
   m_Blur: 1
   m_Downsampling: 1
-  m_OcclusionAttenuation: .569999993
+  m_OcclusionAttenuation: 2
   m_MinZ: .00999999978
   m_SSAOShader: {fileID: 4800000, guid: 43ca18288c424f645aaa1e9e07f04c50, type: 3}
   m_RandomTexture: {fileID: 2800000, guid: a181ca8e3c62f3e4b8f183f6c586b032, type: 3}
+--- !u!114 &99683967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 99683956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd05e71c69dd4457fa205c9eea7c2326, type: 3}
+  m_Name: 
+  type: 1
+  adaptiveTextureSize: 256
+  remapCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: .00230258703
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: .634132445
+      value: 1.00396299
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  exposureAdjustment: 1.77999997
+  middleGrey: .400000006
+  white: 2
+  adaptionSpeed: 1.5
+  tonemapper: {fileID: 4800000, guid: 003377fc2620a44939dadde6fe3f8190, type: 3}
+  validRenderTextureFormat: 1
 --- !u!1 &101986084
 GameObject:
   m_ObjectHideFlags: 0
@@ -1836,7 +1838,7 @@ Light:
   serializedVersion: 3
   m_Type: 2
   m_Color: {r: 0, g: .136989757, b: .559701502, a: 1}
-  m_Intensity: 1.00999999
+  m_Intensity: .620000005
   m_Range: 36.949791
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -10788,7 +10790,7 @@ Light:
   serializedVersion: 3
   m_Type: 2
   m_Color: {r: 0, g: .215739444, b: .582089543, a: 1}
-  m_Intensity: .930000007
+  m_Intensity: .769999981
   m_Range: 36.949791
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -20651,7 +20653,7 @@ Light:
   serializedVersion: 3
   m_Type: 2
   m_Color: {r: 0, g: .129683629, b: .529850721, a: 1}
-  m_Intensity: .829999983
+  m_Intensity: .75
   m_Range: 36.949791
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -22911,7 +22913,7 @@ Light:
   serializedVersion: 3
   m_Type: 2
   m_Color: {r: 0, g: .164387718, b: .671641827, a: 1}
-  m_Intensity: .99000001
+  m_Intensity: .600000024
   m_Range: 36.949791
   m_SpotAngle: 30
   m_CookieSize: 10
