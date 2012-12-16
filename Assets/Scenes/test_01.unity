@@ -8341,6 +8341,8 @@ MonoBehaviour:
   m_ApplyGravity: 1
   m_SpeedFactor: 1
   m_SpeedAuto: .5
+  m_StartedJump: 0
+  m_StartedSayingHi: 0
 --- !u!143 &1181551588
 CharacterController:
   m_ObjectHideFlags: 0
