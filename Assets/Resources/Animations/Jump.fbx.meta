@@ -515,7 +515,38 @@ ModelImporter:
       mirror: 0
       keepAdditionalBonesAnimation: 1
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
+      curves:
+      - name: JumpingCurve
+        curve:
+          serializedVersion: 2
+          curve:
+          - time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+          - time: .287904739
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+          - time: .454508156
+            value: .0503389798
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+          - time: .625213027
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+          - time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+          preInfinity: 2
+          postInfinity: 2
       skeletonMaskElements: []
     isReadable: 1
   meshes:
