@@ -12,7 +12,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/level_01.unity
   - enabled: 1
-    path: Assets/Scenes/level_02.unity
+    path: Assets/Scenes/TestCorentin02.unity
   - enabled: 1
     path: Assets/Scenes/level_03.unity
   - enabled: 1
