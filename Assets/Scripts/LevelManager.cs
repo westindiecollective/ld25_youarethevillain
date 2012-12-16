@@ -35,14 +35,14 @@ public class LevelManager : MonoBehaviour {
 		LoadLevel(nextLevel);
 	}
 	
-	public IEnumerator LoadLevelAsync(int _level, int _waitTimeInSeconds)
+	public IEnumerator LoadLevelAsync(int _level, float _waitTimeInSeconds)
 	{
 		yield return new WaitForSeconds(_waitTimeInSeconds);
 		
 		LoadLevel(_level);
 	}
 	
-	public IEnumerator LoadNextLevelAsync(int _waitTimeInSeconds)
+	public IEnumerator LoadNextLevelAsync(float _waitTimeInSeconds)
 	{
 		yield return new WaitForSeconds(_waitTimeInSeconds);
 		
