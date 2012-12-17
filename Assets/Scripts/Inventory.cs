@@ -14,6 +14,9 @@ public class Inventory : MonoBehaviour
 	public float m_SquirrelProjectileVelocity = 1.0f;
 	public GameObject m_LavaStoneProjectilePrefab = null;
 	public float m_LavaStoneProjectileVelocity = 1.0f;
+	public GameObject m_DemonFlowerProjectilePrefab = null;
+	public GameObject m_VampireBatProjectilePrefab = null;
+	public float m_DropDurationInSeconds = 1.0f;
 
 	public Transform m_UseableBoneOrigin = null;
 	public float m_ProjectileDurationInSeconds = 1.0f;
@@ -93,7 +96,7 @@ public class Inventory : MonoBehaviour
 				m_CurrentIcon = m_IconSquirrel;
 				break;
 			case Pickable.PickupType.E_PickupVampireBat:
-				m_ItemToUse = AddPlaceable(Placeable.PlaceableType.E_PlaceableVampireBat);
+				m_ItemToUse = AddPlaceable(Placeable.PlaceableType.E_PlaceableVampireBat, m_VampireBatProjectilePrefab, m_UseableBoneOrigin, m_DropDurationInSeconds);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconVampireBat;
 				break;
@@ -113,7 +116,7 @@ public class Inventory : MonoBehaviour
 				m_CurrentIcon = m_IconLavaStone;
 				break;
 			case Pickable.PickupType.E_PickupDemonFlower:
-				m_ItemToUse = AddPlaceable(Placeable.PlaceableType.E_PlaceableDemonFlower);
+				m_ItemToUse = AddPlaceable(Placeable.PlaceableType.E_PlaceableDemonFlower, m_DemonFlowerProjectilePrefab, m_UseableBoneOrigin, m_DropDurationInSeconds);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconDemonFlower;
 				break;
@@ -151,10 +154,10 @@ public class Inventory : MonoBehaviour
 		return addedItem;
 	}
 	
-	Useable AddPlaceable(Placeable.PlaceableType _PlaceableType)
+	Useable AddPlaceable(Placeable.PlaceableType _PlaceableType, GameObject _ProjectilePrefab, Transform _ProjectileOrigin, float _ProjectileDurationInSeconds)
 	{
 		Placeable addedItem = gameObject.AddComponent<Placeable>();
-		addedItem.SetPlaceableType(_PlaceableType);
+		addedItem.InitPlaceable(_PlaceableType, _ProjectilePrefab, _ProjectileOrigin, _ProjectileDurationInSeconds);
 		
 		return addedItem;
 	}

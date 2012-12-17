@@ -21,24 +21,31 @@ public class Throwable : Useable
 		{
 			projectile = Instantiate(_ProjectilePrefab, Vector3.zero, Quaternion.identity) as GameObject;
 			projectile.transform.parent = _ProjectileOrigin;
-
-			Rigidbody projectileRB = projectile.GetComponent<Rigidbody>();
-			projectileRB.isKinematic = true;
-			projectileRB.useGravity = false;
 		}
 		else
 		{
+			//DEBUG
 			projectile = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-			projectile.transform.parent = _ProjectileOrigin;
 
+			projectile.transform.parent = _ProjectileOrigin;
 			projectile.transform.localPosition = Vector3.zero;
 			projectile.transform.localRotation = Quaternion.identity;
-			float projectileScale = 0.10f;
+			float projectileScale = 0.40f;
 			projectile.transform.localScale = new Vector3(projectileScale, projectileScale, projectileScale);
 
-			Rigidbody projectileRB = projectile.AddComponent<Rigidbody>();
+			projectile.AddComponent<Rigidbody>();
+		}
+
+		Rigidbody projectileRB = projectile.GetComponent<Rigidbody>();
+		if (projectileRB)
+		{
 			projectileRB.isKinematic = true;
-			projectileRB.useGravity = false;
+		}
+
+		Collider projectileCollider = projectile.GetComponent<Collider>();
+		if (projectileCollider != null)
+		{
+			projectileCollider.enabled = false;
 		}
 
 		m_Projectile = projectile;
@@ -75,7 +82,14 @@ public class Throwable : Useable
 			if (projectileRB != null)
 			{
 				projectileRB.isKinematic = false;
+				projectileRB.useGravity = false;
 				projectileRB.velocity = m_ProjectileVelocity * gameObject.transform.TransformDirection( -Vector3.forward );
+			}
+
+			Collider projectileCollider = m_Projectile.GetComponent<Collider>();
+			if (projectileCollider != null)
+			{
+				projectileCollider.enabled = true;
 			}
 		}
 	}
