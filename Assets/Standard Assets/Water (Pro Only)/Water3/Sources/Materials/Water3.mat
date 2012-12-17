@@ -27,6 +27,27 @@ Material:
           m_Offset: {x: 0, y: 0}
       data:
         first:
+          name: _ReflectionTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _DisplacementHeightMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1d4263e594532c24a8f9530fd4d54e07, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _SecondDisplacementHeightMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 39b109479ba8e644a8858ce76a694a18, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
           name: _ReflectiveColorCube
         second:
           m_Texture: {fileID: 8900000, guid: 9cda328e4b6954d70841a8a66f42ec08, type: 3}
@@ -48,13 +69,6 @@ Material:
           m_Offset: {x: 0, y: 0}
       data:
         first:
-          name: _ReflectionTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
           name: _RefractionTex
         second:
           m_Texture: {fileID: 0}
@@ -72,20 +86,6 @@ Material:
           name: _DecalTex
         second:
           m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _DisplacementHeightMap
-        second:
-          m_Texture: {fileID: 2800000, guid: 1d4263e594532c24a8f9530fd4d54e07, type: 3}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _SecondDisplacementHeightMap
-        second:
-          m_Texture: {fileID: 2800000, guid: 39b109479ba8e644a8858ce76a694a18, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
@@ -188,24 +188,24 @@ Material:
     m_Colors:
       data:
         first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
           name: _MainTex_ST
         second: {r: 1, g: 1, b: 0, a: 0}
       data:
         first:
-          name: _BumpMap_ST
-        second: {r: 1, g: 1, b: 0, a: 0}
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
       data:
         first:
           name: _Displacement
-        second: {r: 89, g: 20.3539829, b: -3, a: 3}
+        second: {r: 36.7000008, g: 47, b: -3, a: .230000004}
       data:
         first:
           name: _ShoreTiling
         second: {r: 0, g: 0, b: 0, a: 0}
+      data:
+        first:
+          name: _BumpMap_ST
+        second: {r: 1, g: 1, b: 0, a: 0}
       data:
         first:
           name: _RefrColor
@@ -249,7 +249,7 @@ Material:
       data:
         first:
           name: _DisplacementXz
-        second: {r: 5.21000004, g: 0, b: 12.2200003, a: 0}
+        second: {r: 5, g: 0, b: 10, a: 0}
       data:
         first:
           name: _RefrColorDepth

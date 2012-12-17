@@ -19,9 +19,9 @@ public class LavaManager : MonoBehaviour {
 	[HideInInspector]
 	public float m_NormalsDisplacement = 0.5F;
 	[HideInInspector]
-	public float m_HeightDisplacement = 3.5F;
+	public float m_HeightDisplacement = 2.1F;
 	[HideInInspector]
-	public float m_SmallWavesSpeed = 0.02F;
+	public float m_SmallWavesSpeed = -0.02F;
 	[HideInInspector]
 	private Texture2D m_DisplacementHeightMap;
 	[HideInInspector]
