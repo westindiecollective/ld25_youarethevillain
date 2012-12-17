@@ -3,7 +3,7 @@ using System.Collections;
 
 public class LevelTimer : MonoBehaviour
 {
-	public int m_WaitTimeInSeconds = 0;
+	public float m_WaitTimeInSeconds = 0.0f;
 	public int m_LevelToLoadIndex = 1;
 	private bool m_TriggeredWait = false;
 	

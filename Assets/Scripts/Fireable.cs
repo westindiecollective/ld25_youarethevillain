@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Fireable : Useable
 {
-	public enum FireableType { E_FireableNone, E_FireablePoisonedBerry, E_FireableDragonCub };
+	public enum FireableType { E_FireableNone, E_FireablePoisonedBerries, E_FireableDragonCub };
 	FireableType m_FireableType;
 	
 	public void SetFireableType(FireableType _FireableType)

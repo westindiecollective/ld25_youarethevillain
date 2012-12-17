@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
-public class NextLevelTimer : MonoBehaviour {
-	
-	public int m_WaitTimeInSeconds = 0;
+public class NextLevelTimer : MonoBehaviour
+{
+	public float m_WaitTimeInSeconds = 0.0f;
 	private bool m_TriggeredWait = false;
 	
 	void Start()
