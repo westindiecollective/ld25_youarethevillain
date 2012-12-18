@@ -19,7 +19,7 @@ public class ScalePlayerCollision : MonoBehaviour
 		m_CharacterController = GetComponent<CharacterController>();
 		m_BaseCapsuleHeight = m_CharacterController.height;
 //		m_BaseCapsuleCenterY = m_CharacterController.center.y;
-		m_IsJumping = false;
+//		m_IsJumping = false;
 	}
 	
 	void Update()
