@@ -1,28 +1,34 @@
 using UnityEngine;
 using System.Collections;
 
-public class IdleRunJump : MonoBehaviour {
+public class IdleRunJump : MonoBehaviour
+{
+	Animator m_Animator;
 
-
-	protected Animator m_Animator;
-	public float m_DirectionDampTime = .25f;
-	public bool m_ApplyGravity = true;
-	public float m_SpeedFactor = 1.0f;
-	public float m_SpeedAuto = 0.5f;
-	
-	public bool m_StartedJump = false;
-	public bool m_StartedSayingHi = false;
-	
-	// Use this for initialization
-	void Start () 
+	void SetupAnimator(Animator _Animator)
 	{
-		m_Animator = GetComponent<Animator>();
-		
+		m_Animator = _Animator;
+
 		if(m_Animator.layerCount >= 2)
 			m_Animator.SetLayerWeight(1, 1);
 	}
-		
-	// Update is called once per frame
+
+	public float m_DirectionDampTime = .25f;
+	public float m_SpeedFactor = 1.0f;
+	public float m_SpeedAuto = 0.0f;
+	
+	bool m_StartedJump = false;
+	bool m_StartedSayingHi = false;
+	
+	public bool m_AffectSpeed = true;
+	public bool m_AffectDirection = true;
+
+	void Start () 
+	{
+		Animator animator = GetComponent<Animator>();
+		SetupAnimator(animator);
+	}
+
 	void Update () 
 	{
 		if (m_Animator)
@@ -51,14 +57,21 @@ public class IdleRunJump : MonoBehaviour {
 				m_StartedSayingHi = false;
 			}
 		
-      		float h = Input.GetAxis("Horizontal");
-        	float v = Mathf.Max( m_SpeedAuto, Input.GetAxis("Vertical") );
+			float v = Mathf.Max( m_SpeedAuto, Input.GetAxis("Vertical") );
+			float h = Input.GetAxis("Horizontal");
+
+			//Debug.Log(string.Format("IdleRunJump h: {0}, v: {1}", h, v));
 			
-			//Debug.Log(string.Format("h: {0}, v: {1}", h, v));
+			if (m_AffectSpeed)
+			{
+				float speed = m_SpeedFactor * (h*h+v*v);
+				m_Animator.SetFloat("Speed", speed);
+			}
 			
-			float speed = m_SpeedFactor * (h*h+v*v);
-			m_Animator.SetFloat("Speed", speed);
-            m_Animator.SetFloat("Direction", h, m_DirectionDampTime, Time.deltaTime);	
+			if (m_AffectDirection)
+			{
+				m_Animator.SetFloat("Direction", h, m_DirectionDampTime, Time.deltaTime);
+			}
 		}   		  
 	}
 }
