@@ -20,7 +20,6 @@ public class FollowLane : MonoBehaviour
 	
 	public float m_DistanceToLaneThreshold = 0.01f;
 	
-	//public float m_MaxSpeed = Mathf.Infinity;
 	public float m_MaxAngularSpeed = Mathf.Infinity;
 	
 	public float m_ChangeLaneInputThreshold = 0.8f;
@@ -36,7 +35,6 @@ public class FollowLane : MonoBehaviour
 	
 	bool m_IsChangingLane = false;
 	
-	//Vector3 m_CharacterVelocity = Vector3.zero;
 	Vector3 m_CharacterAngularVelocity = Vector3.zero;
 #else
 	public bool m_CanChangeLane = false;
@@ -46,7 +44,6 @@ public class FollowLane : MonoBehaviour
 	
 	public bool m_IsChangingLane = false;
 	
-	//public Vector3 m_CharacterVelocity = Vector3.zero;
 	public Vector3 m_CharacterAngularVelocity = Vector3.zero;
 	
 	public GameObject m_DebugPlayer = null;
@@ -97,7 +94,6 @@ public class FollowLane : MonoBehaviour
 			int frame_count_min = m_ChangeLaneInputFrameCountThreshold;
 			
 			float h_min = m_ChangeLaneInputThreshold;
-			//float h = Input.GetAxis("Horizontal");
 			if ( h < -h_min )
 			{
 				frame_count = (changeLeft)? frame_count+1 : 1;
@@ -130,13 +126,10 @@ public class FollowLane : MonoBehaviour
 		
 		if (m_LaneCount > 0)
 		{
-			
-			
 			float laneWidth = m_LanesWidth / m_LaneCount;
 			Vector3 laneCenterAtOrigin = ComputeLaneCenterAtOrigin(m_TargetLaneIndex, m_LanesLeftOrigin, m_LanesLeftToRightDir, laneWidth);
 			
 			Vector3 currentPos = gameObject.transform.position;
-			//Vector3 currentDir = gameObject.transform.forward;
 			Quaternion currentRot = gameObject.transform.rotation;
 			Vector3 laneCenter = ComputeLaneCenterForPos( currentPos, laneCenterAtOrigin, m_LanesLeftToRightDir);
 
@@ -147,7 +140,6 @@ public class FollowLane : MonoBehaviour
 			if (m_DebugPlayer)
 			{
 				currentPos = m_DebugPlayer.transform.position;
-				//currentDir = m_DebugPlayer.transform.forward;
 				currentRot = m_DebugPlayer.transform.rotation;
 				Vector3 laneCenterDebug = ComputeLaneCenterForPos( currentPos, laneCenterAtOrigin, m_LanesLeftToRightDir);
 				laneCenter = laneCenter + Vector3.Dot( laneCenterDebug - laneCenter, laneUpDir ) * laneUpDir;
@@ -166,7 +158,6 @@ public class FollowLane : MonoBehaviour
 				if ( characterVelocity * m_LaneChangeTimeFactor > laneWidth )
 				{
 					float laneChangeDistance = characterVelocity * m_LaneChangeTimeFactor; //approximation
-					//targetForwardOffset = Mathf.Sqrt(laneChangeDistance * laneChangeDistance - distanceToLane * distanceToLane);
 					targetForwardOffset = laneChangeDistance * Mathf.Max (distanceToLane / laneWidth, 1.0f); //always have target ahead to help with rotation smoothing
 				}
 				
@@ -178,37 +169,20 @@ public class FollowLane : MonoBehaviour
 				}
 #endif
 				float smoothTime = (distanceToLane / laneWidth) * m_LaneChangeTimeFactor;
-				
-				//Vector3 velocity = m_CharacterVelocity;
-				//Vector3 newPos = Vector3.SmoothDamp(currentPos, targetPos, ref velocity, smoothTime, maxSpeed, deltaTime);
-				
+
 				Vector3 targetDir = Vector3.Normalize(targetPos - currentPos);
 				Quaternion targetRot = Quaternion.LookRotation(targetDir);
 				
-				Quaternion newRot = Quaternion.Slerp(currentRot, targetRot, deltaTime * m_LaneChangeTimeFactor);
-				
-				//float angularVelocityX = m_CharacterAngularVelocity.z;
-				//float curRotX = currentRot.eulerAngles.x;
-				//float targetRotX = targetRot.eulerAngles.x;
-				//float targetAngleRotX = curRotX + Mathf.DeltaAngle(curRotX, targetRotX);
-				//float newRot2X = Mathf.SmoothDampAngle(curRotX, targetRotX, ref angularVelocityX, smoothTime, m_MaxAngularSpeed, deltaTime);
+				//Quaternion newRot = Quaternion.Slerp(currentRot, targetRot, deltaTime * m_LaneChangeTimeFactor);
 				
 				float angularVelocityY = m_CharacterAngularVelocity.y;
 				float curRotY = currentRot.eulerAngles.y;
 				float targetRotY = targetRot.eulerAngles.y;
-				float newRot2Y = Mathf.SmoothDampAngle(curRotY, targetRotY, ref angularVelocityY, smoothTime, m_MaxAngularSpeed, deltaTime);
+				float newRot2Y = Mathf.SmoothDamp(curRotY, targetRotY, ref angularVelocityY, smoothTime, m_MaxAngularSpeed, deltaTime);
 #if DEBUG_FOLLOW_LANE
 				//float targetAngleRotY = curRotY + Mathf.DeltaAngle(curRotY, targetRotY);
 				//Debug.Log(string.Format("Rot Y - cur:{0}, target:{1}, targetangle:{2}, new:{3}", curRotY, targetRotY, targetAngleRotY, newRot2Y));
 #endif
-				//float angularVelocityZ = m_CharacterAngularVelocity.z;
-				//float curRotZ = currentRot.eulerAngles.z;
-				//float targetRotZ = targetRot.eulerAngles.z;
-				//float targetAngleRotZ = curRotZ + Mathf.DeltaAngle(curRotZ, targetRotZ);
-				//float newRot2Z = Mathf.SmoothDampAngle(curRotZ, targetRotZ, ref angularVelocityZ, smoothTime, m_MaxAngularSpeed, deltaTime);
-				
-				//Debug.Log(string.Format("NewRot: {0}, {1}, {2}", newRot2X, newRot2Y, newRot2Z));
-				
 				Quaternion newRot2 = Quaternion.Euler(0.0f, newRot2Y, 0.0f);
 				
 #if DEBUG_FOLLOW_LANE
@@ -226,7 +200,6 @@ public class FollowLane : MonoBehaviour
 					gameObject.transform.rotation = newRot2;
 				}
 				
-				//m_CharacterVelocity = velocity;
 				m_CharacterAngularVelocity.x = 0.0f;//angularVelocityX;
 				m_CharacterAngularVelocity.y = angularVelocityY;
 				m_CharacterAngularVelocity.z = 0.0f;//angularVelocityZ;
@@ -251,10 +224,9 @@ public class FollowLane : MonoBehaviour
 				{
 					gameObject.transform.rotation = Quaternion.LookRotation( m_LanesForwardDir );
 				}
-
-				//m_CharacterVelocity = Vector3.zero;
 				m_CharacterAngularVelocity = Vector3.zero;
-#endif
+#endif	//	!ALWAYS_PROCESS_FOLLOW_LANE
+
 				m_CanChangeLane = true;
 				
 				if (IsChangingLane())
@@ -295,16 +267,17 @@ public class FollowLane : MonoBehaviour
 			m_Animator.SetFloat("Direction", DirectionValue, DirectionDampTime, _DeltaTime);
 		}
 #endif
-		m_IsChangingLane = true;
+
 #if DEBUG_FOLLOW_LANE
 		m_DebugLaneChangeStartTime = Time.time;
 		m_DebugLaneChangeStartFrame = Time.frameCount;
 #endif
+
+		m_IsChangingLane = true;
 	}
 	
 	void ChangeLaneDone()
 	{
-		m_IsChangingLane = false;
 #if DEBUG_FOLLOW_LANE
 		float debugLaneChangeEndTime = Time.time;
 		int debugLaneChangeEndFrame = Time.frameCount;
@@ -312,6 +285,8 @@ public class FollowLane : MonoBehaviour
 		int debugLaneChangeFrameCount = debugLaneChangeEndFrame - m_DebugLaneChangeStartFrame;
 		Debug.Log(string.Format("Lane change - time: {0}, frame count: {1}", debugLaneChangeTime, debugLaneChangeFrameCount));
 #endif
+
+		m_IsChangingLane = false;
 	}
 	
 	Vector3 ComputeLaneCenterAtOrigin(int _LaneIndex, Vector3 _LanesLeftOrigin, Vector3 _LanesLeftToRightDir, float _LaneWidth)
