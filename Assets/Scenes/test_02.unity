@@ -331,9 +331,12 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb2ded03f00812f40881f2bbfa773e7b, type: 3}
   m_Name: 
-  distanceAway: 10
-  distanceUp: 2
-  smooth: 3
+  m_DistanceAway: 12
+  m_DistanceUp: 2
+  m_SmoothFactor: 3
+  m_UseLookDir: 1
+  m_UseLookDirAsFollowPositionMask: 1
+  m_LookDir: {x: 0, y: 0, z: -1}
 --- !u!1 &111750828
 GameObject:
   m_ObjectHideFlags: 0
@@ -1962,6 +1965,7 @@ GameObject:
   - 114: {fileID: 1181551587}
   - 143: {fileID: 1181551588}
   - 114: {fileID: 1181551589}
+  - 114: {fileID: 1181551590}
   m_Layer: 0
   m_Name: PlayerVillain
   m_TagString: Player
@@ -2008,11 +2012,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b185ae1b44ef642428a8d3609c85952d, type: 3}
   m_Name: 
   m_DirectionDampTime: .25
-  m_ApplyGravity: 1
   m_SpeedFactor: 1
-  m_SpeedAuto: 0
-  m_StartedJump: 0
-  m_StartedSayingHi: 0
+  m_SpeedAuto: .5
+  m_AffectSpeed: 1
+  m_AffectDirection: 0
 --- !u!143 &1181551588
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2039,6 +2042,27 @@ MonoBehaviour:
   m_Name: 
   m_JumpCapsuleScaleFactor: -6
   m_JumpCapsuleOffsetY: 0
+--- !u!114 &1181551590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1181551584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc069edeb48a0dd44904a58944673f77, type: 3}
+  m_Name: 
+  m_LaneCount: 5
+  m_TargetLaneIndex: 2
+  m_LanesWidth: 10
+  m_LanesLeftOrigin: {x: -5, y: 0, z: 0}
+  m_LanesForwardDir: {x: 0, y: 0, z: 1}
+  m_LanesLeftToRightDir: {x: 1, y: 0, z: 0}
+  m_LaneChangeTimeFactor: .5
+  m_DistanceToLaneThreshold: .100000001
+  m_MaxAngularSpeed: Infinity
+  m_ChangeLaneInputThreshold: .800000012
+  m_ChangeLaneInputFrameCountThreshold: 1
 --- !u!1 &1186861815
 GameObject:
   m_ObjectHideFlags: 0
