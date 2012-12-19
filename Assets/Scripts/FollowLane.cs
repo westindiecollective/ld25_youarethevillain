@@ -25,7 +25,8 @@ public class FollowLane : MonoBehaviour
 	public float m_ChangeLaneInputThreshold = 0.8f;
 	public int m_ChangeLaneInputFrameCountThreshold = 1;
 
-	CharacterController m_CharacterController;
+	CharacterController m_CharacterController = null;
+	GameCharacterController m_GameCharacterController = null;
 	
 #if !DEBUG_FOLLOW_LANE
 	bool m_CanChangeLane = false;
@@ -71,18 +72,16 @@ public class FollowLane : MonoBehaviour
 		SetupAnimator(animator);
 #endif
 		m_CharacterController = GetComponent<CharacterController>();
+		m_GameCharacterController = GetComponent<GameCharacterController>();
 	}
 	
 	void Update ()
 	{	
 		float deltaTime = Time.deltaTime;
 		
-		if (m_CanChangeLane)
+		if (m_CanChangeLane && m_GameCharacterController)
 		{
-			//float v = Input.GetAxis("Vertical");
-			float h = Input.GetAxis("Horizontal");
-			
-			//Debug.Log(string.Format("Follow h: {0}, v: {1}", h, v));
+			float h = m_GameCharacterController.GetLeftRightDirection();
 			
 			int currentLaneIndex = m_TargetLaneIndex;
 			int firstLaneIndex = 0;

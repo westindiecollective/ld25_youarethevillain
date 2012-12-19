@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Inventory : MonoBehaviour
 {
-	public string m_UseItemButton = "Fire2";
+	public int m_UseActionIndex = 0;
 	
 	public int m_SwingCountPerBranch = -1;
 	public float m_FireDurationPerDragonCub = 10.0f;
@@ -29,26 +29,37 @@ public class Inventory : MonoBehaviour
 	private Texture2D m_CurrentIcon;
 	public Texture2D m_IconBranch, m_IconSnake, m_IconSquirrel, m_IconVampireBat, m_IconPoisonedBerry, m_IconDragonCub, m_IconLavaStone, m_IconDemonFlower;
 	
+	GameCharacterController m_GameCharacterController = null;
+
 	void Start()
 	{
+		SetupGameCharacterController( GetComponent<GameCharacterController>() );
+	}
 	
+	void SetupGameCharacterController(GameCharacterController _GameCharacterController)
+	{
+		m_GameCharacterController = _GameCharacterController;
 	}
 	
 	void Update()
 	{
-		bool useItem = Input.GetButton(m_UseItemButton);
-		if ( useItem && m_ItemToUse )
+		if (m_GameCharacterController)
 		{
-			Use(m_ItemToUse);
-			
-			if ( m_ItemUseCount == 0 )
+			bool useItem = m_GameCharacterController.IsStartingAction(m_UseActionIndex);
+			if ( useItem && m_ItemToUse )
 			{
-				RemoveUsable();
-			}
-        }
+				Use(m_ItemToUse);
+
+				if ( m_ItemUseCount == 0 )
+				{
+					RemoveUsable();
+				}
+	        }
+		}
 	}
 
-	void OnGUI () {
+	void OnGUI ()
+	{
 		if (m_CurrentIcon)
 		{
 			GUI.Box(new Rect(Screen.width / 2 - 40, Screen.height - 100, 80, 75), m_CurrentIcon);

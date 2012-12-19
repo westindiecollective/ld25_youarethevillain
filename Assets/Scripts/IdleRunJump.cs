@@ -3,7 +3,23 @@ using System.Collections;
 
 public class IdleRunJump : MonoBehaviour
 {
-	Animator m_Animator;
+	Animator m_Animator = null;
+	GameCharacterController m_GameCharacterController = null;
+
+	public int m_JumpActionIndex = 0;
+	public int m_SayHiActionIndex = 1;
+
+	//@TODO: move this to GamePlayerController
+	public float m_DirectionDampTime = .25f;
+
+	public bool m_AffectSpeed = true;
+	public bool m_AffectDirection = true;
+
+	void Start ()
+	{
+		SetupAnimator( GetComponent<Animator>() );
+		SetupGameCharacterController( GetComponent<GameCharacterController>() );
+	}
 
 	void SetupAnimator(Animator _Animator)
 	{
@@ -12,65 +28,37 @@ public class IdleRunJump : MonoBehaviour
 		if(m_Animator.layerCount >= 2)
 			m_Animator.SetLayerWeight(1, 1);
 	}
-
-	public float m_DirectionDampTime = .25f;
-	public float m_SpeedFactor = 1.0f;
-	public float m_SpeedAuto = 0.0f;
 	
-	bool m_StartedJump = false;
-	bool m_StartedSayingHi = false;
-	
-	public bool m_AffectSpeed = true;
-	public bool m_AffectDirection = true;
-
-	void Start () 
+	void SetupGameCharacterController(GameCharacterController _GameCharacterController)
 	{
-		Animator animator = GetComponent<Animator>();
-		SetupAnimator(animator);
+		m_GameCharacterController = _GameCharacterController;
 	}
 
 	void Update () 
 	{
-		if (m_Animator)
+		float deltaTime = Time.deltaTime;
+
+		if (m_Animator && m_GameCharacterController)
 		{
 			//AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);			
 
-			if (Input.GetButton("Fire1"))
-			{
-				m_Animator.SetBool("Jump", true);
-				m_StartedJump = true;
-            }
-			else if ( m_StartedJump )
-			{
-				m_Animator.SetBool("Jump", false);
-				m_StartedJump = false;
-            }
+			bool startJump = m_GameCharacterController.IsStartingAction(m_JumpActionIndex);
+			m_Animator.SetBool("Jump", startJump);
 
-			if (Input.GetButtonDown("Fire2") && m_Animator.layerCount >= 2)
-			{
-				m_Animator.SetBool("Hi", true);
-				m_StartedSayingHi = true;
-			}
-			else if (m_StartedSayingHi)
-			{
-				m_Animator.SetBool("Hi", false);
-				m_StartedSayingHi = false;
-			}
-		
-			float v = Mathf.Max( m_SpeedAuto, Input.GetAxis("Vertical") );
-			float h = Input.GetAxis("Horizontal");
-
-			//Debug.Log(string.Format("IdleRunJump h: {0}, v: {1}", h, v));
+			bool startSayHi = m_GameCharacterController.IsStartingAction(m_SayHiActionIndex);
+			m_Animator.SetBool("Hi", startSayHi);
 			
 			if (m_AffectSpeed)
 			{
-				float speed = m_SpeedFactor * (h*h+v*v);
+				float speed = m_GameCharacterController.GetSpeed();
 				m_Animator.SetFloat("Speed", speed);
 			}
 			
 			if (m_AffectDirection)
 			{
-				m_Animator.SetFloat("Direction", h, m_DirectionDampTime, Time.deltaTime);
+				float leftRightDirection = m_GameCharacterController.GetLeftRightDirection();
+				float direction = Mathf.Clamp01(leftRightDirection);
+				m_Animator.SetFloat("Direction", direction, m_DirectionDampTime, deltaTime);
 			}
 		}   		  
 	}
