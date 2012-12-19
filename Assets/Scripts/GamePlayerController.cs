@@ -10,6 +10,7 @@ public class GamePlayerController : GameCharacterController
 	
 	public bool m_InvertLeftRightInput = false;
 	
+	int m_ActionCount = 0;
 	bool[] m_StartingActions;
 	
 	float m_Speed = 0.0f;
@@ -27,8 +28,7 @@ public class GamePlayerController : GameCharacterController
 	
 	public override bool IsStartingAction(int _ActionIndex)
 	{
-		int actionCount = m_ActionButtons.GetLength(0);
-		bool isValidActionIndex = (0 <= _ActionIndex && _ActionIndex < actionCount);
+		bool isValidActionIndex = (0 <= _ActionIndex && _ActionIndex < m_ActionCount);
 		System.Diagnostics.Debug.Assert(isValidActionIndex);
 		
 		bool isStartingAction = isValidActionIndex? m_StartingActions[_ActionIndex] : false;
@@ -37,14 +37,13 @@ public class GamePlayerController : GameCharacterController
 
 	void Start()
 	{
-		int actionCount = m_ActionButtons.GetLength(0);
-		m_StartingActions = new bool[actionCount];
+		m_ActionCount = m_ActionButtons.GetLength(0);
+		m_StartingActions = new bool[m_ActionCount];
 	}
 	
 	void Update()
 	{
-		int actionCount = m_ActionButtons.GetLength(0);
-		for (int actionIndex = 0; actionIndex < actionCount; ++actionIndex)
+		for (int actionIndex = 0; actionIndex < m_ActionCount; ++actionIndex)
 		{
 			string actionButton = m_ActionButtons[actionIndex];
 			bool hasActionStarted = m_StartingActions[actionIndex];
