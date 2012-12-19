@@ -6465,6 +6465,7 @@ GameObject:
   - 33: {fileID: 622173023}
   - 23: {fileID: 622173022}
   - 95: {fileID: 622173021}
+  - 54: {fileID: 622173025}
   m_Layer: 0
   m_Name: Ruche
   m_TagString: Untagged
@@ -6524,6 +6525,22 @@ Transform:
   m_Children:
   - {fileID: 404374293}
   m_Father: {fileID: 0}
+--- !u!54 &622173025
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 5400000, guid: 802a2415285c342fa9b4b1ece6459962,
+    type: 2}
+  m_PrefabInternal: {fileID: 373820370}
+  m_GameObject: {fileID: 622173020}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &626482350
 GameObject:
   m_ObjectHideFlags: 0
@@ -8233,6 +8250,7 @@ GameObject:
   - 4: {fileID: 850476689}
   - 33: {fileID: 850476688}
   - 23: {fileID: 850476687}
+  - 54: {fileID: 850476690}
   m_Layer: 0
   m_Name: Dragonnet:Mesh
   m_TagString: Untagged
@@ -8279,6 +8297,22 @@ Transform:
   m_Children:
   - {fileID: 316805818}
   m_Father: {fileID: 1352375521}
+--- !u!54 &850476690
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 5400000, guid: 481f47291afa64b76995173e1d849145,
+    type: 2}
+  m_PrefabInternal: {fileID: 1231005256}
+  m_GameObject: {fileID: 850476686}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &852275028
 GameObject:
   m_ObjectHideFlags: 0
@@ -11437,6 +11471,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1181551585}
   - 95: {fileID: 1181551586}
+  - 114: {fileID: 1181551590}
   - 114: {fileID: 1181551587}
   - 143: {fileID: 1181551588}
   - 114: {fileID: 1181551589}
@@ -11486,9 +11521,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b185ae1b44ef642428a8d3609c85952d, type: 3}
   m_Name: 
+  m_JumpActionIndex: 0
+  m_SayHiActionIndex: 1
   m_DirectionDampTime: .25
-  m_SpeedFactor: 1
-  m_SpeedAuto: .5
   m_AffectSpeed: 1
   m_AffectDirection: 0
 --- !u!143 &1181551588
@@ -11526,6 +11561,22 @@ MonoBehaviour:
   m_MaxAngularSpeed: Infinity
   m_ChangeLaneInputThreshold: .800000012
   m_ChangeLaneInputFrameCountThreshold: 1
+--- !u!114 &1181551590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1181551584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b270d27c46133d44b7e4216690213a5, type: 3}
+  m_Name: 
+  m_ActionButtons:
+  - Fire1
+  - Fire2
+  m_SpeedMultiplier: 1
+  m_SpeedMinimum: .5
+  m_InvertLeftRightInput: 0
 --- !u!1 &1184895057
 GameObject:
   m_ObjectHideFlags: 0
@@ -12484,6 +12535,7 @@ GameObject:
   - 33: {fileID: 1314573665}
   - 23: {fileID: 1314573664}
   - 95: {fileID: 1314573663}
+  - 54: {fileID: 1314573667}
   m_Layer: 0
   m_Name: Branche
   m_TagString: Untagged
@@ -12542,6 +12594,22 @@ Transform:
   m_LocalScale: {x: 1.34871304, y: 1.34871304, z: 1.34871304}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!54 &1314573667
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 5400000, guid: 06b7f4502272a4ddaa77ad9e6369f0ed,
+    type: 2}
+  m_PrefabInternal: {fileID: 208576182}
+  m_GameObject: {fileID: 1314573662}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1325469262
 GameObject:
   m_ObjectHideFlags: 0
