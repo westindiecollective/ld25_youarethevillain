@@ -15,6 +15,11 @@ public class IdleRunJump : MonoBehaviour
 	public bool m_AffectSpeed = true;
 	public bool m_AffectDirection = true;
 
+	int m_JumpId = 0;
+	int m_SayHiId = 0;
+	int m_SpeedId = 0;
+	int m_DirectionId = 0;
+
 	void Start ()
 	{
 		SetupAnimator( GetComponent<Animator>() );
@@ -27,6 +32,11 @@ public class IdleRunJump : MonoBehaviour
 
 		if(m_Animator.layerCount >= 2)
 			m_Animator.SetLayerWeight(1, 1);
+
+		m_JumpId = Animator.StringToHash("Jump");
+		m_SayHiId = Animator.StringToHash("Hi");
+		m_SpeedId = Animator.StringToHash("Speed");
+		m_DirectionId = Animator.StringToHash("Direction");
 	}
 	
 	void SetupGameCharacterController(GameCharacterController _GameCharacterController)
@@ -43,22 +53,22 @@ public class IdleRunJump : MonoBehaviour
 			//AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);			
 
 			bool startJump = m_GameCharacterController.IsStartingAction(m_JumpActionIndex);
-			m_Animator.SetBool("Jump", startJump);
+			m_Animator.SetBool(m_JumpId, startJump);
 
 			bool startSayHi = m_GameCharacterController.IsStartingAction(m_SayHiActionIndex);
-			m_Animator.SetBool("Hi", startSayHi);
+			m_Animator.SetBool(m_SayHiId, startSayHi);
 			
 			if (m_AffectSpeed)
 			{
-				float speed = m_GameCharacterController.GetSpeed();
-				m_Animator.SetFloat("Speed", speed);
+				float speed = m_GameCharacterController.GetInputSpeed();
+				m_Animator.SetFloat(m_SpeedId, speed);
 			}
 			
 			if (m_AffectDirection)
 			{
-				float leftRightDirection = m_GameCharacterController.GetLeftRightDirection();
+				float leftRightDirection = m_GameCharacterController.GetInputLeftRightDirection();
 				float direction = Mathf.Clamp01(leftRightDirection);
-				m_Animator.SetFloat("Direction", direction, m_DirectionDampTime, deltaTime);
+				m_Animator.SetFloat(m_DirectionId, direction, m_DirectionDampTime, deltaTime);
 			}
 		}   		  
 	}

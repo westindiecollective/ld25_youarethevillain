@@ -13,19 +13,46 @@ public class GamePlayerController : GameCharacterController
 	int m_ActionCount = 0;
 	bool[] m_StartingActions;
 	
-	float m_Speed = 0.0f;
-	float m_LeftRigthDirection = 0.0f;
+	float m_InputSpeed = 0.0f;
+	float m_InputLeftRigthDirection = 0.0f;
 	
-	public override float GetSpeed()
+	CharacterController m_CharacterController = null;
+
+	public override float GetInputSpeed()
 	{
-		return m_Speed;
+		return m_InputSpeed;
 	}
 	
-	public override float GetLeftRightDirection()
+	public override float GetInputLeftRightDirection()
 	{
-		return m_LeftRigthDirection;
+		return m_InputLeftRigthDirection;
 	}
-	
+
+	public override Vector3 GetPosition()
+	{
+		return gameObject.transform.position;
+	}
+
+	public override void SetPosition(Vector3 _Position)
+	{
+		gameObject.transform.position = _Position;
+	}
+
+	public override Quaternion GetOrientation()
+	{
+		return gameObject.transform.rotation;
+	}
+
+	public override void SetOrientation(Quaternion _Orientation)
+	{
+		gameObject.transform.rotation = _Orientation;
+	}
+
+	public override float GetVelocity()
+	{
+		return m_CharacterController.velocity.magnitude;
+	}
+
 	public override bool IsStartingAction(int _ActionIndex)
 	{
 		bool isValidActionIndex = (0 <= _ActionIndex && _ActionIndex < m_ActionCount);
@@ -39,6 +66,8 @@ public class GamePlayerController : GameCharacterController
 	{
 		m_ActionCount = m_ActionButtons.GetLength(0);
 		m_StartingActions = new bool[m_ActionCount];
+
+		m_CharacterController = GetComponent<CharacterController>();
 	}
 	
 	void Update()
@@ -63,7 +92,7 @@ public class GamePlayerController : GameCharacterController
 		
 		//Debug.Log(string.Format("IdleRunJump h: {0}, v: {1}", input_h, input_v));
 		
-		m_Speed = Mathf.Max( m_SpeedMinimum, m_SpeedMultiplier * (input_v*input_v) );
-		m_LeftRigthDirection = (m_InvertLeftRightInput)? -input_h: input_h;
+		m_InputSpeed = Mathf.Max( m_SpeedMinimum, m_SpeedMultiplier * (input_v*input_v) );
+		m_InputLeftRigthDirection = (m_InvertLeftRightInput)? -input_h: input_h;
 	}
 }

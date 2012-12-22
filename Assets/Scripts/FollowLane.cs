@@ -25,7 +25,6 @@ public class FollowLane : MonoBehaviour
 	public float m_ChangeLaneInputThreshold = 0.8f;
 	public int m_ChangeLaneInputFrameCountThreshold = 1;
 
-	CharacterController m_CharacterController = null;
 	GameCharacterController m_GameCharacterController = null;
 	
 #if !DEBUG_FOLLOW_LANE
@@ -71,7 +70,6 @@ public class FollowLane : MonoBehaviour
 		Animator animator = GetComponent<Animator>();
 		SetupAnimator(animator);
 #endif
-		m_CharacterController = GetComponent<CharacterController>();
 		m_GameCharacterController = GetComponent<GameCharacterController>();
 	}
 	
@@ -81,7 +79,7 @@ public class FollowLane : MonoBehaviour
 		
 		if (m_CanChangeLane && m_GameCharacterController)
 		{
-			float h = m_GameCharacterController.GetLeftRightDirection();
+			float h = m_GameCharacterController.GetInputLeftRightDirection();
 			
 			int currentLaneIndex = m_TargetLaneIndex;
 			int firstLaneIndex = 0;
@@ -128,8 +126,8 @@ public class FollowLane : MonoBehaviour
 			float laneWidth = m_LanesWidth / m_LaneCount;
 			Vector3 laneCenterAtOrigin = ComputeLaneCenterAtOrigin(m_TargetLaneIndex, m_LanesLeftOrigin, m_LanesLeftToRightDir, laneWidth);
 			
-			Vector3 currentPos = gameObject.transform.position;
-			Quaternion currentRot = gameObject.transform.rotation;
+			Vector3 currentPos = m_GameCharacterController.GetPosition();
+			Quaternion currentRot = m_GameCharacterController.GetOrientation();
 			Vector3 laneCenter = ComputeLaneCenterForPos( currentPos, laneCenterAtOrigin, m_LanesLeftToRightDir);
 
 #if DEBUG_FOLLOW_LANE
@@ -151,7 +149,7 @@ public class FollowLane : MonoBehaviour
 			if (distanceToLane > m_DistanceToLaneThreshold)
 #endif
 			{
-				float characterVelocity = m_CharacterController.velocity.magnitude;
+				float characterVelocity = m_GameCharacterController.GetVelocity();
 				
 				float targetForwardOffset = 0.0f;
 				if ( characterVelocity * m_LaneChangeTimeFactor > laneWidth )
@@ -187,7 +185,6 @@ public class FollowLane : MonoBehaviour
 #if DEBUG_FOLLOW_LANE
 				if (m_DebugPlayer)
 				{
-					Vector3 newPos = currentPos + (characterVelocity * deltaTime) * (newRot * Vector3.forward);
 					Vector3 newPos2 = currentPos + (characterVelocity * deltaTime) * (newRot2 * Vector3.forward);
 					
 					m_DebugPlayer.transform.rotation = newRot2;
@@ -196,7 +193,7 @@ public class FollowLane : MonoBehaviour
 				else
 #endif
 				{
-					gameObject.transform.rotation = newRot2;
+					m_GameCharacterController.SetOrientation(newRot2);
 				}
 				
 				m_CharacterAngularVelocity.x = 0.0f;//angularVelocityX;
@@ -221,7 +218,7 @@ public class FollowLane : MonoBehaviour
 				else
 	#endif
 				{
-					gameObject.transform.rotation = Quaternion.LookRotation( m_LanesForwardDir );
+					m_GameCharacterController.SetOrientation( Quaternion.LookRotation(m_LanesForwardDir) );
 				}
 				m_CharacterAngularVelocity = Vector3.zero;
 #endif	//	!ALWAYS_PROCESS_FOLLOW_LANE
