@@ -62,7 +62,7 @@ AnimatorController:
     m_Name: Arms Layer
     m_Type: 0
     m_StateMachine: {fileID: 110700002}
-    m_HumanMask: {fileID: 101100000, guid: 6880eb91962094861bbf23c5035c40c6, type: 2}
+    m_HumanMask: {fileID: 101100000, guid: 3efc2bcae1697a644a4be75171a5a39a, type: 2}
     m_SkeletonMask: {fileID: 0}
     m_BlendingMode: 0
     m_SyncedLayerIndex: -1
