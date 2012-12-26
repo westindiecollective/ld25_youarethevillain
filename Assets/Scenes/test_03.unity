@@ -2358,8 +2358,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d6b73b98fc24a94fa4d25329b7740b1, type: 3}
   m_Name: 
-  m_JumpCapsuleScaleFactor: -6
-  m_JumpCapsuleOffsetY: 0
+  m_JumpCapsuleScaleFactor: -.400000006
+  m_JumpCapsuleOffsetY: .5
 --- !u!114 &1181551590
 MonoBehaviour:
   m_ObjectHideFlags: 0
