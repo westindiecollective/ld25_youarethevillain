@@ -50,8 +50,6 @@ public class IdleRunJump : MonoBehaviour
 
 		if (m_Animator && m_GameCharacterController)
 		{
-			//AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);			
-
 			bool startJump = m_GameCharacterController.IsStartingAction(m_JumpActionIndex);
 			m_Animator.SetBool(m_JumpId, startJump);
 
@@ -70,6 +68,14 @@ public class IdleRunJump : MonoBehaviour
 				float direction = Mathf.Clamp01(leftRightDirection);
 				m_Animator.SetFloat(m_DirectionId, direction, m_DirectionDampTime, deltaTime);
 			}
-		}   		  
+		}
+	}
+
+	public bool IsJumping()
+	{
+		AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
+		bool isJumping = stateInfo.IsName("Base Layer.Jump");
+
+		return isJumping;
 	}
 }

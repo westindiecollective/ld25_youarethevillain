@@ -50,7 +50,7 @@ public class GamePlayerController : GameCharacterController
 
 	public override float GetVelocity()
 	{
-		return m_CharacterController.velocity.magnitude;
+		return m_CharacterController? m_CharacterController.velocity.magnitude : 0.0f;
 	}
 
 	public override bool IsStartingAction(int _ActionIndex)

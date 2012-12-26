@@ -120,8 +120,14 @@ public class FollowLane : MonoBehaviour
 			m_WantToChangeLaneOnLeft = changeLeft;
 			m_WantToChangeLaneOnRight = changeRight;
 		}
-		
-		if (m_LaneCount > 0)
+
+		//@HACK: since jump anims aren't perfectly aligned/straight,
+		//correcting player orientation during a jump anim introduce visible anim jigger artifacts
+		IdleRunJump animComponent = GetComponent<IdleRunJump>();
+		bool isJumping = (animComponent != null && animComponent.IsJumping());
+		bool updateFollowLane = (m_LaneCount > 0) && !isJumping;
+
+		if (updateFollowLane)
 		{
 			float laneWidth = m_LanesWidth / m_LaneCount;
 			Vector3 laneCenterAtOrigin = ComputeLaneCenterAtOrigin(m_TargetLaneIndex, m_LanesLeftOrigin, m_LanesLeftToRightDir, laneWidth);

@@ -7,7 +7,7 @@ public class ScalePlayerCollision : MonoBehaviour
 	private Animator m_Animator;
 	private CharacterController m_CharacterController;
 	private float m_BaseCapsuleHeight;
-//	private float m_BaseCapsuleCenterY;0
+	private Vector3 m_BaseCapsuleCenter;
 	private bool m_IsJumping;
 	
 	public float m_JumpCapsuleScaleFactor = 0.0f;
@@ -18,7 +18,7 @@ public class ScalePlayerCollision : MonoBehaviour
 		m_Animator = GetComponent<Animator>();
 		m_CharacterController = GetComponent<CharacterController>();
 		m_BaseCapsuleHeight = m_CharacterController.height;
-//		m_BaseCapsuleCenterY = m_CharacterController.center.y;
+		m_BaseCapsuleCenter = m_CharacterController.center;
 //		m_IsJumping = false;
 	}
 	
@@ -49,6 +49,7 @@ public class ScalePlayerCollision : MonoBehaviour
 				m_CharacterController.Move( centerRestoreMove );
 			}
 */			
+			m_CharacterController.center = m_BaseCapsuleCenter + new Vector3(0.0f, m_BaseCapsuleCenter.y * m_JumpCapsuleOffsetY * m_Animator.GetFloat("JumpingCurve"), 0.0f);
 			m_CharacterController.height = m_BaseCapsuleHeight * (1 + m_JumpCapsuleScaleFactor * m_Animator.GetFloat("JumpingCurve"));
 			
 		}
