@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2bbc05df805c6e64a9ebbee43c036096
+guid: 5dca049815adb904c83bebdcee160cb9
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -488,25 +488,35 @@ ModelImporter:
         postQ: {x: -.501433372, y: .501433551, z: -.498562306, w: .498562485}
         length: .116569988
         modified: 1
-    - boneName: joint_ToeLT
-      humanName: LeftToes
+    - boneName: joint_EyeLT
+      humanName: LeftEye
       limit:
-        min: {x: 0, y: 0, z: -50}
-        max: {x: 0, y: 0, z: 50}
-        value: {x: .0628195927, y: 0, z: .0314097963}
-        preQ: {x: -5.37124833e-09, y: 1, z: -3.89755485e-07, w: 2.86996365e-05}
-        postQ: {x: .568252325, y: .822775006, z: .00940224528, w: -.00649192929}
-        length: .0785244927
+        min: {x: 0, y: -20, z: -10}
+        max: {x: 0, y: 20, z: 15.000001}
+        value: {x: .0800000057, y: 0, z: .0400000028}
+        preQ: {x: .996414185, y: -.0846098661, z: 3.12924362e-06, w: 3.58410143e-05}
+        postQ: {x: .975204349, y: -.221306473, z: 3.9309256e-05, w: -1.78664905e-05}
+        length: .100000001
         modified: 1
-    - boneName: joint_ToeRT
-      humanName: RightToes
+    - boneName: joint_EyeRT
+      humanName: RightEye
       limit:
-        min: {x: 0, y: 0, z: -50}
-        max: {x: 0, y: 0, z: 50}
-        value: {x: .0628196076, y: 0, z: .0314098038}
-        preQ: {x: 1, y: 5.26835642e-09, z: 2.348423e-05, w: 0}
-        postQ: {x: .822774827, y: -.568252444, z: -.00649595167, w: -.00940555241}
-        length: .0785245076
+        min: {x: 0, y: -20, z: -10}
+        max: {x: 0, y: 20, z: 15.000001}
+        value: {x: .0800000057, y: 0, z: .0400000028}
+        preQ: {x: .996414185, y: -.0846098661, z: 3.12924362e-06, w: 3.58410143e-05}
+        postQ: {x: .975204289, y: -.221306473, z: -3.8981434e-05, w: 1.78888422e-05}
+        length: .100000001
+        modified: 1
+    - boneName: joint_Jaw
+      humanName: Jaw
+      limit:
+        min: {x: 0, y: -10, z: -10}
+        max: {x: 0, y: 10, z: 10}
+        value: {x: .0800000057, y: 0, z: .0400000028}
+        preQ: {x: .984818757, y: -.173585549, z: 6.32234014e-06, w: 3.54147523e-05}
+        postQ: {x: .244827256, y: .663356066, z: .244877294, w: .663365245}
+        length: .100000001
         modified: 1
     - boneName: joint_ThumbALT
       humanName: Left Thumb Proximal
@@ -523,20 +533,10 @@ ModelImporter:
       limit:
         min: {x: 0, y: 0, z: -40}
         max: {x: 0, y: 0, z: 35}
-        value: {x: .026844671, y: 0, z: .0134223355}
-        preQ: {x: -.265905559, y: -.371830523, z: .471420288, w: .754187763}
-        postQ: {x: -.345102757, y: -.345102936, z: .61717397, w: .617174387}
-        length: .0335558392
-        modified: 1
-    - boneName: joint_ThumbCLT
-      humanName: Left Thumb Distal
-      limit:
-        min: {x: 0, y: -7.50000048, z: -50}
-        max: {x: 0, y: 7.50000048, z: 50}
-        value: {x: .0201335046, y: 0, z: .0100667523}
-        preQ: {x: -.250542223, y: -.383804888, z: .49789682, w: .736220837}
-        postQ: {x: -.291847438, y: -.391470253, z: .697319448, w: .524711072}
-        length: .0251668803
+        value: {x: .0186070241, y: 0, z: .00930351205}
+        preQ: {x: -.258378565, y: -.393179297, z: .492028952, w: .732501209}
+        postQ: {x: -.331878573, y: -.360916317, z: .638006449, w: .593754053}
+        length: .0232587792
         modified: 1
     - boneName: joint_CapitateLT
       humanName: Left Index Proximal
@@ -553,20 +553,10 @@ ModelImporter:
       limit:
         min: {x: 0, y: -7.50000048, z: -50}
         max: {x: 0, y: 7.50000048, z: 50}
-        value: {x: .0255096294, y: 0, z: .0127548147}
-        preQ: {x: -.914097309, y: -.344594598, z: -.0929635018, w: .192453653}
-        postQ: {x: -.706846356, y: -.706846356, z: .0191879608, w: .0191879533}
-        length: .0318870358
-        modified: 1
-    - boneName: joint_FingersBLT
-      humanName: Left Index Distal
-      limit:
-        min: {x: 0, y: -7.50000048, z: -50}
-        max: {x: 0, y: 7.50000048, z: 50}
-        value: {x: .0191322211, y: 0, z: .00956611056}
-        preQ: {x: -.892476141, y: -.451014668, z: .00565240998, w: -.00633144798}
-        postQ: {x: -.683226466, y: -.729694903, z: .0198430661, w: .0187929776}
-        length: .0239152759
+        value: {x: .0289554503, y: 0, z: .0144777251}
+        preQ: {x: -.90180546, y: -.369378865, z: -.108494632, w: .196303353}
+        postQ: {x: -.685791612, y: -.727070332, z: .012207862, w: .0301586743}
+        length: .0361943133
         modified: 1
     - boneName: joint_PisiformLT
       humanName: Left Ring Proximal
@@ -583,20 +573,10 @@ ModelImporter:
       limit:
         min: {x: 0, y: -7.50000048, z: -50}
         max: {x: 0, y: 7.50000048, z: 50}
-        value: {x: .0264155213, y: 0, z: .0132077606}
-        preQ: {x: -.616886616, y: -.355731159, z: .66170156, w: .234642804}
-        postQ: {x: -.706930935, y: -.706932247, z: -.0157366414, w: -.0157366842}
-        length: .0330194011
-        modified: 1
-    - boneName: joint_RingBLT
-      humanName: Left Ring Distal
-      limit:
-        min: {x: 0, y: -7.50000048, z: -50}
-        max: {x: 0, y: 7.50000048, z: 50}
-        value: {x: .0198116414, y: 0, z: .00990582071}
-        preQ: {x: -.89280045, y: -.449749559, z: -.0220200326, w: -.0121575017}
-        postQ: {x: -.680049419, y: -.732790053, z: -.0191259179, w: -.0136247175}
-        length: .0247645508
+        value: {x: .0313581489, y: 0, z: .0156790745}
+        preQ: {x: -.606772542, y: -.348830849, z: .68198806, w: .212217659}
+        postQ: {x: -.721282959, y: -.691838086, z: .00225338526, w: -.0332547948}
+        length: .0391976833
         modified: 1
     - boneName: joint_ThumbART
       humanName: Right Thumb Proximal
@@ -613,20 +593,10 @@ ModelImporter:
       limit:
         min: {x: 0, y: 0, z: -40}
         max: {x: 0, y: 0, z: 35}
-        value: {x: .0268445909, y: 0, z: .0134222955}
-        preQ: {x: .471421003, y: -.754187226, z: .265907228, w: -.37182942}
-        postQ: {x: -.617174029, y: .617174268, z: -.345103413, w: .345102519}
-        length: .0335557386
-        modified: 1
-    - boneName: joint_ThumbCRT
-      humanName: Right Thumb Distal
-      limit:
-        min: {x: 0, y: -7.50000048, z: -50}
-        max: {x: 0, y: 7.50000048, z: 50}
-        value: {x: .0201334432, y: 0, z: .0100667216}
-        preQ: {x: .497896761, y: -.736220717, z: .250542998, w: -.383804649}
-        postQ: {x: -.697319388, y: .524710953, z: -.291848212, w: .391470075}
-        length: .025166804
+        value: {x: .0186071098, y: 0, z: .00930355489}
+        preQ: {x: .492028594, y: -.732501507, z: .258379221, w: -.39317891}
+        postQ: {x: -.638005555, y: .593754888, z: -.331878275, w: .360916615}
+        length: .0232588872
         modified: 1
     - boneName: joint_CapitateRT
       humanName: Right Index Proximal
@@ -643,20 +613,10 @@ ModelImporter:
       limit:
         min: {x: 0, y: -7.50000048, z: -50}
         max: {x: 0, y: 7.50000048, z: 50}
-        value: {x: .025509635, y: 0, z: .0127548175}
-        preQ: {x: -.0929647684, y: -.192454562, z: .91409719, w: -.344594121}
-        postQ: {x: -.0191878695, y: .0191878378, z: -.706846654, w: .706846118}
-        length: .0318870433
-        modified: 1
-    - boneName: joint_FingersBRT
-      humanName: Right Index Distal
-      limit:
-        min: {x: 0, y: -7.50000048, z: -50}
-        max: {x: 0, y: 7.50000048, z: 50}
-        value: {x: .0191322267, y: 0, z: .00956611335}
-        preQ: {x: .00565179391, y: .00633203657, z: .892476261, w: -.451014459}
-        postQ: {x: -.0198424049, y: .0187929627, z: -.683228016, w: .729693413}
-        length: .0239152834
+        value: {x: .0289555173, y: 0, z: .0144777587}
+        preQ: {x: -.108494207, y: -.196303576, z: .90180546, w: -.369378865}
+        postQ: {x: -.0122091211, y: .0301572364, z: -.685791731, w: .727070212}
+        length: .0361943953
         modified: 1
     - boneName: joint_PisiformRT
       humanName: Right Ring Proximal
@@ -673,20 +633,10 @@ ModelImporter:
       limit:
         min: {x: 0, y: -7.50000048, z: -50}
         max: {x: 0, y: 7.50000048, z: 50}
-        value: {x: .0264155809, y: 0, z: .0132077904}
-        preQ: {x: .661701858, y: -.234641686, z: .61688745, w: -.355729848}
-        postQ: {x: .0157367177, y: -.0157367159, z: -.706931174, w: .706932187}
-        length: .0330194756
-        modified: 1
-    - boneName: joint_RingBRT
-      humanName: Right Ring Distal
-      limit:
-        min: {x: 0, y: -7.50000048, z: -50}
-        max: {x: 0, y: 7.50000048, z: 50}
-        value: {x: .0198116861, y: 0, z: .00990584306}
-        preQ: {x: -.0220201723, y: .0121575641, z: .89280051, w: -.44974941}
-        postQ: {x: .0191236548, y: -.0136273671, z: -.680051804, w: .732787967}
-        length: .0247646067
+        value: {x: .0313581116, y: 0, z: .0156790558}
+        preQ: {x: .681988001, y: -.212217689, z: .60677278, w: -.348830521}
+        postQ: {x: -.00225331262, y: -.0332548618, z: -.721281946, w: .691839099}
+        length: .0391976386
         modified: 1
     skeleton:
     - name: character_base_01
@@ -726,7 +676,7 @@ ModelImporter:
       transformModified: 1
     - name: joint_FootLT
       position: {x: -0, y: .404453635, z: 6.24500451e-16}
-      rotation: {x: .000628483656, y: -1.28112741e-16, z: .0372194164, w: .999306917}
+      rotation: {x: .000628483656, y: -1.28146648e-16, z: .0372194164, w: .999306917}
       scale: {x: 1, y: 1, z: 1}
       transformModified: 1
     - name: joint_ToeLT
@@ -746,7 +696,7 @@ ModelImporter:
       transformModified: 1
     - name: joint_FootRT
       position: {x: -4.4408921e-16, y: -.404453635, z: -2.24820162e-15}
-      rotation: {x: .000628483482, y: 1.55000955e-16, z: .0372194126, w: .999306917}
+      rotation: {x: .000628483482, y: 1.55007731e-16, z: .0372194126, w: .999306917}
       scale: {x: 1, y: 1, z: 1}
       transformModified: 1
     - name: joint_ToeRT
@@ -801,7 +751,7 @@ ModelImporter:
       transformModified: 1
     - name: joint_FingersBLT
       position: {x: 4.4408921e-16, y: .0318870358, z: 2.22044605e-16}
-      rotation: {x: -.000149389321, y: -.000198670823, z: -.0328662135, w: .999459743}
+      rotation: {x: -.000960781472, y: -.000194160617, z: -.21077913, w: .977533221}
       scale: {x: 1, y: 1, z: 1}
       transformModified: 1
     - name: joint_FingersCLT
@@ -821,7 +771,7 @@ ModelImporter:
       transformModified: 1
     - name: joint_RingBLT
       position: {x: -1.33226763e-15, y: .0330193862, z: -2.22044605e-16}
-      rotation: {x: -.00305906357, y: .000919075741, z: -.0373696312, w: .999296486}
+      rotation: {x: -.0099370582, y: .00091285893, z: -.121443599, w: .992548168}
       scale: {x: 1, y: 1, z: 1}
       transformModified: 1
     - name: joint_RingCLT
@@ -841,7 +791,7 @@ ModelImporter:
       transformModified: 1
     - name: joint_ThumbCLT
       position: {x: -6.66133815e-16, y: .0335558131, z: 4.4408921e-16}
-      rotation: {x: -.00191680086, y: -6.93910858e-13, z: -.140909746, w: .990020633}
+      rotation: {x: -.00191680086, y: -6.93912321e-13, z: -.140909746, w: .990020633}
       scale: {x: 1, y: 1, z: 1}
       transformModified: 1
     - name: joint_ClavicleRT
@@ -876,7 +826,7 @@ ModelImporter:
       transformModified: 1
     - name: joint_FingersBRT
       position: {x: 1.11022302e-15, y: -.0318870358, z: -2.22044605e-16}
-      rotation: {x: -.000149809115, y: -.00019834128, z: -.0328643024, w: .999459803}
+      rotation: {x: -.000960781472, y: -.000194160544, z: -.210779086, w: .977533221}
       scale: {x: 1, y: 1, z: 1}
       transformModified: 1
     - name: joint_FingersCRT
@@ -896,7 +846,7 @@ ModelImporter:
       transformModified: 1
     - name: joint_RingBRT
       position: {x: -2.22044605e-16, y: -.0330195017, z: -4.4408921e-16}
-      rotation: {x: -.00305562397, y: .000919272134, z: -.0373665504, w: .999296606}
+      rotation: {x: -.00993710104, y: .000912852061, z: -.121443644, w: .992548168}
       scale: {x: 1, y: 1, z: 1}
       transformModified: 1
     - name: joint_RingCRT
