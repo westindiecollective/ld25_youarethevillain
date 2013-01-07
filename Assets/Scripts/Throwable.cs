@@ -25,7 +25,7 @@ public class Throwable : Useable
 		else
 		{
 			//DEBUG
-			projectile = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+			projectile = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
 			projectile.transform.parent = _ProjectileOrigin;
 			projectile.transform.localPosition = Vector3.zero;
@@ -34,6 +34,8 @@ public class Throwable : Useable
 			projectile.transform.localScale = new Vector3(projectileScale, projectileScale, projectileScale);
 
 			projectile.AddComponent<Rigidbody>();
+
+			projectile.AddComponent<HitTrigger>();
 		}
 
 		Rigidbody projectileRB = projectile.GetComponent<Rigidbody>();
@@ -75,6 +77,7 @@ public class Throwable : Useable
 			if (m_Projectile.transform.parent != null)
 			{
 				m_Projectile.transform.position = m_Projectile.transform.parent.position;
+				m_Projectile.transform.rotation = Quaternion.identity;
 				m_Projectile.transform.parent = null;
 			}
 
@@ -83,6 +86,7 @@ public class Throwable : Useable
 			{
 				projectileRB.isKinematic = false;
 				projectileRB.useGravity = false;
+				projectileRB.angularVelocity = Vector3.zero;
 				projectileRB.velocity = m_ProjectileVelocity * gameObject.transform.TransformDirection( -Vector3.forward );
 			}
 
@@ -90,6 +94,14 @@ public class Throwable : Useable
 			if (projectileCollider != null)
 			{
 				projectileCollider.enabled = true;
+				projectileCollider.isTrigger = true;
+			}
+
+			HitTrigger projectileHitEffect = m_Projectile.GetComponent<HitTrigger>();
+			if (projectileHitEffect != null)
+			{
+				projectileHitEffect.enabled = true;
+				projectileHitEffect.Init(gameObject);
 			}
 		}
 	}
