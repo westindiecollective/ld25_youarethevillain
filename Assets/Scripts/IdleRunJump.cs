@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class IdleRunJump : MonoBehaviour
+public class IdleRunJump : AnimationController
 {
 	Animator m_Animator = null;
 	GameCharacterController m_GameCharacterController = null;
@@ -14,6 +14,10 @@ public class IdleRunJump : MonoBehaviour
 
 	public bool m_AffectSpeed = true;
 	public bool m_AffectDirection = true;
+	
+	float m_HitSpeed = 0.0f;
+	float m_HitSpeedDuration = 0.0f;
+	bool m_UseHitSpeed = false;
 
 	int m_JumpId = 0;
 	int m_SayHiId = 0;
@@ -47,6 +51,8 @@ public class IdleRunJump : MonoBehaviour
 	void Update () 
 	{
 		float deltaTime = Time.deltaTime;
+        
+        UpdateHitSpeed(deltaTime);
 
 		if (m_Animator && m_GameCharacterController)
 		{
@@ -58,7 +64,7 @@ public class IdleRunJump : MonoBehaviour
 			
 			if (m_AffectSpeed)
 			{
-				float speed = m_GameCharacterController.GetInputSpeed();
+				float speed = m_UseHitSpeed? m_HitSpeed : m_GameCharacterController.GetInputSpeed();
 				m_Animator.SetFloat(m_SpeedId, speed);
 			}
 			
@@ -71,6 +77,34 @@ public class IdleRunJump : MonoBehaviour
 		}
 	}
 
+    //TODO: Find proper solution for hit handling
+    void UpdateHitSpeed(float _DeltaTime)
+    {
+        if (m_UseHitSpeed)
+        {
+            m_HitSpeedDuration -= _DeltaTime;
+            if (m_HitSpeedDuration <= 0.0f)
+            {
+                m_HitSpeedDuration = 0.0f;
+                m_UseHitSpeed = false;
+            }
+        }
+    }
+    
+	void UseHitSpeed(float _HitSpeed, float _HitSpeedDuration)
+	{
+		m_HitSpeed = _HitSpeed;
+		m_HitSpeedDuration = _HitSpeedDuration;
+		m_UseHitSpeed = true;
+	}
+	
+	public override void HandleHit()
+	{
+        //HACK
+        UseHitSpeed(0.0f, 0.3f);
+	}
+
+
 	public bool IsJumping()
 	{
 		AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
@@ -78,4 +112,13 @@ public class IdleRunJump : MonoBehaviour
 
 		return isJumping;
 	}
+
+	public bool IsRunning()
+	{
+		AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
+		bool isRunning = stateInfo.IsName("Base Layer.Run");
+
+		return isRunning;
+	}
+
 }
