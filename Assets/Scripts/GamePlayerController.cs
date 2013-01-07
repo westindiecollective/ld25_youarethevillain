@@ -17,6 +17,7 @@ public class GamePlayerController : GameCharacterController
 	float m_InputLeftRigthDirection = 0.0f;
 	
 	CharacterController m_CharacterController = null;
+    AnimationController m_AnimationController = null;
 
 	public override float GetInputSpeed()
 	{
@@ -68,6 +69,7 @@ public class GamePlayerController : GameCharacterController
 		m_StartingActions = new bool[m_ActionCount];
 
 		m_CharacterController = GetComponent<CharacterController>();
+        m_AnimationController = GetComponent<AnimationController>();
 	}
 	
 	void Update()
@@ -95,4 +97,13 @@ public class GamePlayerController : GameCharacterController
 		m_InputSpeed = Mathf.Max( m_SpeedMinimum, m_SpeedMultiplier * (input_v*input_v) );
 		m_InputLeftRigthDirection = (m_InvertLeftRightInput)? -input_h: input_h;
 	}
+    
+    public override void HandleHit()
+    {
+        if (m_AnimationController)
+        {
+            m_AnimationController.HandleHit();
+        }
+    }
+ 
 }

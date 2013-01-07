@@ -13,6 +13,7 @@ public class GameAIFollowController : GameCharacterController
 	NavMeshAgent m_NavAgent = null;
 	
 	CharacterController m_CharacterController = null;
+    AnimationController m_AnimationController = null;
 	
 #if DEBUG_AIFOLLOW_CONTROLLER
 	public GameObject m_DebugDestination = null;
@@ -65,6 +66,7 @@ public class GameAIFollowController : GameCharacterController
 	void Start()
 	{
 		m_CharacterController = GetComponent<CharacterController>();
+        m_AnimationController = GetComponent<AnimationController>();
 		
 		m_NavAgent = GetComponent<NavMeshAgent>();
 		m_NavAgent.updatePosition = false;
@@ -101,4 +103,12 @@ public class GameAIFollowController : GameCharacterController
 	{
 		return !m_NavAgent.pathPending;
 	}
+    
+    public override void HandleHit()
+    {
+        if (m_AnimationController)
+        {
+            m_AnimationController.HandleHit();
+        }
+    }
 }

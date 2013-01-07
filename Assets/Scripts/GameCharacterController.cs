@@ -13,4 +13,7 @@ public abstract class GameCharacterController : MonoBehaviour
 	public abstract float GetVelocity();
 
 	public abstract bool IsStartingAction(int _ActionIndex);
+    
+    public abstract void HandleHit();
+    
 }
