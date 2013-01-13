@@ -15,14 +15,13 @@ public class HeroAnimController : CharacterAnimController
 	public bool m_AffectSpeed = true;
 	public bool m_AffectDirection = true;
 
-	float m_HitSpeed = 0.0f;
-	float m_HitSpeedDuration = 0.0f;
-	bool m_UseHitSpeed = false;
-
+	int m_HitId = 0;
 	int m_JumpId = 0;
 	int m_ThrowId = 0;
 	int m_SpeedId = 0;
 	int m_DirectionId = 0;
+
+	bool m_TakeHit = false;
 
 	void Start ()
 	{
@@ -37,6 +36,7 @@ public class HeroAnimController : CharacterAnimController
 		if(m_Animator.layerCount >= 2)
 			m_Animator.SetLayerWeight(1, 1);
 
+		m_HitId = Animator.StringToHash("Hit");
 		m_JumpId = Animator.StringToHash("Jump");
 		m_ThrowId = Animator.StringToHash("Throw");
 		m_SpeedId = Animator.StringToHash("Speed");
@@ -52,19 +52,30 @@ public class HeroAnimController : CharacterAnimController
 	{
 		float deltaTime = Time.deltaTime;
 
-		UpdateHitSpeed(deltaTime);
-
 		if (m_Animator && m_GameCharacterController)
 		{
-			bool startJump = m_GameCharacterController.IsStartingAction(m_JumpActionIndex);
-			m_Animator.SetBool(m_JumpId, startJump);
+			if (m_TakeHit)
+			{
+				m_Animator.SetBool(m_HitId, true);
+				m_Animator.SetBool(m_JumpId, false);
+				m_Animator.SetBool(m_ThrowId, false);
 
-			bool startThrow = m_GameCharacterController.IsStartingAction(m_ThrowActionIndex);
-			m_Animator.SetBool(m_ThrowId, startThrow);
+				m_TakeHit = false;
+			}
+			else
+			{
+				m_Animator.SetBool(m_HitId, false);
+
+				bool startJump = m_GameCharacterController.IsStartingAction(m_JumpActionIndex);
+				m_Animator.SetBool(m_JumpId, startJump);
+
+				bool startThrow = m_GameCharacterController.IsStartingAction(m_ThrowActionIndex);
+				m_Animator.SetBool(m_ThrowId, startThrow);
+			}
 
 			if (m_AffectSpeed)
 			{
-				float speed = m_UseHitSpeed? m_HitSpeed : m_GameCharacterController.GetInputSpeed();
+				float speed = m_GameCharacterController.GetInputSpeed();
 				m_Animator.SetFloat(m_SpeedId, speed);
 			}
 
@@ -74,36 +85,22 @@ public class HeroAnimController : CharacterAnimController
 				float direction = Mathf.Clamp01(leftRightDirection);
 				m_Animator.SetFloat(m_DirectionId, direction, m_DirectionDampTime, deltaTime);
 			}
-		}
-	}
 
-	//TODO: Find proper solution for hit handling
-	void UpdateHitSpeed(float _DeltaTime)
-	{
-		if (m_UseHitSpeed)
-		{
-			m_HitSpeedDuration -= _DeltaTime;
-			if (m_HitSpeedDuration <= 0.0f)
+			if (!gameObject.CompareTag("Player"))
 			{
-				m_HitSpeedDuration = 0.0f;
-				m_UseHitSpeed = false;
+				AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
+				if (stateInfo.IsName("Hit"))
+					Debug.Log( string.Format("Hero anim state is 'Hit'") );
+				else if (stateInfo.IsName("Idle"))
+					Debug.Log( string.Format("Hero anim state is 'Idle'") );
 			}
 		}
 	}
 
-	void UseHitSpeed(float _HitSpeed, float _HitSpeedDuration)
-	{
-		m_HitSpeed = _HitSpeed;
-		m_HitSpeedDuration = _HitSpeedDuration;
-		m_UseHitSpeed = true;
-	}
-
 	public override void HandleHit()
 	{
-		//HACK
-		UseHitSpeed(0.0f, 0.3f);
+		m_TakeHit = true;
 	}
-
 
 	public override bool IsJumping()
 	{

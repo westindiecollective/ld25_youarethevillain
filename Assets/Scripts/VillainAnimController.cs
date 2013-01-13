@@ -15,10 +15,6 @@ public class VillainAnimController : CharacterAnimController
 	public bool m_AffectSpeed = true;
 	public bool m_AffectDirection = true;
 
-	float m_HitSpeed = 0.0f;
-	float m_HitSpeedDuration = 0.0f;
-	bool m_UseHitSpeed = false;
-
 	int m_JumpId = 0;
 	int m_ThrowId = 0;
 	int m_SpeedId = 0;
@@ -52,8 +48,6 @@ public class VillainAnimController : CharacterAnimController
 	{
 		float deltaTime = Time.deltaTime;
 
-		UpdateHitSpeed(deltaTime);
-
 		if (m_Animator && m_GameCharacterController)
 		{
 			bool startJump = m_GameCharacterController.IsStartingAction(m_JumpActionIndex);
@@ -64,7 +58,7 @@ public class VillainAnimController : CharacterAnimController
 
 			if (m_AffectSpeed)
 			{
-				float speed = m_UseHitSpeed? m_HitSpeed : m_GameCharacterController.GetInputSpeed();
+				float speed = m_GameCharacterController.GetInputSpeed();
 				m_Animator.SetFloat(m_SpeedId, speed);
 			}
 
@@ -77,33 +71,10 @@ public class VillainAnimController : CharacterAnimController
 		}
 	}
 
-	//TODO: Find proper solution for hit handling
-	void UpdateHitSpeed(float _DeltaTime)
-	{
-		if (m_UseHitSpeed)
-		{
-			m_HitSpeedDuration -= _DeltaTime;
-			if (m_HitSpeedDuration <= 0.0f)
-			{
-				m_HitSpeedDuration = 0.0f;
-				m_UseHitSpeed = false;
-			}
-		}
-	}
-
-	void UseHitSpeed(float _HitSpeed, float _HitSpeedDuration)
-	{
-		m_HitSpeed = _HitSpeed;
-		m_HitSpeedDuration = _HitSpeedDuration;
-		m_UseHitSpeed = true;
-	}
-
 	public override void HandleHit()
 	{
-		//HACK
-		UseHitSpeed(0.0f, 0.3f);
+		//villain not affected by hit?
 	}
-
 
 	public override bool IsJumping()
 	{
