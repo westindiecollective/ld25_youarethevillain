@@ -6,12 +6,11 @@ public class LevelTimer : MonoBehaviour
 	public float m_WaitTimeInSeconds = 0.0f;
 	public int m_LevelToLoadIndex = 1;
 	private bool m_TriggeredWait = false;
-	
+
 	void Start()
 	{
-		
 	}
-	
+
 	void Update()
 	{
 		if (!m_TriggeredWait)
@@ -21,7 +20,7 @@ public class LevelTimer : MonoBehaviour
 			{
 				StartCoroutine( instance.LoadLevelAsync( m_LevelToLoadIndex, m_WaitTimeInSeconds ) );
 			}
-			
+
 			m_TriggeredWait = true;
 		}
 	}

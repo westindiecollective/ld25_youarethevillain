@@ -1,15 +1,13 @@
 using UnityEngine;
 using System.Collections;
 
-public class Interactive : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
+public class Interactive : MonoBehaviour
+{
+	void Start ()
+	{
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	void Update ()
+	{
 	}
 }

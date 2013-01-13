@@ -5,10 +5,9 @@ public class NextLevelTimer : MonoBehaviour
 {
 	public float m_WaitTimeInSeconds = 0.0f;
 	private bool m_TriggeredWait = false;
-	
+
 	void Start()
 	{
-		
 	}
 	
 	void Update()
@@ -20,7 +19,7 @@ public class NextLevelTimer : MonoBehaviour
 			{
 				StartCoroutine( instance.LoadNextLevelAsync( m_WaitTimeInSeconds ) );
 			}
-			
+
 			m_TriggeredWait = true;
 		}
 	}

@@ -42,7 +42,7 @@ public class IdleRunJump : AnimationController
 		m_SpeedId = Animator.StringToHash("Speed");
 		m_DirectionId = Animator.StringToHash("Direction");
 	}
-	
+
 	void SetupGameCharacterController(GameCharacterController _GameCharacterController)
 	{
 		m_GameCharacterController = _GameCharacterController;
@@ -51,8 +51,8 @@ public class IdleRunJump : AnimationController
 	void Update () 
 	{
 		float deltaTime = Time.deltaTime;
-        
-        UpdateHitSpeed(deltaTime);
+
+		UpdateHitSpeed(deltaTime);
 
 		if (m_Animator && m_GameCharacterController)
 		{
@@ -77,20 +77,20 @@ public class IdleRunJump : AnimationController
 		}
 	}
 
-    //TODO: Find proper solution for hit handling
-    void UpdateHitSpeed(float _DeltaTime)
-    {
-        if (m_UseHitSpeed)
-        {
-            m_HitSpeedDuration -= _DeltaTime;
-            if (m_HitSpeedDuration <= 0.0f)
-            {
-                m_HitSpeedDuration = 0.0f;
-                m_UseHitSpeed = false;
-            }
-        }
-    }
-    
+	//TODO: Find proper solution for hit handling
+	void UpdateHitSpeed(float _DeltaTime)
+	{
+		if (m_UseHitSpeed)
+		{
+			m_HitSpeedDuration -= _DeltaTime;
+			if (m_HitSpeedDuration <= 0.0f)
+			{
+				m_HitSpeedDuration = 0.0f;
+				m_UseHitSpeed = false;
+			}
+		}
+	}
+
 	void UseHitSpeed(float _HitSpeed, float _HitSpeedDuration)
 	{
 		m_HitSpeed = _HitSpeed;
@@ -100,8 +100,8 @@ public class IdleRunJump : AnimationController
 	
 	public override void HandleHit()
 	{
-        //HACK
-        UseHitSpeed(0.0f, 0.3f);
+		//HACK
+		UseHitSpeed(0.0f, 0.3f);
 	}
 
 

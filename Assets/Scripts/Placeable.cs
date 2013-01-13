@@ -5,7 +5,7 @@ public class Placeable : Useable
 {
 	public enum PlaceableType { E_PlaceableNone, E_PlaceableVampireBat, E_PlaceableDemonFlower };
 	PlaceableType m_PlaceableType;
-	
+
 	float m_ProjectileDurationInSeconds = 0.0f;
 	GameObject m_Projectile = null;
 
@@ -48,21 +48,20 @@ public class Placeable : Useable
 
 		m_Projectile = projectile;
 	}
-	
+
 	public override UseableType GetUseableType()
 	{
 		return UseableType.E_UseablePlace;
 	}
-	
+
 	void Start()
 	{
-		
 	}
-	
+
 	void Update()
 	{
 	}
-	
+
 	public override void Use()
 	{
 		if (m_Projectile != null)

@@ -14,11 +14,11 @@ public class HitTrigger : MonoBehaviour
 	void Start()
 	{
 	}
-	
+
 	void Update()
 	{
 	}
-	
+
 	void OnTriggerEnter(Collider other)
 	{
 		if ( other.gameObject == m_Owner )
@@ -28,13 +28,13 @@ public class HitTrigger : MonoBehaviour
 		else
 		{
 			Debug.Log(string.Format("Game object {0} has been hit with projectile.", other.gameObject.name));
-			
+
 			HitReceiver hitHandler = other.gameObject.GetComponent<HitReceiver>();
 			if (hitHandler)
 			{
 				hitHandler.HandleHit();
 			}
-			
+
 			//TODO: hide render component, spawn particles, ...
 
 			DestroyObject(gameObject);
