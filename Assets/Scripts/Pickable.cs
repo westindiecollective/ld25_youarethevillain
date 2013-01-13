@@ -21,26 +21,21 @@ public class Pickable : MonoBehaviour
 	
 	void Start()
 	{
-		
 	}
 	
 	void Update()
 	{
-	
 	}
-	
+
 	void OnTriggerEnter(Collider other)
 	{
-		if ( other.CompareTag("Player") )
+		Inventory inventory = other.gameObject.GetComponent<Inventory>();
+		if (inventory)
 		{
-			Inventory inventory = other.gameObject.GetComponent<Inventory>();
-			if (inventory)
+			bool pickedup = inventory.AddPickup(m_PickupType, m_PickupCount);
+			if ( pickedup )
 			{
-				bool pickedup = inventory.AddPickup(m_PickupType, m_PickupCount);
-				if ( pickedup )
-				{
-					DestroyObject(gameObject);	
-				}
+				DestroyObject(gameObject);
 			}
 		}
 	}
