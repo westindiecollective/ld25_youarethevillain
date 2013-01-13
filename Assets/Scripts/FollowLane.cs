@@ -1,6 +1,6 @@
 
 //#define USE_RUN_LEFTRIGHT_ANIM_BLENDTREE
-//#define ALWAYS_PROCESS_FOLLOW_LANE
+#define ALWAYS_PROCESS_FOLLOW_LANE
 //#define DEBUG_FOLLOW_LANE
 
 using UnityEngine;
@@ -10,42 +10,42 @@ public class FollowLane : MonoBehaviour
 {
 	public int m_LaneCount = 1;
 	public int m_TargetLaneIndex = 0;
-	
+
 	public float m_LanesWidth = 1.0f;
 	public Vector3 m_LanesLeftOrigin = Vector3.zero;
 	public Vector3 m_LanesForwardDir = Vector3.forward;
 	public Vector3 m_LanesLeftToRightDir = Vector3.right;
-	
+
 	public float m_LaneChangeTimeFactor = 1.0f;
-	
+
 	public float m_DistanceToLaneThreshold = 0.01f;
-	
+
 	public float m_MaxAngularSpeed = Mathf.Infinity;
-	
+
 	public float m_ChangeLaneInputThreshold = 0.8f;
 	public int m_ChangeLaneInputFrameCountThreshold = 1;
 
 	GameCharacterController m_GameCharacterController = null;
-	
+
 #if !DEBUG_FOLLOW_LANE
 	bool m_CanChangeLane = false;
 	bool m_WantToChangeLaneOnLeft = false;
 	bool m_WantToChangeLaneOnRight = false;
 	int m_ChangeLaneInputFrameCount = 0;
-	
+
 	bool m_IsChangingLane = false;
-	
+
 	Vector3 m_CharacterAngularVelocity = Vector3.zero;
 #else
 	public bool m_CanChangeLane = false;
 	public bool m_WantToChangeLaneOnLeft = false;
 	public bool m_WantToChangeLaneOnRight = false;
 	public int m_ChangeLaneInputFrameCount = 0;
-	
+
 	public bool m_IsChangingLane = false;
-	
+
 	public Vector3 m_CharacterAngularVelocity = Vector3.zero;
-	
+
 	public GameObject m_DebugPlayer = null;
 	public GameObject m_DebugTarget = null;
 	public float m_DebugLaneChangeStartTime = 0.0f;
@@ -54,11 +54,11 @@ public class FollowLane : MonoBehaviour
 
 #if USE_RUN_LEFTRIGHT_ANIM_BLENDTREE
 	Animator m_Animator;
-	
+
 	void SetupAnimator(Animator _Animator)
 	{
 		m_Animator = _Animator;
-		
+
 		if(m_Animator.layerCount >= 2)
 			m_Animator.SetLayerWeight(1, 1);
 	}
@@ -72,24 +72,24 @@ public class FollowLane : MonoBehaviour
 #endif
 		m_GameCharacterController = GetComponent<GameCharacterController>();
 	}
-	
+
 	void Update ()
-	{	
+	{
 		float deltaTime = Time.deltaTime;
-		
+
 		if (m_CanChangeLane && m_GameCharacterController)
 		{
 			float h = m_GameCharacterController.GetInputLeftRightDirection();
-			
+
 			int currentLaneIndex = m_TargetLaneIndex;
 			int firstLaneIndex = 0;
 			int lastLaneIndex = m_LaneCount - 1;
-			
+
 			bool changeLeft = m_WantToChangeLaneOnLeft;
 			bool changeRight = m_WantToChangeLaneOnRight;
 			int frame_count = m_ChangeLaneInputFrameCount;
 			int frame_count_min = m_ChangeLaneInputFrameCountThreshold;
-			
+
 			float h_min = m_ChangeLaneInputThreshold;
 			if ( h < -h_min )
 			{
@@ -109,13 +109,15 @@ public class FollowLane : MonoBehaviour
 				changeLeft = false;
 				changeRight = false;
 			}
-			
+
 			if ( (changeLeft || changeRight) && (frame_count >= frame_count_min) )
 			{
 				ChangeLane( changeLeft, h, deltaTime );
 				m_CanChangeLane = false;
+
+				m_GameCharacterController.DisableActions();
 			}
-			
+
 			m_ChangeLaneInputFrameCount = frame_count;
 			m_WantToChangeLaneOnLeft = changeLeft;
 			m_WantToChangeLaneOnRight = changeRight;
@@ -123,7 +125,7 @@ public class FollowLane : MonoBehaviour
 
 		//@HACK: since jump anims aren't perfectly aligned/straight,
 		//correcting player orientation during a jump anim introduce visible anim jigger artifacts
-		IdleRunJump animComponent = GetComponent<IdleRunJump>();
+		CharacterAnimController animComponent = GetComponent<CharacterAnimController>();
 		bool isJumping = (animComponent != null && animComponent.IsJumping());
 		bool updateFollowLane = (m_LaneCount > 0) && !isJumping;
 
@@ -131,7 +133,7 @@ public class FollowLane : MonoBehaviour
 		{
 			float laneWidth = m_LanesWidth / m_LaneCount;
 			Vector3 laneCenterAtOrigin = ComputeLaneCenterAtOrigin(m_TargetLaneIndex, m_LanesLeftOrigin, m_LanesLeftToRightDir, laneWidth);
-			
+
 			Vector3 currentPos = m_GameCharacterController.GetPosition();
 			Quaternion currentRot = m_GameCharacterController.GetOrientation();
 			Vector3 laneCenter = ComputeLaneCenterForPos( currentPos, laneCenterAtOrigin, m_LanesLeftToRightDir);
@@ -139,7 +141,7 @@ public class FollowLane : MonoBehaviour
 #if DEBUG_FOLLOW_LANE
 			//Unity follows left handed convention
 			Vector3 laneUpDir = Vector3.Cross(m_LanesForwardDir, m_LanesLeftToRightDir);
-			
+
 			if (m_DebugPlayer)
 			{
 				currentPos = m_DebugPlayer.transform.position;
@@ -148,9 +150,9 @@ public class FollowLane : MonoBehaviour
 				laneCenter = laneCenter + Vector3.Dot( laneCenterDebug - laneCenter, laneUpDir ) * laneUpDir;
 			}
 #endif
-			
+
 			float distanceToLane = ComputeDistanceToLane( currentPos, laneCenterAtOrigin, m_LanesLeftToRightDir);
-			
+
 #if !ALWAYS_PROCESS_FOLLOW_LANE
 			if (distanceToLane > m_DistanceToLaneThreshold)
 #endif
@@ -163,7 +165,7 @@ public class FollowLane : MonoBehaviour
 					float laneChangeDistance = characterVelocity * m_LaneChangeTimeFactor; //approximation
 					targetForwardOffset = laneChangeDistance * Mathf.Max (distanceToLane / laneWidth, 1.0f); //always have target ahead to help with rotation smoothing
 				}
-				
+
 				Vector3 targetPos = laneCenter + targetForwardOffset * m_LanesForwardDir;
 #if DEBUG_FOLLOW_LANE
 				if (m_DebugTarget)
@@ -175,9 +177,9 @@ public class FollowLane : MonoBehaviour
 
 				Vector3 targetDir = Vector3.Normalize(targetPos - currentPos);
 				Quaternion targetRot = Quaternion.LookRotation(targetDir);
-				
+
 				//Quaternion newRot = Quaternion.Slerp(currentRot, targetRot, deltaTime * m_LaneChangeTimeFactor);
-				
+
 				float angularVelocityY = m_CharacterAngularVelocity.y;
 				float curRotY = currentRot.eulerAngles.y;
 				float targetRotY = targetRot.eulerAngles.y;
@@ -187,12 +189,12 @@ public class FollowLane : MonoBehaviour
 				//Debug.Log(string.Format("Rot Y - cur:{0}, target:{1}, targetangle:{2}, new:{3}", curRotY, targetRotY, targetAngleRotY, newRot2Y));
 #endif
 				Quaternion newRot2 = Quaternion.Euler(0.0f, newRot2Y, 0.0f);
-				
+
 #if DEBUG_FOLLOW_LANE
 				if (m_DebugPlayer)
 				{
 					Vector3 newPos2 = currentPos + (characterVelocity * deltaTime) * (newRot2 * Vector3.forward);
-					
+
 					m_DebugPlayer.transform.rotation = newRot2;
 					m_DebugPlayer.transform.position = newPos2;
 				}
@@ -201,7 +203,7 @@ public class FollowLane : MonoBehaviour
 				{
 					m_GameCharacterController.SetOrientation(newRot2);
 				}
-				
+
 				m_CharacterAngularVelocity.x = 0.0f;//angularVelocityX;
 				m_CharacterAngularVelocity.y = angularVelocityY;
 				m_CharacterAngularVelocity.z = 0.0f;//angularVelocityZ;
@@ -209,7 +211,7 @@ public class FollowLane : MonoBehaviour
 #if ALWAYS_PROCESS_FOLLOW_LANE
 			if (distanceToLane > m_DistanceToLaneThreshold)
 			{
-				
+
 			}
 #endif
 			else
@@ -230,10 +232,12 @@ public class FollowLane : MonoBehaviour
 #endif	//	!ALWAYS_PROCESS_FOLLOW_LANE
 
 				m_CanChangeLane = true;
-				
+
 				if (IsChangingLane())
 				{
 					ChangeLaneDone();
+
+					m_GameCharacterController.EnableActions();
 				}
 			}
 		}
@@ -242,12 +246,12 @@ public class FollowLane : MonoBehaviour
 			//free running mode
 		}
 	}
-	
+
 	bool IsChangingLane()
 	{
 		return m_IsChangingLane;
 	}
-	
+
 	void ChangeLane(bool _ChangeLaneOnLeft, float _InputValue, float _DeltaTime)
 	{	
 		if (_ChangeLaneOnLeft)
@@ -260,7 +264,7 @@ public class FollowLane : MonoBehaviour
 			++m_TargetLaneIndex;
 			System.Diagnostics.Debug.Assert( m_TargetLaneIndex < m_LaneCount);
 		}
-		
+
 #if USE_RUN_LEFTRIGHT_ANIM_BLENDTREE
 		if (m_Animator)
 		{
@@ -277,7 +281,7 @@ public class FollowLane : MonoBehaviour
 
 		m_IsChangingLane = true;
 	}
-	
+
 	void ChangeLaneDone()
 	{
 #if DEBUG_FOLLOW_LANE
@@ -290,7 +294,7 @@ public class FollowLane : MonoBehaviour
 
 		m_IsChangingLane = false;
 	}
-	
+
 	Vector3 ComputeLaneCenterAtOrigin(int _LaneIndex, Vector3 _LanesLeftOrigin, Vector3 _LanesLeftToRightDir, float _LaneWidth)
 	{
 		float laneCenterOffsetRight = (_LaneIndex + 0.5f) * _LaneWidth;
@@ -298,14 +302,14 @@ public class FollowLane : MonoBehaviour
 
 		return laneCenterAtOrigin;
 	}
-	
+
 	Vector3 ComputeLaneCenterForPos(Vector3 _CurrentPos, Vector3 _LaneCenterAtOrigin, Vector3 _LanesLeftToRightDir)
 	{
 		Vector3 laneCenterForPos = _CurrentPos + Vector3.Dot(_LaneCenterAtOrigin - _CurrentPos, _LanesLeftToRightDir) * _LanesLeftToRightDir;
-		
+
 		return laneCenterForPos;
 	}
-	
+
 	float ComputeDistanceToLane(Vector3 _CurrentPos, Vector3 _LaneCenterAtOrigin, Vector3 _LanesLeftToRightDir)
 	{
 		float distanceToLane = Mathf.Abs( Vector3.Dot(_LaneCenterAtOrigin - _CurrentPos, _LanesLeftToRightDir) );
