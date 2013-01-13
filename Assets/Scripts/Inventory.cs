@@ -4,7 +4,7 @@ using System.Collections;
 public class Inventory : MonoBehaviour
 {
 	public int m_UseActionIndex = 0;
-	
+
 	public int m_SwingCountPerBranch = -1;
 	public float m_FireDurationPerDragonCub = 10.0f;
 	public float m_ShootDurationPerPoisonBerries = 4.0f;
@@ -20,27 +20,27 @@ public class Inventory : MonoBehaviour
 
 	public Transform m_UseableBoneOrigin = null;
 	public float m_ProjectileDurationInSeconds = 1.0f;
-	
+
 	public bool m_DropPreviousIfNewPickup = false;
-	
-	Useable m_ItemToUse;
-	int m_ItemUseCount;
-	
-	private Texture2D m_CurrentIcon;
+
+	Useable m_ItemToUse = null;
+	int m_ItemUseCount = 0;
+
+	private Texture2D m_CurrentIcon = null;
 	public Texture2D m_IconBranch, m_IconSnake, m_IconSquirrel, m_IconVampireBat, m_IconPoisonedBerry, m_IconDragonCub, m_IconLavaStone, m_IconDemonFlower;
-	
+
 	GameCharacterController m_GameCharacterController = null;
 
 	void Start()
 	{
 		SetupGameCharacterController( GetComponent<GameCharacterController>() );
 	}
-	
+
 	void SetupGameCharacterController(GameCharacterController _GameCharacterController)
 	{
 		m_GameCharacterController = _GameCharacterController;
 	}
-	
+
 	void Update()
 	{
 		if (m_GameCharacterController)
@@ -52,7 +52,7 @@ public class Inventory : MonoBehaviour
 
 				if ( m_ItemUseCount == 0 )
 				{
-					RemoveUsable();
+					RemoveUseable();
 				}
 	        }
 		}
@@ -69,23 +69,23 @@ public class Inventory : MonoBehaviour
 			GUI.Box(new Rect(Screen.width / 2 - 40, Screen.height - 100, 80, 75), "\nInventory\nEmpty");
 		}
 	}
-	
+
 	public bool AddPickup(Pickable.PickupType _PickupType, int _PickupCount)
 	{
 		bool pickedup = AddUseableFromPickup(_PickupType, _PickupCount);
-		
+
 		return pickedup;
 	}
 	
 	bool AddUseableFromPickup(Pickable.PickupType _PickupType, int _PickupCount)
 	{
 		bool added = false;
-		
+
 		if ( m_DropPreviousIfNewPickup )
 		{
-			RemoveUsable();
+			RemoveUseable();
 		}
-		
+
 		if ( m_ItemToUse == null )
 		{
 			//add useable component accordingly
@@ -134,53 +134,56 @@ public class Inventory : MonoBehaviour
 			}
 
 			//add render component accordingly
-			
+
 			added = (m_ItemToUse != null);
 		}
-		
+
 		return added;
 	}
-	
+
 	Useable AddSwingable(Swingable.SwingableType _SwingableType)
 	{
 		Swingable addedItem = gameObject.AddComponent<Swingable>();
 		addedItem.SetSwingableType(_SwingableType);
-		
+
 		return addedItem;
 	}
-	
+
 	Useable AddThrowable(Throwable.ThrowableType _ThrowableType, GameObject _ProjectilePrefab, Transform _ProjectileOrigin, float _ProjectileVelocity, float _ProjectileDurationInSeconds)
 	{
 		Throwable addedItem = gameObject.AddComponent<Throwable>();
-		addedItem.InitThrowable(_ThrowableType, _ProjectilePrefab, _ProjectileOrigin, _ProjectileVelocity, _ProjectileDurationInSeconds);
+		//Throwing behind the character
+		Vector3 throwDirection = -Vector3.forward;
+
+		addedItem.InitThrowable(_ThrowableType, _ProjectilePrefab, _ProjectileOrigin, throwDirection, _ProjectileVelocity, _ProjectileDurationInSeconds);
 		
 		return addedItem;
 	}
-	
+
 	Useable AddFireable(Fireable.FireableType _FireableType)
 	{
 		Fireable addedItem = gameObject.AddComponent<Fireable>();
 		addedItem.SetFireableType(_FireableType);
-		
+
 		return addedItem;
 	}
-	
+
 	Useable AddPlaceable(Placeable.PlaceableType _PlaceableType, GameObject _ProjectilePrefab, Transform _ProjectileOrigin, float _ProjectileDurationInSeconds)
 	{
 		Placeable addedItem = gameObject.AddComponent<Placeable>();
 		addedItem.InitPlaceable(_PlaceableType, _ProjectilePrefab, _ProjectileOrigin, _ProjectileDurationInSeconds);
-		
+
 		return addedItem;
 	}
-	
-	void RemoveUsable()
-	{		
-		Destroy(m_ItemToUse);
-		Destroy (m_CurrentIcon);
+
+	void RemoveUseable()
+	{
 		m_ItemToUse = null;
 		m_ItemUseCount = 0;
-	}
-	
+
+		m_CurrentIcon = null;
+    }
+
 	void Use(Useable _ItemToUse)
 	{
 		_ItemToUse.Use();

@@ -6,13 +6,15 @@ public class Throwable : Useable
 	public enum ThrowableType { E_ThrowableNone, E_ThrowableSnake, E_ThrowableSquirrel, E_ThrowableLavaStone };
 	ThrowableType m_ThrowableType = ThrowableType.E_ThrowableNone;
 
+	GameObject m_Projectile = null;
+	Vector3 m_ProjectileDirectionRelativeToGameObject = Vector3.zero;
 	float m_ProjectileVelocity = 0.0f;
 	float m_ProjectileDurationInSeconds = 0.0f;
-	GameObject m_Projectile = null;
-	
-	public void InitThrowable(ThrowableType _ThrowableType, GameObject _ProjectilePrefab, Transform _ProjectileOrigin, float _ProjectileVelocity, float _ProjectileDurationInSeconds)
+
+	public void InitThrowable(ThrowableType _ThrowableType, GameObject _ProjectilePrefab, Transform _ProjectileOrigin, Vector3 _ProjectileDirection, float _ProjectileVelocity, float _ProjectileDurationInSeconds)
 	{
 		m_ThrowableType = _ThrowableType;
+		m_ProjectileDirectionRelativeToGameObject = _ProjectileDirection;
 		m_ProjectileVelocity = _ProjectileVelocity;
 		m_ProjectileDurationInSeconds = _ProjectileDurationInSeconds;
 
@@ -30,7 +32,7 @@ public class Throwable : Useable
 			projectile.transform.parent = _ProjectileOrigin;
 			projectile.transform.localPosition = Vector3.zero;
 			projectile.transform.localRotation = Quaternion.identity;
-			float projectileScale = 0.40f;
+			float projectileScale = 0.1f;
 			projectile.transform.localScale = new Vector3(projectileScale, projectileScale, projectileScale);
 
 			projectile.AddComponent<Rigidbody>();
@@ -50,23 +52,28 @@ public class Throwable : Useable
 			projectileCollider.enabled = false;
 		}
 
+		HitTrigger projectileHitTrigger = projectile.GetComponent<HitTrigger>();
+		if (projectileHitTrigger != null)
+		{
+			projectileHitTrigger.enabled = false;
+		}
+
 		m_Projectile = projectile;
 	}
-	
+
 	public override UseableType GetUseableType()
 	{
 		return UseableType.E_UseableThrow;	
 	}
-	
+
 	void Start()
 	{
-		
 	}
-	
+
 	void Update()
 	{
 	}
-	
+
 	public override void Use()
 	{
 		if (m_Projectile != null)
@@ -87,7 +94,7 @@ public class Throwable : Useable
 				projectileRB.isKinematic = false;
 				projectileRB.useGravity = false;
 				projectileRB.angularVelocity = Vector3.zero;
-				projectileRB.velocity = m_ProjectileVelocity * gameObject.transform.TransformDirection( -Vector3.forward );
+				projectileRB.velocity = m_ProjectileVelocity * gameObject.transform.TransformDirection( m_ProjectileDirectionRelativeToGameObject );
 			}
 
 			Collider projectileCollider = m_Projectile.GetComponent<Collider>();
@@ -97,11 +104,11 @@ public class Throwable : Useable
 				projectileCollider.isTrigger = true;
 			}
 
-			HitTrigger projectileHitEffect = m_Projectile.GetComponent<HitTrigger>();
-			if (projectileHitEffect != null)
+			HitTrigger projectileHitTrigger = m_Projectile.GetComponent<HitTrigger>();
+			if (projectileHitTrigger != null)
 			{
-				projectileHitEffect.enabled = true;
-				projectileHitEffect.Init(gameObject);
+				projectileHitTrigger.enabled = true;
+				projectileHitTrigger.Init(gameObject);
 			}
 		}
 	}
