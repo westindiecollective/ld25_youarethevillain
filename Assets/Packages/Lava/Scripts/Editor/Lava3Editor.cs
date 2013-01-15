@@ -105,7 +105,9 @@ public class Lava3Editor : Editor
 	} 
 
     public override void OnInspectorGUI() 
-	{		
+	{
+		bool allowSceneObjects = !EditorUtility.IsPersistent(target);
+
 		m_SerObj.Update();
 			
 		EditorGUILayout.Separator ();	
@@ -208,15 +210,16 @@ public class Lava3Editor : Editor
 		if(m_WaterDisplacement.boolValue) {
 			
 			LavaManager.Instance().m_CpuDisplacementModel = (LavaManager.CpuDisplacementModel)EditorGUILayout.EnumPopup("CPU based", ((LavaManager.CpuDisplacementModel)LavaManager.Instance().m_CpuDisplacementModel));
+
 			EditorGUILayout.BeginHorizontal();
-			m_Displacement = (Texture2D) EditorGUILayout.ObjectField("Height map A", m_Displacement as Object, typeof(Texture2D));
-			m_2ndDisplacement = (Texture2D) EditorGUILayout.ObjectField("Height map B", m_2ndDisplacement as Object, typeof(Texture2D));
+
+			m_Displacement = (Texture2D) EditorGUILayout.ObjectField("Height map A", m_Displacement as Object, typeof(Texture2D), allowSceneObjects);
+			m_2ndDisplacement = (Texture2D) EditorGUILayout.ObjectField("Height map B", m_2ndDisplacement as Object, typeof(Texture2D), allowSceneObjects);
 			
 			LavaManager.Instance().SetDisplacementHeightMap(m_Displacement as Texture2D, 0);
 			LavaManager.Instance().SetMaterialTexture("_DisplacementHeightMap",m_Displacement as Texture2D);
 			LavaManager.Instance().SetDisplacementHeightMap(m_2ndDisplacement as Texture2D, 1);
 			LavaManager.Instance().SetMaterialTexture("_SecondDisplacementHeightMap",m_2ndDisplacement as Texture2D);
-
 
 			EditorGUILayout.EndHorizontal();
 
@@ -354,15 +357,16 @@ public class Lava3Editor : Editor
 		
 		GUILayout.Label(new GUIContent("06. Textures", "Specify textures for advanced and fallback rendering"), EditorStyles.boldLabel );	
 		EditorGUILayout.BeginHorizontal();
-		m_NormalMap = EditorGUILayout.ObjectField("Bump", m_NormalMap as Object, typeof(Texture2D)) as Texture2D;
+		m_NormalMap = EditorGUILayout.ObjectField("Bump", m_NormalMap as Object, typeof(Texture2D), allowSceneObjects) as Texture2D;
 		LavaManager.Instance().SetMaterialTexture("_BumpMap",m_NormalMap);
-		m_FoamMap = EditorGUILayout.ObjectField("Foam", m_FoamMap as Object, typeof(Texture2D)) as Texture2D;
+		m_FoamMap = EditorGUILayout.ObjectField("Foam", m_FoamMap as Object, typeof(Texture2D), allowSceneObjects) as Texture2D;
 		LavaManager.Instance().SetMaterialTexture("_ShoreTex",m_FoamMap);
-		EditorGUILayout.EndHorizontal();	
+		EditorGUILayout.EndHorizontal();
+
 		EditorGUILayout.BeginHorizontal();
-		m_CubeFallback = EditorGUILayout.ObjectField("Static cubemap", m_CubeFallback as Object, typeof(Cubemap)) as Cubemap;
+		m_CubeFallback = EditorGUILayout.ObjectField("Static cubemap", m_CubeFallback as Object, typeof(Cubemap), allowSceneObjects) as Cubemap;
 		LavaManager.Instance().SetMaterialTexture("_ReflectiveColorCube",m_CubeFallback);
-		m_Fallback = EditorGUILayout.ObjectField("Fallback", m_Fallback as Object, typeof(Texture2D)) as Texture2D;
+		m_Fallback = EditorGUILayout.ObjectField("Fallback", m_Fallback as Object, typeof(Texture2D), allowSceneObjects) as Texture2D;
 		LavaManager.Instance().SetMaterialTexture("_MainTex",m_Fallback);
 		EditorGUILayout.EndHorizontal();	
 		
