@@ -159,7 +159,10 @@ public class FollowLane : MonoBehaviour
 			{
 				float characterVelocity = m_GameCharacterController.GetVelocity();
 				
-				float targetForwardOffset = 0.0f;
+				//The idea is that when the character is blocked by an obstacle
+				// it shouldn't target ahead but go straight towards the lane center
+				// but it should always target forward when it's already close to the lane center (whether velocity is null or not)
+				float targetForwardOffset = (distanceToLane > m_DistanceToLaneThreshold)? 0.0f : 1.0f;
 				if ( characterVelocity * m_LaneChangeTimeFactor > laneWidth )
 				{
 					float laneChangeDistance = characterVelocity * m_LaneChangeTimeFactor; //approximation
@@ -289,7 +292,7 @@ public class FollowLane : MonoBehaviour
 		int debugLaneChangeEndFrame = Time.frameCount;
 		float debugLaneChangeTime = debugLaneChangeEndTime - m_DebugLaneChangeStartTime;
 		int debugLaneChangeFrameCount = debugLaneChangeEndFrame - m_DebugLaneChangeStartFrame;
-		Debug.Log(string.Format("Lane change - time: {0}, frame count: {1}", debugLaneChangeTime, debugLaneChangeFrameCount));
+		//Debug.Log(string.Format("Lane change - time: {0}, frame count: {1}", debugLaneChangeTime, debugLaneChangeFrameCount));
 #endif
 
 		m_IsChangingLane = false;
