@@ -1,13 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class VillainAnimController : CharacterAnimController
 {
+	public CharacterAnimAction[] m_SupportedAnimActions;
+
 	Animator m_Animator = null;
 	GameCharacterController m_GameCharacterController = null;
-
-	public int m_JumpActionIndex = 0;
-	public int m_ThrowActionIndex = 1;
 
 	//@TODO: move this to GamePlayerController
 	public float m_DirectionDampTime = .25f;
@@ -15,10 +15,48 @@ public class VillainAnimController : CharacterAnimController
 	public bool m_AffectSpeed = true;
 	public bool m_AffectDirection = true;
 
-	int m_JumpId = 0;
-	int m_ThrowId = 0;
 	int m_SpeedId = 0;
 	int m_DirectionId = 0;
+
+	int FindAnimParamId( GameCharacterController.CharacterActionType _actionType )
+	{
+		int animParamId = 0;
+		int actionCount = m_SupportedAnimActions.Length;
+		for (int actionIndex = 0; actionIndex < actionCount; ++actionIndex)
+		{
+			CharacterAnimAction action = m_SupportedAnimActions[actionIndex];
+			if (action.m_ActionType == _actionType)
+			{
+				animParamId = action.GetParamId();
+				break;
+			}
+		}
+		return animParamId;
+	}
+
+	void InitActions()
+	{
+		int actionCount = m_SupportedAnimActions.Length;
+		for (int actionIndex = 0; actionIndex < actionCount; ++actionIndex)
+		{
+			CharacterAnimAction action = m_SupportedAnimActions[actionIndex];
+			action.InitParamId();
+		}
+
+		m_SpeedId = Animator.StringToHash("Speed");
+		m_DirectionId = Animator.StringToHash("Direction");
+	}
+
+	void ResetActions()
+	{
+		int actionCount = m_SupportedAnimActions.Length;
+		for (int actionIndex = 0; actionIndex < actionCount; ++actionIndex)
+		{
+			CharacterAnimAction action = m_SupportedAnimActions[actionIndex];
+			int animParamId = action.GetParamId();
+			m_Animator.SetBool( animParamId, false );
+		}
+	}
 
 	void Start ()
 	{
@@ -33,10 +71,7 @@ public class VillainAnimController : CharacterAnimController
 		if(m_Animator.layerCount >= 2)
 			m_Animator.SetLayerWeight(1, 1);
 
-		m_JumpId = Animator.StringToHash("Jump");
-		m_ThrowId = Animator.StringToHash("Throw");
-		m_SpeedId = Animator.StringToHash("Speed");
-		m_DirectionId = Animator.StringToHash("Direction");
+		InitActions();
 	}
 
 	void SetupGameCharacterController(GameCharacterController _GameCharacterController)
@@ -50,11 +85,14 @@ public class VillainAnimController : CharacterAnimController
 
 		if (m_Animator && m_GameCharacterController)
 		{
-			bool startJump = m_GameCharacterController.IsStartingAction(m_JumpActionIndex);
-			m_Animator.SetBool(m_JumpId, startJump);
+			ResetActions();
 
-			bool startThrow = m_GameCharacterController.IsStartingAction(m_ThrowActionIndex);
-			m_Animator.SetBool(m_ThrowId, startThrow);
+			List<GameCharacterController.CharacterActionType> startedActions = m_GameCharacterController.GetActions();
+			foreach (GameCharacterController.CharacterActionType action in startedActions)
+			{
+				int animParamId = FindAnimParamId(action);
+				m_Animator.SetBool( animParamId, true );
+			}
 
 			if (m_AffectSpeed)
 			{
@@ -69,11 +107,6 @@ public class VillainAnimController : CharacterAnimController
 				m_Animator.SetFloat(m_DirectionId, direction, m_DirectionDampTime, deltaTime);
 			}
 		}
-	}
-
-	public override void HandleHit()
-	{
-		//villain not affected by hit?
 	}
 
 	public override bool IsJumping()
@@ -102,5 +135,4 @@ public class VillainAnimController : CharacterAnimController
 
 		return isThrowing;
 	}
-
 }

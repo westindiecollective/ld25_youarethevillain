@@ -1,13 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class HeroAnimController : CharacterAnimController
 {
+	public CharacterAnimAction[] m_SupportedAnimActions;
+
 	Animator m_Animator = null;
 	GameCharacterController m_GameCharacterController = null;
-
-	public int m_JumpActionIndex = 0;
-	public int m_ThrowActionIndex = 1;
 
 	//@TODO: move this to GamePlayerController
 	public float m_DirectionDampTime = .25f;
@@ -15,13 +15,48 @@ public class HeroAnimController : CharacterAnimController
 	public bool m_AffectSpeed = true;
 	public bool m_AffectDirection = true;
 
-	int m_HitId = 0;
-	int m_JumpId = 0;
-	int m_ThrowId = 0;
 	int m_SpeedId = 0;
 	int m_DirectionId = 0;
 
-	bool m_TakeHit = false;
+	int FindAnimParamId( GameCharacterController.CharacterActionType _actionType )
+	{
+		int animParamId = 0;
+		int actionCount = m_SupportedAnimActions.Length;
+		for (int actionIndex = 0; actionIndex < actionCount; ++actionIndex)
+		{
+			CharacterAnimAction action = m_SupportedAnimActions[actionIndex];
+			if (action.m_ActionType == _actionType)
+			{
+				animParamId = action.GetParamId();
+				break;
+			}
+		}
+		return animParamId;
+	}
+
+	void InitActions()
+	{
+		int actionCount = m_SupportedAnimActions.Length;
+		for (int actionIndex = 0; actionIndex < actionCount; ++actionIndex)
+		{
+			CharacterAnimAction action = m_SupportedAnimActions[actionIndex];
+			action.InitParamId();
+		}
+
+		m_SpeedId = Animator.StringToHash("Speed");
+		m_DirectionId = Animator.StringToHash("Direction");
+	}
+
+	void ResetActions()
+	{
+		int actionCount = m_SupportedAnimActions.Length;
+		for (int actionIndex = 0; actionIndex < actionCount; ++actionIndex)
+		{
+			CharacterAnimAction action = m_SupportedAnimActions[actionIndex];
+			int animParamId = action.GetParamId();
+			m_Animator.SetBool( animParamId, false );
+		}
+	}
 
 	void Start ()
 	{
@@ -36,41 +71,27 @@ public class HeroAnimController : CharacterAnimController
 		if(m_Animator.layerCount >= 2)
 			m_Animator.SetLayerWeight(1, 1);
 
-		m_HitId = Animator.StringToHash("Hit");
-		m_JumpId = Animator.StringToHash("Jump");
-		m_ThrowId = Animator.StringToHash("Throw");
-		m_SpeedId = Animator.StringToHash("Speed");
-		m_DirectionId = Animator.StringToHash("Direction");
+		InitActions();
 	}
 
 	void SetupGameCharacterController(GameCharacterController _GameCharacterController)
 	{
-		 m_GameCharacterController = _GameCharacterController;
+		m_GameCharacterController = _GameCharacterController;
 	}
 
-	void Update () 
+	void Update()
 	{
 		float deltaTime = Time.deltaTime;
 
 		if (m_Animator && m_GameCharacterController)
 		{
-			if (m_TakeHit)
+			ResetActions();
+
+			List<GameCharacterController.CharacterActionType> startedActions = m_GameCharacterController.GetActions();
+			foreach (GameCharacterController.CharacterActionType action in startedActions)
 			{
-				m_Animator.SetBool(m_HitId, true);
-				m_Animator.SetBool(m_JumpId, false);
-				m_Animator.SetBool(m_ThrowId, false);
-
-				m_TakeHit = false;
-			}
-			else
-			{
-				m_Animator.SetBool(m_HitId, false);
-
-				bool startJump = m_GameCharacterController.IsStartingAction(m_JumpActionIndex);
-				m_Animator.SetBool(m_JumpId, startJump);
-
-				bool startThrow = m_GameCharacterController.IsStartingAction(m_ThrowActionIndex);
-				m_Animator.SetBool(m_ThrowId, startThrow);
+				int animParamId = FindAnimParamId(action);
+				m_Animator.SetBool( animParamId, true );
 			}
 
 			if (m_AffectSpeed)
@@ -85,21 +106,7 @@ public class HeroAnimController : CharacterAnimController
 				float direction = Mathf.Clamp01(leftRightDirection);
 				m_Animator.SetFloat(m_DirectionId, direction, m_DirectionDampTime, deltaTime);
 			}
-
-			if (!gameObject.CompareTag("Player"))
-			{
-				AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
-				if (stateInfo.IsName("Hit"))
-					Debug.Log( string.Format("Hero anim state is 'Hit'") );
-				else if (stateInfo.IsName("Idle"))
-					Debug.Log( string.Format("Hero anim state is 'Idle'") );
-			}
 		}
-	}
-
-	public override void HandleHit()
-	{
-		m_TakeHit = true;
 	}
 
 	public override bool IsJumping()
@@ -107,7 +114,10 @@ public class HeroAnimController : CharacterAnimController
 		AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
 		bool isJumping = stateInfo.IsName("Base Layer.Jump");
 
-		return isJumping;
+		AnimatorStateInfo nextStateInfo = m_Animator.GetNextAnimatorStateInfo(0);
+		bool isGoingToJump = nextStateInfo.IsName("Base Layer.Jump");
+
+		return (isJumping || isGoingToJump);
 	}
 
 	public override bool IsRunning()
@@ -122,8 +132,7 @@ public class HeroAnimController : CharacterAnimController
 	{
 		AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
 		bool isThrowing = stateInfo.IsName("Base Layer.Throw");
-		
+
 		return isThrowing;
 	}
-
 }

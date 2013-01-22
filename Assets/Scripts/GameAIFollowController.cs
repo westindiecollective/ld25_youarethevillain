@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameAIFollowController : GameCharacterController
 {
@@ -12,8 +13,14 @@ public class GameAIFollowController : GameCharacterController
 	int m_FrameCountSinceLastPath = 0;
 	NavMeshAgent m_NavAgent = null;
 
+	//FIXME: duplicated code from GamePlayerController
+	public CharacterAction[] m_SupportedActions;
+	LinkedList<CharacterAction> m_ActiveActions = null;
+	List<CharacterActionType> m_Actions = null;
+	bool m_CanStartAction = false;
+	bool m_HandleHit = false;
+
 	CharacterController m_CharacterController = null;
-	AnimationController m_AnimationController = null;
 
 #if DEBUG_AIFOLLOW_CONTROLLER
 	public GameObject m_DebugDestination = null;
@@ -60,23 +67,68 @@ public class GameAIFollowController : GameCharacterController
 
 	public override void EnableActions()
 	{
-		//nothing
+		m_CanStartAction = true;
 	}
 
 	public override void DisableActions()
 	{
-		//nothing
+		m_CanStartAction = false;
 	}
 
-	public override bool IsStartingAction(int _ActionIndex)
+	public override void EnableAction(CharacterActionType _Action)
 	{
-		return false;
+		int actionCount = m_SupportedActions.Length;
+		for (int actionIndex = 0; actionIndex < actionCount; ++actionIndex)
+		{
+			CharacterAction action = m_SupportedActions[actionIndex];
+			if (action.m_ActionType == _Action)
+			{
+				m_ActiveActions.AddFirst(action);
+				break;
+			}
+		}
+	}
+
+	public override void DisableAction(CharacterActionType _Action)
+	{
+		foreach (CharacterAction action in m_ActiveActions)
+		{
+			if (action.m_ActionType == _Action)
+			{
+				m_ActiveActions.Remove(action);
+				break;
+			}
+		}
+	}
+
+	//FIXME: duplicated code from GamePlayerController
+	public override List<CharacterActionType> GetActions()
+	{
+		return m_Actions;	//new List<CharacterActionType>();
+	}
+
+	void InitActions()
+	{
+		m_ActiveActions = new LinkedList<CharacterAction>();
+		m_Actions = new List<CharacterActionType>();
+	}
+
+	void StartAction(CharacterActionType _ActionType)
+	{
+		m_Actions.Add(_ActionType);
+	}
+
+	void ClearActions()
+	{
+		m_Actions.Clear();
 	}
 
 	void Start()
 	{
+		InitActions();
+		EnableActions();
+
 		m_CharacterController = GetComponent<CharacterController>();
-        m_AnimationController = GetComponent<AnimationController>();
 
 		m_NavAgent = GetComponent<NavMeshAgent>();
 		m_NavAgent.updatePosition = false;
@@ -95,6 +147,37 @@ public class GameAIFollowController : GameCharacterController
 			{
 				UpdatePath(deltaTime, m_FollowTarget.gameObject.transform.position);
 				m_FrameCountSinceLastPath = 0;
+			}
+
+			//FIXME: duplicated code from GamePlayerController
+			ClearActions();
+
+			if (m_CanStartAction)
+			{
+				foreach (CharacterAction action in m_ActiveActions)
+				{
+					string actionButton = action.m_ActionButton;
+					if (actionButton.Length > 0 && Input.GetButton(actionButton))
+					{
+						StartAction(action.m_ActionType);
+					}
+				}
+			}
+
+			if (m_HandleHit)
+			{
+				//check whether hit action is supported
+				int actionCount = m_SupportedActions.Length;
+				for (int actionIndex = 0; actionIndex < actionCount; ++actionIndex)
+				{
+					CharacterAction action = m_SupportedActions[actionIndex];
+					if (action.m_ActionType == CharacterActionType.E_ActionTakeHit)
+					{
+						StartAction(CharacterActionType.E_ActionTakeHit);
+						break;
+					}
+				}
+				m_HandleHit = false;
 			}
 		}
 	}
@@ -116,9 +199,6 @@ public class GameAIFollowController : GameCharacterController
 
 	public override void HandleHit()
 	{
-		if (m_AnimationController)
-		{
-			m_AnimationController.HandleHit();
-		}
+		m_HandleHit = true;
 	}
 }

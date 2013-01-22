@@ -1,24 +1,25 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GamePlayerController : GameCharacterController
 {
-	public string[] m_ActionButtons = new string[] { "Fire1", "Fire2" };
+	public CharacterAction[] m_SupportedActions;
+
+	LinkedList<CharacterAction> m_ActiveActions = null;
+	List<CharacterActionType> m_Actions = null;
+	bool m_CanStartAction = false;
+	bool m_HandleHit = false;
 
 	public float m_SpeedMultiplier = 1.0f;
 	public float m_SpeedMinimum = 0.0f;
 
 	public bool m_InvertLeftRightInput = false;
 
-	int m_ActionCount = 0;
-    bool m_CanStartAction = false;
-	bool[] m_StartingActions;
-
 	float m_InputSpeed = 0.0f;
 	float m_InputLeftRigthDirection = 0.0f;
 
 	CharacterController m_CharacterController = null;
-	AnimationController m_AnimationController = null;
 
 	public override float GetInputSpeed()
 	{
@@ -65,47 +66,91 @@ public class GamePlayerController : GameCharacterController
 		m_CanStartAction = false;
 	}
 
-	public override bool IsStartingAction(int _ActionIndex)
+	public override void EnableAction(CharacterActionType _Action)
 	{
-		bool isValidActionIndex = (0 <= _ActionIndex && _ActionIndex < m_ActionCount);
-		System.Diagnostics.Debug.Assert(isValidActionIndex);
-		
-		bool isStartingAction = isValidActionIndex? m_StartingActions[_ActionIndex] : false;
-		return isStartingAction;
+		int actionCount = m_SupportedActions.Length;
+		for (int actionIndex = 0; actionIndex < actionCount; ++actionIndex)
+		{
+			CharacterAction action = m_SupportedActions[actionIndex];
+			if (action.m_ActionType == _Action)
+			{
+				m_ActiveActions.AddFirst(action);
+				break;
+			}
+		}
+	}
+
+	public override void DisableAction(CharacterActionType _Action)
+	{
+		foreach (CharacterAction action in m_ActiveActions)
+		{
+			if (action.m_ActionType == _Action)
+			{
+				m_ActiveActions.Remove(action);
+				break;
+			}
+		}
+	}
+
+	public override List<CharacterActionType> GetActions()
+	{
+		return m_Actions;
+	}
+
+	void InitActions()
+	{
+		m_ActiveActions = new LinkedList<CharacterAction>();
+		m_Actions = new List<CharacterActionType>();
+	}
+
+	void StartAction(CharacterActionType _ActionType)
+	{
+		m_Actions.Add(_ActionType);
+	}
+
+	void ClearActions()
+	{
+		m_Actions.Clear();
 	}
 
 	void Start()
 	{
+		InitActions();
 		EnableActions();
 
-		m_ActionCount = m_ActionButtons.GetLength(0);
-		m_StartingActions = new bool[m_ActionCount];
-
 		m_CharacterController = GetComponent<CharacterController>();
-		m_AnimationController = GetComponent<AnimationController>();
 	}
 	
 	void Update()
 	{
-		for (int actionIndex = 0; actionIndex < m_ActionCount; ++actionIndex)
+		ClearActions();
+
+		if (m_CanStartAction)
 		{
-			bool hasActionStarted = m_StartingActions[actionIndex];
-			if ( hasActionStarted )
-			{
-				m_StartingActions[actionIndex] = false;
+				foreach (CharacterAction action in m_ActiveActions)
+				{
+					string actionButton = action.m_ActionButton;
+					if (actionButton.Length > 0 && Input.GetButton(actionButton))
+				{
+					StartAction(action.m_ActionType);
+				}
 			}
 		}
 
-		if ( m_CanStartAction )
+		if (m_HandleHit)
 		{
-			for (int actionIndex = 0; actionIndex < m_ActionCount; ++actionIndex)
+			//check whether hit action is supported
+			int actionCount = m_SupportedActions.Length;
+			for (int actionIndex = 0; actionIndex < actionCount; ++actionIndex)
 			{
-				string actionButton = m_ActionButtons[actionIndex];
-				if (Input.GetButton(actionButton))
+				CharacterAction action = m_SupportedActions[actionIndex];
+				if (action.m_ActionType == CharacterActionType.E_ActionTakeHit)
 				{
-					m_StartingActions[actionIndex] = true;
+					StartAction(CharacterActionType.E_ActionTakeHit);
+					break;
 				}
 			}
+			m_HandleHit = false;
 		}
 
 		float input_h = Input.GetAxis("Horizontal");
@@ -119,10 +164,7 @@ public class GamePlayerController : GameCharacterController
 
 	public override void HandleHit()
 	{
-		if (m_AnimationController)
-		{
-			m_AnimationController.HandleHit();
-		}
+		m_HandleHit = true;
 	}
 
 }

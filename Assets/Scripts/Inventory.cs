@@ -1,10 +1,9 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Inventory : MonoBehaviour
 {
-	public int m_UseActionIndex = 0;
-
 	public int m_SwingCountPerBranch = -1;
 	public float m_FireDurationPerDragonCub = 10.0f;
 	public float m_ShootDurationPerPoisonBerries = 4.0f;
@@ -45,10 +44,17 @@ public class Inventory : MonoBehaviour
 	{
 		if (m_GameCharacterController)
 		{
-			bool useItem = m_GameCharacterController.IsStartingAction(m_UseActionIndex);
-			if ( useItem && m_ItemToUse )
+			if (m_ItemToUse)
 			{
-				Use(m_ItemToUse);
+				List<GameCharacterController.CharacterActionType> startedActions = m_GameCharacterController.GetActions();
+				foreach (GameCharacterController.CharacterActionType action in startedActions)
+				{
+					if (action == GameCharacterController.CharacterActionType.E_ActionUse)
+					{
+						Use(m_ItemToUse);
+						break;
+					}
+				}
 
 				if ( m_ItemUseCount == 0 )
 				{
