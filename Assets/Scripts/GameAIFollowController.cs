@@ -8,6 +8,7 @@ public class GameAIFollowController : GameCharacterController
 {
 	public GameObject m_FollowTarget = null;
 	public float m_FollowSpeed = 0.5f;
+	Vector3 m_FollowRightDir = Vector3.zero;
 
 	public int m_UpdatePathFrameFrequency = 1;
 	int m_FrameCountSinceLastPath = 0;
@@ -33,11 +34,20 @@ public class GameAIFollowController : GameCharacterController
 
 	public override float GetInputLeftRightDirection()
 	{
-		Vector3 desiredForwardDir = m_NavAgent? Vector3.Normalize(m_NavAgent.desiredVelocity) : Vector3.zero;
-		Vector3 rightDir = gameObject.transform.right;
+		Vector3 desiredForwardDir = (m_NavAgent && m_NavAgent.hasPath)? Vector3.Normalize(m_NavAgent.path.corners[1] - gameObject.transform.position) : Vector3.zero;
+		Vector3 rightDir = m_FollowRightDir;
 		float leftRightDir = Vector3.Dot(desiredForwardDir, rightDir);
 
 		return leftRightDir;
+	}
+
+	void UpdateFollowDir( Vector3 _followUpDir, Vector3 _followForwardDir)
+	{
+		Vector3 upDir = _followUpDir;
+		Vector3 forwardDir = _followForwardDir;
+		Vector3 rightDir = Vector3.Cross(upDir, forwardDir);
+
+		m_FollowRightDir = rightDir;
 	}
 
 	public override Vector3 GetPosition()
@@ -133,6 +143,9 @@ public class GameAIFollowController : GameCharacterController
 		m_NavAgent = GetComponent<NavMeshAgent>();
 		m_NavAgent.updatePosition = false;
 		m_NavAgent.updateRotation = false;
+
+		//HACK: up and forward dir should be provided by sthg and not hardcoded
+		UpdateFollowDir(Vector3.up, Vector3.forward);
 	}
 
 	void Update()
@@ -141,6 +154,20 @@ public class GameAIFollowController : GameCharacterController
 
 		if (m_NavAgent && m_FollowTarget)
 		{
+#if DEBUG_AIFOLLOW_CONTROLLER
+			NavMeshPathStatus pathStatus = m_NavAgent.pathStatus;
+			if (pathStatus != NavMeshPathStatus.PathInvalid)
+			{
+				Color pathColor = (pathStatus == NavMeshPathStatus.PathComplete)? Color.green : Color.blue;
+
+				NavMeshPath path = m_NavAgent.path;
+				int pathElements = path.corners.Length;
+				for (int i=1; i<pathElements; ++i)
+				{
+				    Debug.DrawLine(path.corners[i-1], path.corners[i], pathColor);
+				}
+			}
+#endif
 			++m_FrameCountSinceLastPath;
 			bool updatePath = (m_FrameCountSinceLastPath >= m_UpdatePathFrameFrequency) && CanUpdatePath();
 			if (updatePath)
