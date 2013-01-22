@@ -1,3 +1,5 @@
+#define DEBUG_PLAY_GAME_IN_SLOW_MOTION
+
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +22,13 @@ public class GamePlayerController : GameCharacterController
 	float m_InputLeftRigthDirection = 0.0f;
 
 	CharacterController m_CharacterController = null;
+
+#if DEBUG_PLAY_GAME_IN_SLOW_MOTION
+	public string m_SlowMotionInputButton = "";
+	public float m_SlowMotionTimeScale = 0.5f;
+	float m_FixedDeltaTimeRatio = 0.0f;
+	bool m_PlayInSlowMotion = false;
+#endif
 
 	public override float GetInputSpeed()
 	{
@@ -119,10 +128,29 @@ public class GamePlayerController : GameCharacterController
 		EnableActions();
 
 		m_CharacterController = GetComponent<CharacterController>();
+
+#if DEBUG_PLAY_GAME_IN_SLOW_MOTION
+		m_FixedDeltaTimeRatio = Time.fixedDeltaTime / Time.timeScale;
+		if (m_PlayInSlowMotion)
+		{
+			Time.timeScale = m_PlayInSlowMotion? m_SlowMotionTimeScale : 1.0f;
+			Time.fixedDeltaTime = m_FixedDeltaTimeRatio * Time.timeScale;
+		}
+#endif
 	}
 	
 	void Update()
 	{
+#if DEBUG_PLAY_GAME_IN_SLOW_MOTION
+		bool switchSlowMotionMode = (m_SlowMotionInputButton.Length > 0) && Input.GetButton(m_SlowMotionInputButton);
+		if (switchSlowMotionMode)
+		{
+			m_PlayInSlowMotion = !m_PlayInSlowMotion;
+			Time.timeScale = m_PlayInSlowMotion? m_SlowMotionTimeScale : 1.0f;
+			Time.fixedDeltaTime = m_FixedDeltaTimeRatio * Time.timeScale;
+		}
+#endif
+
 		ClearActions();
 
 		if (m_CanStartAction)
