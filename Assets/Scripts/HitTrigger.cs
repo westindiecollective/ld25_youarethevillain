@@ -35,7 +35,7 @@ public class HitTrigger : MonoBehaviour
 				hitHandler.HandleHit();
 			}
 
-			//TODO: hide render component, spawn particles, ...
+			//@TODO: hide render component, spawn particles, ...
 
 			DestroyObject(gameObject);
 		}
