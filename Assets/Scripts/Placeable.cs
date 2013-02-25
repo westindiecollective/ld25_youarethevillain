@@ -32,6 +32,8 @@ public class Placeable : Useable
 			projectile.transform.localScale = new Vector3(projectileScale, projectileScale, projectileScale);
 
 			projectile.AddComponent<Rigidbody>();
+
+			projectile.AddComponent<HitTrigger>();
 		}
 
 		Rigidbody projectileRB = projectile.GetComponent<Rigidbody>();
@@ -44,6 +46,12 @@ public class Placeable : Useable
 		if (projectileCollider != null)
 		{
 			projectileCollider.enabled = false;
+		}
+
+		HitTrigger projectileHitTrigger = projectile.GetComponent<HitTrigger>();
+		if (projectileHitTrigger != null)
+		{
+			projectileHitTrigger.enabled = false;
 		}
 
 		m_Projectile = projectile;
@@ -86,6 +94,13 @@ public class Placeable : Useable
 			if (projectileCollider != null)
 			{
 				projectileCollider.enabled = true;
+			}
+
+			HitTrigger projectileHitTrigger = m_Projectile.GetComponent<HitTrigger>();
+			if (projectileHitTrigger != null)
+			{
+				projectileHitTrigger.enabled = true;
+				projectileHitTrigger.Init(gameObject);
 			}
 		}
 	}
