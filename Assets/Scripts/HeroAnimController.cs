@@ -135,4 +135,18 @@ public class HeroAnimController : CharacterAnimController
 
 		return isThrowing;
 	}
+	
+	public override bool CanOrientationBeModified()
+	{
+		AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
+		bool isRunning = stateInfo.IsName("Base Layer.Run");
+		bool isIdle = stateInfo.IsName("Base Layer.Idle");
+
+		AnimatorStateInfo nextStateInfo = m_Animator.GetNextAnimatorStateInfo(0);
+		bool isGoingToJump = nextStateInfo.IsName("Base Layer.Jump");
+		bool isGoingToDive = nextStateInfo.IsName("Base Layer.Dive");
+		bool isGoingToVault = nextStateInfo.IsName("Base Layer.Vault");
+
+		return (isRunning || isIdle) && !(isGoingToJump || isGoingToDive || isGoingToVault);
+	}
 }

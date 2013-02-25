@@ -1,5 +1,3 @@
-
-//#define USE_RUN_LEFTRIGHT_ANIM_BLENDTREE
 #define ALWAYS_PROCESS_FOLLOW_LANE
 //#define DEBUG_FOLLOW_LANE
 
@@ -51,25 +49,9 @@ public class FollowLane : MonoBehaviour
 	public float m_DebugLaneChangeStartTime = 0.0f;
 	public int m_DebugLaneChangeStartFrame = 0;
 #endif
-
-#if USE_RUN_LEFTRIGHT_ANIM_BLENDTREE
-	Animator m_Animator;
-
-	void SetupAnimator(Animator _Animator)
-	{
-		m_Animator = _Animator;
-
-		if(m_Animator.layerCount >= 2)
-			m_Animator.SetLayerWeight(1, 1);
-	}
-#endif
 	
 	void Start ()
 	{
-#if USE_RUN_LEFTRIGHT_ANIM_BLENDTREE
-		Animator animator = GetComponent<Animator>();
-		SetupAnimator(animator);
-#endif
 		m_GameCharacterController = GetComponent<GameCharacterController>();
 	}
 
@@ -126,8 +108,8 @@ public class FollowLane : MonoBehaviour
 		//@HACK: since jump anims aren't perfectly aligned/straight,
 		//correcting player orientation during a jump anim introduce visible anim jigger artifacts
 		CharacterAnimController animComponent = GetComponent<CharacterAnimController>();
-		bool isJumping = (animComponent != null && animComponent.IsJumping());
-		bool updateFollowLane = (m_LaneCount > 0) && !isJumping;
+		bool canModifyOrientation = (animComponent != null && animComponent.CanOrientationBeModified());
+		bool updateFollowLane = (m_LaneCount > 0) && canModifyOrientation;
 
 		if (updateFollowLane)
 		{
@@ -267,15 +249,6 @@ public class FollowLane : MonoBehaviour
 			++m_TargetLaneIndex;
 			System.Diagnostics.Debug.Assert( m_TargetLaneIndex < m_LaneCount);
 		}
-
-#if USE_RUN_LEFTRIGHT_ANIM_BLENDTREE
-		if (m_Animator)
-		{
-			float DirectionValue = _InputValue;
-			float DirectionDampTime = 0.25f;
-			m_Animator.SetFloat("Direction", DirectionValue, DirectionDampTime, _DeltaTime);
-		}
-#endif
 
 #if DEBUG_FOLLOW_LANE
 		m_DebugLaneChangeStartTime = Time.time;

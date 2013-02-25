@@ -10,8 +10,13 @@ public class GamePlayerController : GameCharacterController
 
 	LinkedList<CharacterAction> m_ActiveActions = null;
 	List<CharacterActionType> m_Actions = null;
+	List<CharacterActionType> m_PendingActions = null;
+	List<CharacterActionType> m_PendingActionsToTrigger = null;
 	bool m_CanStartAction = false;
 	bool m_HandleHit = false;
+	bool m_CanUpdateCollision = false;
+	
+	Texture2D m_CurrentActionIcon = null;
 
 	public float m_SpeedMultiplier = 1.0f;
 	public float m_SpeedMinimum = 0.0f;
@@ -64,6 +69,27 @@ public class GamePlayerController : GameCharacterController
 	{
 		return m_CharacterController? m_CharacterController.velocity.magnitude : 0.0f;
 	}
+	
+	public override bool CanUpdateCollision()
+	{
+		return m_CanUpdateCollision;
+	}
+	
+	public override void AuthorizeUpdatingCollision()
+	{
+		m_CanUpdateCollision = true;
+	}
+	
+	public override void UnauthorizeUpdatingCollision()
+	{
+		m_CanUpdateCollision = false;
+	}
+	
+	public override void UpdateCollision(Vector3 _Center, float _Height)
+	{
+		m_CharacterController.center = _Center;
+		m_CharacterController.height = _Height;
+	}
 
 	public override void EnableActions()
 	{
@@ -84,6 +110,7 @@ public class GamePlayerController : GameCharacterController
 			if (action.m_ActionType == _Action)
 			{
 				m_ActiveActions.AddFirst(action);
+				m_CurrentActionIcon = action.m_ActionIcon;
 				break;
 			}
 		}
@@ -96,6 +123,7 @@ public class GamePlayerController : GameCharacterController
 			if (action.m_ActionType == _Action)
 			{
 				m_ActiveActions.Remove(action);
+				m_CurrentActionIcon = null;
 				break;
 			}
 		}
@@ -110,6 +138,8 @@ public class GamePlayerController : GameCharacterController
 	{
 		m_ActiveActions = new LinkedList<CharacterAction>();
 		m_Actions = new List<CharacterActionType>();
+		m_PendingActions = new List<CharacterActionType>();
+		m_PendingActionsToTrigger = new List<CharacterActionType>();
 	}
 
 	void StartAction(CharacterActionType _ActionType)
@@ -121,6 +151,47 @@ public class GamePlayerController : GameCharacterController
 	{
 		m_Actions.Clear();
 	}
+	
+	public override void TriggerPendingAction(CharacterActionType _ActionType)
+	{
+		m_PendingActionsToTrigger.Add(_ActionType);
+	}
+	
+	void ClearPendingActionsToTrigger()
+	{
+		m_PendingActionsToTrigger.Clear();
+	}
+	
+	bool IsActionPending(CharacterActionType _ActionType)
+	{
+		bool isActionPending = m_PendingActions.Contains(_ActionType);
+		return isActionPending;
+	}
+	
+	void AddPendingAction(CharacterActionType _ActionType)
+	{
+		m_PendingActions.Add(_ActionType);
+	}
+	
+	void StartPendingAction(CharacterActionType _ActionType)
+	{
+		foreach (CharacterActionType pendingActionType in m_PendingActions)
+		{
+			if (pendingActionType == _ActionType)
+			{
+				StartAction(_ActionType);
+
+				m_PendingActions.Remove(_ActionType);
+				
+				break;
+			}
+		}
+	}
+	
+	void ClearPendingActions()
+	{
+		m_PendingActions.Clear();
+	}
 
 	void Start()
 	{
@@ -128,6 +199,8 @@ public class GamePlayerController : GameCharacterController
 		EnableActions();
 
 		m_CharacterController = GetComponent<CharacterController>();
+		
+		AuthorizeUpdatingCollision();
 
 #if DEBUG_PLAY_GAME_IN_SLOW_MOTION
 		m_FixedDeltaTimeRatio = Time.fixedDeltaTime / Time.timeScale;
@@ -139,10 +212,18 @@ public class GamePlayerController : GameCharacterController
 #endif
 	}
 	
+	void OnGUI ()
+	{
+		if (m_CurrentActionIcon)
+		{
+			GUI.Box(new Rect(Screen.width / 2 - 40, 100, 80, 75), m_CurrentActionIcon);
+		}
+	}
+	
 	void Update()
 	{
 #if DEBUG_PLAY_GAME_IN_SLOW_MOTION
-		bool switchSlowMotionMode = (m_SlowMotionInputButton.Length > 0) && Input.GetButton(m_SlowMotionInputButton);
+		bool switchSlowMotionMode = (m_SlowMotionInputButton.Length > 0) && Input.GetButtonUp(m_SlowMotionInputButton);
 		if (switchSlowMotionMode)
 		{
 			m_PlayInSlowMotion = !m_PlayInSlowMotion;
@@ -155,14 +236,29 @@ public class GamePlayerController : GameCharacterController
 
 		if (m_CanStartAction)
 		{
-				foreach (CharacterAction action in m_ActiveActions)
+			foreach (CharacterAction action in m_ActiveActions)
+			{
+				string actionButton = action.m_ActionButton;
+				if (actionButton.Length > 0 && Input.GetButtonUp(actionButton))
 				{
-					string actionButton = action.m_ActionButton;
-					if (actionButton.Length > 0 && Input.GetButton(actionButton))
-				{
-					StartAction(action.m_ActionType);
+					bool startAction = action.m_ActionIsImmediate;
+					if (startAction)
+					{
+						StartAction(action.m_ActionType);
+					}
+					else if ( IsActionPending(action.m_ActionType) == false )
+					{
+						AddPendingAction(action.m_ActionType);
+					}
 				}
 			}
+			
+			foreach (CharacterActionType actionType in m_PendingActionsToTrigger)
+			{
+				StartPendingAction(actionType);
+			}
+			
+			ClearPendingActionsToTrigger();
 		}
 
 		if (m_HandleHit)

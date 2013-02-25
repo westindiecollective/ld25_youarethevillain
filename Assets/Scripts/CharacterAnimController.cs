@@ -26,4 +26,6 @@ public abstract class CharacterAnimController : AnimationController
 	public abstract bool IsRunning();
 
 	public abstract bool IsThrowing();
+	
+	public abstract bool CanOrientationBeModified();
 }

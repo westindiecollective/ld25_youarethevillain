@@ -17,6 +17,12 @@ public class VillainAnimController : CharacterAnimController
 
 	int m_SpeedId = 0;
 	int m_DirectionId = 0;
+	
+	private float m_BaseCapsuleHeight;
+	private Vector3 m_BaseCapsuleCenter;
+	public float m_JumpCapsuleScaleFactor = 0.0f;
+	public float m_JumpCapsuleOffsetY = 0.0f;
+	int m_JumpingCurveId = 0;
 
 	int FindAnimParamId( GameCharacterController.CharacterActionType _actionType )
 	{
@@ -57,6 +63,15 @@ public class VillainAnimController : CharacterAnimController
 			m_Animator.SetBool( animParamId, false );
 		}
 	}
+	
+	void InitCharacterCollisionUpdate()
+	{
+		CharacterController  charController = GetComponent<CharacterController>();
+		m_BaseCapsuleHeight = charController.height;
+		m_BaseCapsuleCenter = charController.center;
+		
+		m_JumpingCurveId = Animator.StringToHash("JumpingCurve");
+	}
 
 	void Start ()
 	{
@@ -77,6 +92,8 @@ public class VillainAnimController : CharacterAnimController
 	void SetupGameCharacterController(GameCharacterController _GameCharacterController)
 	{
 		m_GameCharacterController = _GameCharacterController;
+		
+		InitCharacterCollisionUpdate();
 	}
 
 	void Update()
@@ -85,6 +102,11 @@ public class VillainAnimController : CharacterAnimController
 
 		if (m_Animator && m_GameCharacterController)
 		{
+			if (m_GameCharacterController.CanUpdateCollision())
+			{
+				UpdateCharacterCollisionFromAnimCurves(m_Animator, m_GameCharacterController);
+			}
+			
 			ResetActions();
 
 			List<GameCharacterController.CharacterActionType> startedActions = m_GameCharacterController.GetActions();
@@ -107,6 +129,16 @@ public class VillainAnimController : CharacterAnimController
 				m_Animator.SetFloat(m_DirectionId, direction, m_DirectionDampTime, deltaTime);
 			}
 		}
+	}
+	
+	void UpdateCharacterCollisionFromAnimCurves(
+		Animator _Animator,
+		GameCharacterController _GameCharacterController)
+	{
+		Vector3 center = m_BaseCapsuleCenter + new Vector3(0.0f, m_BaseCapsuleCenter.y * m_JumpCapsuleOffsetY * _Animator.GetFloat(m_JumpingCurveId), 0.0f);
+		float height = m_BaseCapsuleHeight * (1 + m_JumpCapsuleScaleFactor * _Animator.GetFloat(m_JumpingCurveId));
+		
+		_GameCharacterController.UpdateCollision(center, height);
 	}
 
 	public override bool IsJumping()
@@ -134,5 +166,19 @@ public class VillainAnimController : CharacterAnimController
 		bool isThrowing = stateInfo.IsName("Base Layer.Throw");
 
 		return isThrowing;
+	}
+	
+	public override bool CanOrientationBeModified()
+	{
+		AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
+		bool isRunning = stateInfo.IsName("Base Layer.Run");
+		bool isIdle = stateInfo.IsName("Base Layer.Idle");
+
+		AnimatorStateInfo nextStateInfo = m_Animator.GetNextAnimatorStateInfo(0);
+		bool isGoingToJump = nextStateInfo.IsName("Base Layer.Jump");
+		bool isGoingToDive = nextStateInfo.IsName("Base Layer.Dive");
+		bool isGoingToVault = nextStateInfo.IsName("Base Layer.Vault");
+
+		return (isRunning || isIdle) && !(isGoingToJump || isGoingToDive || isGoingToVault);
 	}
 }

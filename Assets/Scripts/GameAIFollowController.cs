@@ -20,6 +20,8 @@ public class GameAIFollowController : GameCharacterController
 	List<CharacterActionType> m_Actions = null;
 	bool m_CanStartAction = false;
 	bool m_HandleHit = false;
+	
+	bool m_CanUpdateCollision = false;
 
 	CharacterController m_CharacterController = null;
 
@@ -73,6 +75,27 @@ public class GameAIFollowController : GameCharacterController
 	public override float GetVelocity()
 	{
 		return m_CharacterController.velocity.magnitude;
+	}
+	
+	public override bool CanUpdateCollision()
+	{
+		return m_CanUpdateCollision;
+	}
+	
+	public override void AuthorizeUpdatingCollision()
+	{
+		m_CanUpdateCollision = true;
+	}
+	
+	public override void UnauthorizeUpdatingCollision()
+	{
+		m_CanUpdateCollision = false;
+	}
+	
+	public override void UpdateCollision(Vector3 _Center, float _Height)
+	{
+		m_CharacterController.center = _Center;
+		m_CharacterController.height = _Height;
 	}
 
 	public override void EnableActions()
@@ -131,6 +154,10 @@ public class GameAIFollowController : GameCharacterController
 	void ClearActions()
 	{
 		m_Actions.Clear();
+	}
+
+	public override void TriggerPendingAction(CharacterActionType _Action)
+	{
 	}
 
 	void Start()
