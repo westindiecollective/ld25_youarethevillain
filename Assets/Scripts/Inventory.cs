@@ -26,7 +26,7 @@ public class Inventory : MonoBehaviour
 	int m_ItemUseCount = 0;
 
 	private Texture2D m_CurrentIcon = null;
-	public Texture2D m_IconBranch, m_IconSnake, m_IconSquirrel, m_IconVampireBat, m_IconPoisonedBerry, m_IconDragonCub, m_IconLavaStone, m_IconDemonFlower;
+	public Texture2D m_IconEmpty, m_IconBranch, m_IconSnake, m_IconSquirrel, m_IconVampireBat, m_IconPoisonedBerry, m_IconDragonCub, m_IconLavaStone, m_IconDemonFlower;
 
 	GameCharacterController m_GameCharacterController = null;
 
@@ -68,11 +68,11 @@ public class Inventory : MonoBehaviour
 	{
 		if (m_CurrentIcon)
 		{
-			GUI.Box(new Rect(Screen.width / 2 - 40, Screen.height - 100, 80, 75), m_CurrentIcon);
+			GUI.Box(new Rect( 40, Screen.height - 100, 80, 75), m_CurrentIcon);
 		}
 		else
 		{
-			GUI.Box(new Rect(Screen.width / 2 - 40, Screen.height - 100, 80, 75), "\nInventory\nEmpty");
+			GUI.Box(new Rect( 40, Screen.height - 100, 80, 75), m_IconEmpty);
 		}
 	}
 
