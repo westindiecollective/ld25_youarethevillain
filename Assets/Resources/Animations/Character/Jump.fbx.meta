@@ -516,32 +516,32 @@ ModelImporter:
       keepAdditionalBonesAnimation: 1
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves:
-      - name: JumpingCurve
+      - name: CollisionHeightScaleCurve
         curve:
           serializedVersion: 2
           curve:
           - time: 0
-            value: 0
+            value: 1
             inSlope: 0
             outSlope: 0
             tangentMode: 0
           - time: .287904739
-            value: 0
+            value: 1
             inSlope: 0
             outSlope: 0
             tangentMode: 0
-          - time: .454508156
-            value: .999996781
+          - time: .454508066
+            value: .300000012
             inSlope: 0
             outSlope: 0
             tangentMode: 0
           - time: .625213027
-            value: 0
+            value: 1
             inSlope: 0
             outSlope: 0
             tangentMode: 0
           - time: 1
-            value: 0
+            value: 1
             inSlope: 0
             outSlope: 0
             tangentMode: 0
@@ -552,14 +552,14 @@ ModelImporter:
           serializedVersion: 2
           curve:
           - time: 0
-            value: .0499812327
-            inSlope: -.004662978
-            outSlope: -.004662978
+            value: 1
+            inSlope: 0
+            outSlope: 0
             tangentMode: 0
           - time: .117154807
-            value: .0499812327
-            inSlope: -.000816546904
-            outSlope: -.000816546904
+            value: 1
+            inSlope: 0
+            outSlope: 0
             tangentMode: 0
           - time: .288243622
             value: -1.8763385e-05
@@ -571,15 +571,15 @@ ModelImporter:
             inSlope: .00489191618
             outSlope: .00489191618
             tangentMode: 0
-          - time: .648262262
-            value: .0502509102
+          - time: .648262143
+            value: 1
             inSlope: 0
             outSlope: 0
             tangentMode: 0
-          - time: .999913216
-            value: .0501741543
-            inSlope: -.00220157625
-            outSlope: -.00220157625
+          - time: .999913037
+            value: 1
+            inSlope: 0
+            outSlope: 0
             tangentMode: 0
           preInfinity: 2
           postInfinity: 2

@@ -20,9 +20,7 @@ public class VillainAnimController : CharacterAnimController
 	
 	private float m_BaseCapsuleHeight;
 	private Vector3 m_BaseCapsuleCenter;
-	public float m_JumpCapsuleScaleFactor = 0.0f;
-	public float m_JumpCapsuleOffsetY = 0.0f;
-	int m_JumpingCurveId = 0;
+	int m_CollisionHeightScaleCurveId = 0;
 
 	int FindAnimParamId( GameCharacterController.CharacterActionType _actionType )
 	{
@@ -70,7 +68,7 @@ public class VillainAnimController : CharacterAnimController
 		m_BaseCapsuleHeight = charController.height;
 		m_BaseCapsuleCenter = charController.center;
 		
-		m_JumpingCurveId = Animator.StringToHash("JumpingCurve");
+		m_CollisionHeightScaleCurveId = Animator.StringToHash("CollisionHeightScaleCurve");
 	}
 
 	void Start ()
@@ -135,8 +133,8 @@ public class VillainAnimController : CharacterAnimController
 		Animator _Animator,
 		GameCharacterController _GameCharacterController)
 	{
-		Vector3 center = m_BaseCapsuleCenter + new Vector3(0.0f, m_BaseCapsuleCenter.y * m_JumpCapsuleOffsetY * _Animator.GetFloat(m_JumpingCurveId), 0.0f);
-		float height = m_BaseCapsuleHeight * (1 + m_JumpCapsuleScaleFactor * _Animator.GetFloat(m_JumpingCurveId));
+		Vector3 center = m_BaseCapsuleCenter;
+		float height = m_BaseCapsuleHeight * _Animator.GetFloat(m_CollisionHeightScaleCurveId);
 		
 		_GameCharacterController.UpdateCollision(center, height);
 	}
