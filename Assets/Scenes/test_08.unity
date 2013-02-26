@@ -2016,7 +2016,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 3, z: 2}
-  m_Center: {x: 0, y: 1, z: -2}
+  m_Center: {x: 0, y: 1, z: -1}
 --- !u!4 &333224493
 Transform:
   m_ObjectHideFlags: 0
@@ -3041,7 +3041,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 3, z: 2}
-  m_Center: {x: 0, y: 1, z: -2}
+  m_Center: {x: 0, y: 1, z: -1}
 --- !u!4 &516092563
 Transform:
   m_ObjectHideFlags: 0
@@ -4078,7 +4078,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 3, z: 2}
-  m_Center: {x: 0, y: 1, z: -2}
+  m_Center: {x: 0, y: 1, z: -1}
 --- !u!4 &682473812
 Transform:
   m_ObjectHideFlags: 0
@@ -4131,7 +4131,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 3, z: 2}
-  m_Center: {x: 0, y: 1, z: -2}
+  m_Center: {x: 0, y: 1, z: -1}
 --- !u!4 &701938749
 Transform:
   m_ObjectHideFlags: 0
@@ -5599,7 +5599,7 @@ MonoBehaviour:
     m_ActionIcon: {fileID: 0}
   - m_ActionType: 5
     m_ActionButton: Fire1
-    m_ActionIsImmediate: 0
+    m_ActionIsImmediate: 1
     m_ActionIcon: {fileID: 2800000, guid: 31c709d75d909a04880cc774c49a2885, type: 3}
   m_SpeedMultiplier: 1
   m_SpeedMinimum: .5
@@ -5638,12 +5638,12 @@ CharacterController:
   m_GameObject: {fileID: 962090381}
   serializedVersion: 2
   m_Height: 1.79999995
-  m_Radius: .349999994
+  m_Radius: .300000012
   m_SlopeLimit: 45
   m_StepOffset: .300000012
   m_SkinWidth: .0799999982
   m_MinMoveDistance: 0
-  m_Center: {x: 0, y: .949999988, z: 0}
+  m_Center: {x: 0, y: .899999976, z: 0}
 --- !u!114 &962090388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9763,7 +9763,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 3, z: 2}
-  m_Center: {x: 0, y: 1, z: -2}
+  m_Center: {x: 0, y: 1, z: -1}
 --- !u!4 &1653462375
 Transform:
   m_ObjectHideFlags: 0
