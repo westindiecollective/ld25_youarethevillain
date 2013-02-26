@@ -31,10 +31,11 @@ public abstract class GameCharacterController : MonoBehaviour
 	public abstract void SetOrientation(Quaternion _Orientation);
 	public abstract float GetVelocity();
 	
-	public abstract void UpdateCollision(Vector3 _Center, float _Height);
-	public abstract bool CanUpdateCollision();
-	public abstract void AuthorizeUpdatingCollision();
-	public abstract void UnauthorizeUpdatingCollision();
+	public abstract void UpdateCollisionCenter(Vector3 _Center);
+	public abstract void UpdateCollisionHeight(float _Height);
+	public abstract bool CanUpdateCollisionCenter();
+	public abstract void AuthorizeUpdatingCollisionCenter();
+	public abstract void UnauthorizeUpdatingCollisionCenter();
 
 	public abstract void EnableActions();
 	public abstract void DisableActions();

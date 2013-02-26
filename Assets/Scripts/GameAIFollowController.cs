@@ -21,7 +21,7 @@ public class GameAIFollowController : GameCharacterController
 	bool m_CanStartAction = false;
 	bool m_HandleHit = false;
 	
-	bool m_CanUpdateCollision = false;
+	bool m_CanUpdateCollisionCenter = false;
 
 	CharacterController m_CharacterController = null;
 
@@ -77,25 +77,29 @@ public class GameAIFollowController : GameCharacterController
 		return m_CharacterController.velocity.magnitude;
 	}
 	
-	public override bool CanUpdateCollision()
+	public override bool CanUpdateCollisionCenter()
 	{
-		return m_CanUpdateCollision;
+		return m_CanUpdateCollisionCenter;
 	}
 	
-	public override void AuthorizeUpdatingCollision()
+	public override void AuthorizeUpdatingCollisionCenter()
 	{
-		m_CanUpdateCollision = true;
+		m_CanUpdateCollisionCenter = true;
 	}
 	
-	public override void UnauthorizeUpdatingCollision()
+	public override void UnauthorizeUpdatingCollisionCenter()
 	{
-		m_CanUpdateCollision = false;
+		m_CanUpdateCollisionCenter = false;
 	}
 	
-	public override void UpdateCollision(Vector3 _Center, float _Height)
+	public override void UpdateCollisionHeight(float _Height)
+	{
+		m_CharacterController.height = _Height;
+	}
+	
+	public override void UpdateCollisionCenter(Vector3 _Center)
 	{
 		m_CharacterController.center = _Center;
-		m_CharacterController.height = _Height;
 	}
 
 	public override void EnableActions()

@@ -100,10 +100,7 @@ public class VillainAnimController : CharacterAnimController
 
 		if (m_Animator && m_GameCharacterController)
 		{
-			if (m_GameCharacterController.CanUpdateCollision())
-			{
-				UpdateCharacterCollisionFromAnimCurves(m_Animator, m_GameCharacterController);
-			}
+			UpdateCharacterCollisionFromAnimCurves(m_Animator, m_GameCharacterController, m_BaseCapsuleCenter, m_BaseCapsuleHeight);
 			
 			ResetActions();
 
@@ -131,12 +128,18 @@ public class VillainAnimController : CharacterAnimController
 	
 	void UpdateCharacterCollisionFromAnimCurves(
 		Animator _Animator,
-		GameCharacterController _GameCharacterController)
+		GameCharacterController _GameCharacterController,
+		Vector3 _BaseCollisionCenter,
+		float _BaseCollisionHeight)
 	{
-		Vector3 center = m_BaseCapsuleCenter;
-		float height = m_BaseCapsuleHeight * _Animator.GetFloat(m_CollisionHeightScaleCurveId);
+		if (_GameCharacterController.CanUpdateCollisionCenter())
+		{
+			Vector3 center = _BaseCollisionCenter;
+			_GameCharacterController.UpdateCollisionCenter(center);
+		}
 		
-		_GameCharacterController.UpdateCollision(center, height);
+		float height = _BaseCollisionHeight * _Animator.GetFloat(m_CollisionHeightScaleCurveId);
+		_GameCharacterController.UpdateCollisionHeight(height);
 	}
 
 	public override bool IsJumping()

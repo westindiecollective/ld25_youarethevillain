@@ -14,7 +14,7 @@ public class GamePlayerController : GameCharacterController
 	List<CharacterActionType> m_PendingActionsToTrigger = null;
 	bool m_CanStartAction = false;
 	bool m_HandleHit = false;
-	bool m_CanUpdateCollision = false;
+	bool m_CanUpdateCollisionCenter = false;
 	
 	Texture2D m_CurrentActionIcon = null;
 
@@ -70,25 +70,33 @@ public class GamePlayerController : GameCharacterController
 		return m_CharacterController? m_CharacterController.velocity.magnitude : 0.0f;
 	}
 	
-	public override bool CanUpdateCollision()
+	//NOTE: updating character collision center will reset Unity internal data for OnTriggerEnter() events
+	//causing multiple successive enter events being fired
+	//To avoid this, when entering a trigger volume, UnauthorizeUpdatingCollisionCenter() should be called
+	//and when exiting the trigger volume, AuthorizeUpdatingCollisionCenter() should be called
+	public override bool CanUpdateCollisionCenter()
 	{
-		return m_CanUpdateCollision;
+		return m_CanUpdateCollisionCenter;
 	}
 	
-	public override void AuthorizeUpdatingCollision()
+	public override void AuthorizeUpdatingCollisionCenter()
 	{
-		m_CanUpdateCollision = true;
+		m_CanUpdateCollisionCenter = true;
 	}
 	
-	public override void UnauthorizeUpdatingCollision()
+	public override void UnauthorizeUpdatingCollisionCenter()
 	{
-		m_CanUpdateCollision = false;
+		m_CanUpdateCollisionCenter = false;
 	}
 	
-	public override void UpdateCollision(Vector3 _Center, float _Height)
+	public override void UpdateCollisionHeight(float _Height)
+	{
+		m_CharacterController.height = _Height;
+	}
+	
+	public override void UpdateCollisionCenter(Vector3 _Center)
 	{
 		m_CharacterController.center = _Center;
-		m_CharacterController.height = _Height;
 	}
 
 	public override void EnableActions()
@@ -200,7 +208,7 @@ public class GamePlayerController : GameCharacterController
 
 		m_CharacterController = GetComponent<CharacterController>();
 		
-		AuthorizeUpdatingCollision();
+		AuthorizeUpdatingCollisionCenter();
 
 #if DEBUG_PLAY_GAME_IN_SLOW_MOTION
 		m_FixedDeltaTimeRatio = Time.fixedDeltaTime / Time.timeScale;
