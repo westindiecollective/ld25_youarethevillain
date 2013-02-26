@@ -8,8 +8,9 @@ public class ThirdPersonCamera : MonoBehaviour
 	public float m_SmoothFactor;    // how smooth the camera movement is
 
 	public bool m_UseLookDir = false;
-	public bool m_UseLookDirAsFollowPositionMask = false;
+	public bool m_UseFollowPositionMask = false;
 	public Vector3 m_LookDir = Vector3.forward;
+	public Vector3 m_FollowPositionMask = Vector3.forward;
 
 	private Vector3 m_TargetPosition;   // the position the camera is trying to be in
 
@@ -17,7 +18,12 @@ public class ThirdPersonCamera : MonoBehaviour
 
 	void Start()
 	{
-		m_FollowTransform = GameObject.FindWithTag ("Player").transform;
+		 SetFollowTarget(GameObject.FindWithTag("Player").transform);
+	}
+	
+	public void SetFollowTarget(Transform _FollowTarget)
+	{
+		m_FollowTransform = _FollowTarget;
 	}
 
 	void LateUpdate()
@@ -35,7 +41,7 @@ public class ThirdPersonCamera : MonoBehaviour
 		}
 
 		Vector3 lookDir = (m_UseLookDir)? m_LookDir : m_FollowTransform.forward;
-		Vector3 followPos = (m_UseLookDirAsFollowPositionMask)? Vector3.Dot(m_FollowTransform.position, m_LookDir) * m_LookDir: m_FollowTransform.position;
+		Vector3 followPos = (m_UseFollowPositionMask)? Vector3.Scale(m_FollowTransform.position, m_FollowPositionMask) : m_FollowTransform.position;
 
 		// setting the target position to be the correct offset from the hovercraft
 		m_TargetPosition = followPos + m_DistanceUp * Vector3.up  - m_DistanceAway * lookDir;

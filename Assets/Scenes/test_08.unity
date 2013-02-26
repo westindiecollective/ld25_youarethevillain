@@ -494,8 +494,9 @@ MonoBehaviour:
   m_DistanceUp: 3
   m_SmoothFactor: 3
   m_UseLookDir: 1
-  m_UseLookDirAsFollowPositionMask: 1
+  m_UseFollowPositionMask: 1
   m_LookDir: {x: 0, y: 0, z: -1}
+  m_FollowPositionMask: {x: 0, y: 0, z: 1}
 --- !u!1 &111750828
 GameObject:
   m_ObjectHideFlags: 0
