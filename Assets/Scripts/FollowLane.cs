@@ -61,6 +61,10 @@ public class FollowLane : MonoBehaviour
 
 		if (m_CanChangeLane && m_GameCharacterController)
 		{
+			GameObject character = m_GameCharacterController.gameObject;
+			Vector3 characterPos = m_GameCharacterController.GetPosition();
+			float laneWidth = m_LanesWidth / m_LaneCount;
+			
 			float h = m_GameCharacterController.GetInputLeftRightDirection();
 
 			int currentLaneIndex = m_TargetLaneIndex;
@@ -76,14 +80,14 @@ public class FollowLane : MonoBehaviour
 			if ( h < -h_min )
 			{
 				frame_count = (changeLeft)? frame_count+1 : 1;
-				changeLeft = (currentLaneIndex > firstLaneIndex);
+				changeLeft = (currentLaneIndex > firstLaneIndex) && !WillCollideWhenChangingLane(-m_LanesLeftToRightDir, laneWidth, characterPos, character);
 				changeRight = false;
 			}
 			else if ( h > h_min )
 			{
 				frame_count = (changeRight)? frame_count+1 : 1;
 				changeLeft = false;
-				changeRight = (currentLaneIndex < lastLaneIndex);
+				changeRight = (currentLaneIndex < lastLaneIndex) && !WillCollideWhenChangingLane(m_LanesLeftToRightDir, laneWidth, characterPos, character);;
 			}
 			else
 			{
@@ -96,8 +100,10 @@ public class FollowLane : MonoBehaviour
 			{
 				ChangeLane( changeLeft, h, deltaTime );
 				m_CanChangeLane = false;
-
-				m_GameCharacterController.DisableActions();
+				
+				//@NOTE: preventing players changing lane from performing an action is too restrictive
+				//this would prevent players from jumping just because they're changing lane
+				//m_GameCharacterController.DisableActions();
 			}
 
 			m_ChangeLaneInputFrameCount = frame_count;
@@ -231,6 +237,29 @@ public class FollowLane : MonoBehaviour
 			//free running mode
 		}
 	}
+	
+	bool WillCollideWhenChangingLane(Vector3 _ChangeLaneDir, float _LaneWidth, Vector3 _Position, GameObject _CharacterChangingLane)
+	{
+		bool willCollide = false;
+		
+		RaycastHit[] hits;
+        hits = Physics.RaycastAll(_Position, _ChangeLaneDir, _LaneWidth);
+		
+        foreach (RaycastHit hit in hits)
+		{
+			bool isTrigger = hit.collider.isTrigger;
+			GameObject blockingObject = hit.collider.gameObject;
+			
+			if (!isTrigger && blockingObject != _CharacterChangingLane)
+			{
+				//Debug.Log(string.Format("Character {0} can't change lane because of object {1}.", _CharacterChangingLane, blockingObject));
+				willCollide = true;
+				break;
+			}
+        }
+		
+		return willCollide;
+    }
 
 	bool IsChangingLane()
 	{
