@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d33645362894e24f98df8e42c34cd06, type: 3}
   m_Name: 
-  m_ActionToActivate: 5
+  m_ActionToActivate: 6
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

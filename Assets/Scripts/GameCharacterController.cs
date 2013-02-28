@@ -8,6 +8,7 @@ public abstract class GameCharacterController : MonoBehaviour
 		E_ActionNone,
 		E_ActionDive,
 		E_ActionJump,
+		E_ActionSlide,
 		E_ActionTakeHit,
 		E_ActionUse,
 		E_ActionVault,
