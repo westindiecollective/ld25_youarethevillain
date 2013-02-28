@@ -32,7 +32,7 @@ public class GamePlayerController : GameCharacterController
 	public string m_SlowMotionInputButton = "";
 	public float m_SlowMotionTimeScale = 0.5f;
 	float m_FixedDeltaTimeRatio = 0.0f;
-	bool m_PlayInSlowMotion = false;
+	public bool m_PlayInSlowMotion = false;
 #endif
 
 	public override float GetInputSpeed()
@@ -231,7 +231,7 @@ public class GamePlayerController : GameCharacterController
 	void Update()
 	{
 #if DEBUG_PLAY_GAME_IN_SLOW_MOTION
-		bool switchSlowMotionMode = (m_SlowMotionInputButton.Length > 0) && Input.GetButtonUp(m_SlowMotionInputButton);
+		bool switchSlowMotionMode = (m_SlowMotionInputButton.Length > 0) && Input.GetButtonDown(m_SlowMotionInputButton);
 		if (switchSlowMotionMode)
 		{
 			m_PlayInSlowMotion = !m_PlayInSlowMotion;
@@ -247,7 +247,7 @@ public class GamePlayerController : GameCharacterController
 			foreach (CharacterAction action in m_ActiveActions)
 			{
 				string actionButton = action.m_ActionButton;
-				if (actionButton.Length > 0 && Input.GetButtonUp(actionButton))
+				if (actionButton.Length > 0 && Input.GetButtonDown(actionButton))
 				{
 					bool startAction = action.m_ActionIsImmediate;
 					if (startAction)
