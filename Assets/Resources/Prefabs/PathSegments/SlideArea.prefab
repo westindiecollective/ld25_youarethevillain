@@ -11,7 +11,7 @@ GameObject:
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: JumpArea
+  m_Name: SlideArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38,8 +38,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 3, z: 2}
-  m_Center: {x: 0, y: 1, z: -4}
+  m_Size: {x: 1, y: 3, z: 4}
+  m_Center: {x: 0, y: 1, z: -3}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d33645362894e24f98df8e42c34cd06, type: 3}
   m_Name: 
-  m_ActionToActivate: 2
+  m_ActionToActivate: 3
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
