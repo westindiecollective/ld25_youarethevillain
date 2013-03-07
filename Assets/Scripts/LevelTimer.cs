@@ -15,7 +15,7 @@ public class LevelTimer : MonoBehaviour
 	{
 		if (!m_TriggeredWait)
 		{
-			LevelManager instance = (LevelManager)FindObjectOfType (typeof (LevelManager));
+			LevelManager instance = (LevelManager)FindObjectOfType( typeof(LevelManager) );
 			if (instance)
 			{
 				StartCoroutine( instance.LoadLevelAsync( m_LevelToLoadIndex, m_WaitTimeInSeconds ) );
