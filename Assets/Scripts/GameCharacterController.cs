@@ -2,22 +2,22 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+public enum CharacterActionType {
+	E_ActionNone,
+	E_ActionDive,
+	E_ActionJump,
+	E_ActionSlide,
+	E_ActionTakeHit,
+	E_ActionUse,
+	E_ActionVault,
+};
+
 public abstract class GameCharacterController : MonoBehaviour
 {
-	public enum CharacterActionType {
-		E_ActionNone,
-		E_ActionDive,
-		E_ActionJump,
-		E_ActionSlide,
-		E_ActionTakeHit,
-		E_ActionUse,
-		E_ActionVault,
-	};
-
 	[System.Serializable]
 	public class CharacterAction
 	{
-		public CharacterActionType m_ActionType = GameCharacterController.CharacterActionType.E_ActionNone;
+		public CharacterActionType m_ActionType = CharacterActionType.E_ActionNone;
 		public string m_ActionButton;
 		public bool m_ActionIsImmediate;
 		public Texture2D m_ActionIcon;

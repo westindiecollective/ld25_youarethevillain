@@ -18,7 +18,7 @@ public class HeroAnimController : CharacterAnimController
 	int m_SpeedId = 0;
 	int m_DirectionId = 0;
 
-	int FindAnimParamId( GameCharacterController.CharacterActionType _actionType )
+	int FindAnimParamId( CharacterActionType _actionType )
 	{
 		int animParamId = 0;
 		int actionCount = m_SupportedAnimActions.Length;
@@ -87,8 +87,8 @@ public class HeroAnimController : CharacterAnimController
 		{
 			ResetActions();
 
-			List<GameCharacterController.CharacterActionType> startedActions = m_GameCharacterController.GetActions();
-			foreach (GameCharacterController.CharacterActionType action in startedActions)
+			List<CharacterActionType> startedActions = m_GameCharacterController.GetActions();
+			foreach (CharacterActionType action in startedActions)
 			{
 				int animParamId = FindAnimParamId(action);
 				m_Animator.SetBool( animParamId, true );

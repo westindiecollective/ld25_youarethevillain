@@ -46,10 +46,10 @@ public class Inventory : MonoBehaviour
 		{
 			if (m_ItemToUse)
 			{
-				List<GameCharacterController.CharacterActionType> startedActions = m_GameCharacterController.GetActions();
-				foreach (GameCharacterController.CharacterActionType action in startedActions)
+				List<CharacterActionType> startedActions = m_GameCharacterController.GetActions();
+				foreach (CharacterActionType action in startedActions)
 				{
-					if (action == GameCharacterController.CharacterActionType.E_ActionUse)
+					if (action == CharacterActionType.E_ActionUse)
 					{
 						Use(m_ItemToUse);
 						break;
@@ -76,14 +76,14 @@ public class Inventory : MonoBehaviour
 		}
 	}
 
-	public bool AddPickup(Pickable.PickupType _PickupType, int _PickupCount)
+	public bool AddPickup(PickupType _PickupType, int _PickupCount)
 	{
 		bool pickedup = AddUseableFromPickup(_PickupType, _PickupCount);
 
 		return pickedup;
 	}
 	
-	bool AddUseableFromPickup(Pickable.PickupType _PickupType, int _PickupCount)
+	bool AddUseableFromPickup(PickupType _PickupType, int _PickupCount)
 	{
 		bool added = false;
 
@@ -97,42 +97,42 @@ public class Inventory : MonoBehaviour
 			//add useable component accordingly
 			switch (_PickupType)
 			{			
-			case Pickable.PickupType.E_PickupBranch:
+			case PickupType.E_PickupBranch:
 				m_ItemToUse = AddSwingable(Swingable.SwingableType.E_SwingableBranch);
 				m_ItemUseCount = _PickupCount * m_SwingCountPerBranch;
 				m_CurrentIcon = m_IconBranch;
 				break;
-			case Pickable.PickupType.E_PickupSnake:
+			case PickupType.E_PickupSnake:
 				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableSnake, m_SnakeProjectilePrefab, m_UseableBoneOrigin, m_SnakeProjectileVelocity, m_ProjectileDurationInSeconds);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconSnake;
 				break;
-			case Pickable.PickupType.E_PickupSquirrel:
+			case PickupType.E_PickupSquirrel:
 				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableSquirrel, m_SquirrelProjectilePrefab, m_UseableBoneOrigin, m_SquirrelProjectileVelocity, m_ProjectileDurationInSeconds);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconSquirrel;
 				break;
-			case Pickable.PickupType.E_PickupVampireBat:
+			case PickupType.E_PickupVampireBat:
 				m_ItemToUse = AddPlaceable(Placeable.PlaceableType.E_PlaceableVampireBat, m_VampireBatProjectilePrefab, m_UseableBoneOrigin, m_DropDurationInSeconds);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconVampireBat;
 				break;
-			case Pickable.PickupType.E_PickupPoisonedBerry:
+			case PickupType.E_PickupPoisonedBerry:
 				m_ItemToUse = AddFireable(Fireable.FireableType.E_FireablePoisonedBerries);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconPoisonedBerry;
 				break;
-			case Pickable.PickupType.E_PickupDragonCub:
+			case PickupType.E_PickupDragonCub:
 				m_ItemToUse = AddFireable(Fireable.FireableType.E_FireableDragonCub);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconDragonCub;
 				break;
-			case Pickable.PickupType.E_PickupLavaStone:
+			case PickupType.E_PickupLavaStone:
 				m_ItemToUse = AddThrowable(Throwable.ThrowableType.E_ThrowableLavaStone, m_LavaStoneProjectilePrefab, m_UseableBoneOrigin, m_LavaStoneProjectileVelocity, m_ProjectileDurationInSeconds);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconLavaStone;
 				break;
-			case Pickable.PickupType.E_PickupDemonFlower:
+			case PickupType.E_PickupDemonFlower:
 				m_ItemToUse = AddPlaceable(Placeable.PlaceableType.E_PlaceableDemonFlower, m_DemonFlowerProjectilePrefab, m_UseableBoneOrigin, m_DropDurationInSeconds);
 				m_ItemUseCount = _PickupCount;
 				m_CurrentIcon = m_IconDemonFlower;

@@ -22,7 +22,7 @@ public class VillainAnimController : CharacterAnimController
 	private Vector3 m_BaseCapsuleCenter;
 	int m_CollisionHeightScaleCurveId = 0;
 
-	int FindAnimParamId( GameCharacterController.CharacterActionType _actionType )
+	int FindAnimParamId( CharacterActionType _actionType )
 	{
 		int animParamId = 0;
 		int actionCount = m_SupportedAnimActions.Length;
@@ -104,8 +104,8 @@ public class VillainAnimController : CharacterAnimController
 			
 			ResetActions();
 
-			List<GameCharacterController.CharacterActionType> startedActions = m_GameCharacterController.GetActions();
-			foreach (GameCharacterController.CharacterActionType action in startedActions)
+			List<CharacterActionType> startedActions = m_GameCharacterController.GetActions();
+			foreach (CharacterActionType action in startedActions)
 			{
 				int animParamId = FindAnimParamId(action);
 				m_Animator.SetBool( animParamId, true );

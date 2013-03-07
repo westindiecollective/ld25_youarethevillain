@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ActionEnableTrigger : MonoBehaviour
 {
-	public GameCharacterController.CharacterActionType m_ActionToActivate = GameCharacterController.CharacterActionType.E_ActionNone;
+	public CharacterActionType m_ActionToActivate = CharacterActionType.E_ActionNone;
 
 	void Start()
 	{
@@ -15,7 +15,7 @@ public class ActionEnableTrigger : MonoBehaviour
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (m_ActionToActivate != GameCharacterController.CharacterActionType.E_ActionNone)
+		if (m_ActionToActivate != CharacterActionType.E_ActionNone)
 		{
 			//Debug.Log(string.Format("Game object {0} can now start action {1}.", other.gameObject.name, m_ActionToActivate.ToString()));
 	
@@ -30,7 +30,7 @@ public class ActionEnableTrigger : MonoBehaviour
 	
 	void OnTriggerExit(Collider other)
 	{
-		if (m_ActionToActivate != GameCharacterController.CharacterActionType.E_ActionNone)
+		if (m_ActionToActivate != CharacterActionType.E_ActionNone)
 		{
 			//Debug.Log(string.Format("Game object {0} won't be able to start action {1}.", other.gameObject.name, m_ActionToActivate.ToString()));
 	

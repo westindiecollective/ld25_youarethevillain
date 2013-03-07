@@ -6,7 +6,7 @@ public abstract class CharacterAnimController : AnimationController
 	[System.Serializable]
 	public class CharacterAnimAction
 	{
-		public GameCharacterController.CharacterActionType m_ActionType = GameCharacterController.CharacterActionType.E_ActionNone;
+		public CharacterActionType m_ActionType = CharacterActionType.E_ActionNone;
 		int m_AnimParamId;
 		public string m_AnimParam;
 

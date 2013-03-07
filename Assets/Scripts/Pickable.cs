@@ -1,18 +1,19 @@
 using UnityEngine;
 using System.Collections;
 
+public enum PickupType { E_PickupNone,
+	E_PickupBranch,
+	E_PickupSnake,
+	E_PickupSquirrel,
+	E_PickupVampireBat,
+	E_PickupPoisonedBerry,
+	E_PickupDragonCub,
+	E_PickupLavaStone,
+	E_PickupDemonFlower
+};
+
 public class Pickable : MonoBehaviour
 {
-	public enum PickupType { E_PickupNone,
-		E_PickupBranch,
-		E_PickupSnake,
-		E_PickupSquirrel,
-		E_PickupVampireBat,
-		E_PickupPoisonedBerry,
-		E_PickupDragonCub,
-		E_PickupLavaStone,
-		E_PickupDemonFlower
-	};
 	public PickupType m_PickupType = PickupType.E_PickupNone;
 	public int m_PickupCount = 1;
 	
