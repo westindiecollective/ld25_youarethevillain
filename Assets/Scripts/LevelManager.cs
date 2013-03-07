@@ -5,8 +5,23 @@ public class LevelManager : MonoBehaviour
 {
 
 	private bool m_LoadingLevel = true;
-	public int m_LevelCount = 1;
-
+	
+	public bool IsLoading()
+	{
+		return m_LoadingLevel;
+	}
+	
+	public bool IsValidLevelIndex(int _levelIndex)
+	{
+		bool IsValidIndex = (0 <= _levelIndex) && (_levelIndex < Application.levelCount);
+		return IsValidIndex;
+	}
+	
+	public void QuitGame()
+	{
+		Application.Quit();
+	}
+	
 	void Start()
 	{
 		DontDestroyOnLoad(gameObject);
@@ -21,7 +36,7 @@ public class LevelManager : MonoBehaviour
 
 	public void LoadLevel(int _level)
 	{
-		int levelToLoad = _level % m_LevelCount;
+		int levelToLoad = _level % Application.levelCount;
 
 		Debug.Log( string.Format("Loading level {0} ...", levelToLoad) );
 
@@ -32,7 +47,7 @@ public class LevelManager : MonoBehaviour
 
 	public void LoadNextLevel()
 	{
-		int nextLevel = (Application.loadedLevel + 1) % m_LevelCount;
+		int nextLevel = (Application.loadedLevel + 1) % Application.levelCount;
 		LoadLevel(nextLevel);
 	}
 
@@ -52,14 +67,5 @@ public class LevelManager : MonoBehaviour
 
 	void Update()
 	{
-	}
-
-	void OnGUI()
-	{
-		//Loading screen
-		if (m_LoadingLevel)
-		{
-
-		}
 	}
 }
