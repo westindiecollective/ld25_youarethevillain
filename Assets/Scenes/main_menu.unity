@@ -164,5 +164,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90b0ea3e77e97e141ace50fd01da90bd, type: 3}
   m_Name: 
+  m_GameManagerPrefab: {fileID: 100000, guid: 780a9d21ade02194494975a82ca9b129, type: 2}
   m_CreditSceneIndex: 6
-  m_FirstLevelSceneIndex: 2
+  m_FirstLevelSceneIndex: 7
