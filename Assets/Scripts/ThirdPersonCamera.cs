@@ -14,22 +14,24 @@ public class ThirdPersonCamera : MonoBehaviour
 
 	private Vector3 m_TargetPosition;   // the position the camera is trying to be in
 
-	Transform m_FollowTransform;
+	private Transform m_FollowTransform = null;
 
 	void Start()
 	{
-		 SetFollowTarget(GameObject.FindWithTag("Player").transform);
+		 //SetFollowTarget(GameObject.FindWithTag("Player").transform);
+		enabled = (m_FollowTransform != null);
 	}
 	
 	public void SetFollowTarget(Transform _FollowTarget)
 	{
 		m_FollowTransform = _FollowTarget;
+		enabled = (_FollowTarget != null);
 	}
 
 	void LateUpdate()
 	{
 		float deltaTime = Time.deltaTime;
-
+		
 		// make sure the camera is looking the right way!
 		if (m_UseLookDir)
 		{
