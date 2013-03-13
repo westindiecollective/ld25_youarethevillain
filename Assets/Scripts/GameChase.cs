@@ -5,16 +5,20 @@ public enum GameState { E_GameLoading, E_GameWaitingForPlayers, E_GamePrepareFor
 
 public class GameChase : MonoBehaviour
 {
-	GameState m_GameState = GameState.E_GameLoading;
+	private GameState m_GameState = GameState.E_GameLoading;
 	
 	public GameObject m_GameManagerPrefab = null;
 	private LevelManager m_LevelManager = null;
+	
+	public CharacterSpawnType m_PlayerCharacterType = CharacterSpawnType.E_SpawnVillain;
 	
 	private bool m_IsActiveSequence = false;
 	
 	private int m_NextLevelIndex = -1;
 	
 	private void ChangeGameState(GameState _NewGameState) { m_GameState = _NewGameState; }
+	
+	private bool IsWaitingForPlayers() { return m_GameState == GameState.E_GameWaitingForPlayers; }
 	
 	void Start()
 	{
@@ -23,8 +27,10 @@ public class GameChase : MonoBehaviour
 	
 	void OnLevelWasLoaded(int _level)
 	{
-		//InitGameSequence();
+
 		Debug.Log("Game Chase Sequence: Level is loaded");
+		
+		WaitForPlayers();
 	}
 	
 	void StartSequence()
@@ -46,7 +52,10 @@ public class GameChase : MonoBehaviour
 		
 		InitCamera();
 		
-		WaitForPlayers();
+		if (!IsWaitingForPlayers())
+		{
+			SpawnCharacters();
+		}
 	}
 	
 	void EndSequence()
@@ -63,8 +72,8 @@ public class GameChase : MonoBehaviour
 		ThirdPersonCamera thirdPersonCamera = mainCamera.gameObject.AddComponent<ThirdPersonCamera>();
 		
 		//@FIXME get player character type from player profile?
-		CharacterSpawnType playerCharacterType = CharacterSpawnType.E_SpawnVillain;
-		CharacterSpawner playerSpawner = CharacterSpawner.FindCharacterSpawner(playerCharacterType);
+		
+		CharacterSpawner playerSpawner = CharacterSpawner.FindCharacterSpawner(m_PlayerCharacterType);
 		
 		if ( playerSpawner )
 		{
