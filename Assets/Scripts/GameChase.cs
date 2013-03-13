@@ -1,14 +1,20 @@
 using UnityEngine;
 using System.Collections;
 
+public enum GameState { E_GameLoading, E_GameWaitingForPlayers, E_GamePrepareForStart, E_GamePlaying, E_GamePaused, E_GameEnding, };
+
 public class GameChase : MonoBehaviour
 {
+	GameState m_GameState = GameState.E_GameLoading;
+	
 	public GameObject m_GameManagerPrefab = null;
 	private LevelManager m_LevelManager = null;
 	
 	private bool m_IsActiveSequence = false;
 	
 	private int m_NextLevelIndex = -1;
+	
+	private void ChangeGameState(GameState _NewGameState) { m_GameState = _NewGameState; }
 	
 	void Start()
 	{
@@ -18,10 +24,13 @@ public class GameChase : MonoBehaviour
 	void OnLevelWasLoaded(int _level)
 	{
 		//InitGameSequence();
+		Debug.Log("Game Chase Sequence: Level is loaded");
 	}
 	
 	void StartSequence()
 	{
+		Debug.Log("Starting Game Chase Sequence");
+		
 		LevelManager levelManager = (LevelManager)FindObjectOfType( typeof(LevelManager) );
 		if (levelManager == null && m_GameManagerPrefab != null)
 		{
@@ -37,7 +46,7 @@ public class GameChase : MonoBehaviour
 		
 		InitCamera();
 		
-		SpawnCharacters();
+		WaitForPlayers();
 	}
 	
 	void EndSequence()
@@ -74,6 +83,18 @@ public class GameChase : MonoBehaviour
 		}
 	}
 	
+	void WaitForPlayers()
+	{
+		ChangeGameState(GameState.E_GameWaitingForPlayers);
+	}
+	
+	void PrepareForStart()
+	{
+		ChangeGameState(GameState.E_GamePrepareForStart);
+		
+		SpawnCharacters();
+	}
+	
 	void SpawnCharacters()
 	{
 		//@TEMP characters/players will have to be spawned by network authority
@@ -93,8 +114,15 @@ public class GameChase : MonoBehaviour
 		}
 	}
 	
+	void StartGame()
+	{
+		ChangeGameState(GameState.E_GamePlaying);
+	}
+	
 	void QuitGame()
 	{
+		ChangeGameState(GameState.E_GameEnding);
+		
 		m_LevelManager.QuitGame();
 	}
 	
