@@ -11,6 +11,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400004}
+  - 148: {fileID: 14800000}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Persistent
@@ -68,9 +69,21 @@ MonoBehaviour:
   m_ConnectionCountMax: 4
   m_ConnectPort: 4231
   m_AdvertisingPort: 6534
-  m_DisconnectTimeOutInMilliSeconds: 200
+  m_DisconnectTimeOutInMilliseconds: 200
   m_AdvertiseServer: 1
   m_ServerName: MyGameServer
+--- !u!148 &14800000
+NetworkView:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_StateSynchronization: 0
+  m_Observed: {fileID: 0}
+  m_ViewID:
+    m_ID: 0
+    m_Type: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
