@@ -167,3 +167,5 @@ MonoBehaviour:
   m_GameManagerPrefab: {fileID: 100000, guid: 780a9d21ade02194494975a82ca9b129, type: 2}
   m_CreditSceneIndex: 6
   m_FirstLevelSceneIndex: 7
+  m_SelectedDisplayedServerIndex: -1
+  m_ServerListUpdateTimeIntervalInSeconds: 2
