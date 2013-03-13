@@ -69,14 +69,10 @@ public class GameChase : MonoBehaviour
 	{
 		//GameObject mainCameraObject = GameObject.FindWithTag("MainCamera");
 		Camera mainCamera = Camera.main;
-		ThirdPersonCamera thirdPersonCamera = mainCamera.gameObject.AddComponent<ThirdPersonCamera>();
-		
-		//@FIXME get player character type from player profile?
-		
-		CharacterSpawner playerSpawner = CharacterSpawner.FindCharacterSpawner(m_PlayerCharacterType);
-		
-		if ( playerSpawner )
+		ThirdPersonCamera thirdPersonCamera = mainCamera.gameObject.GetComponent<ThirdPersonCamera>();
+		if (thirdPersonCamera == null)
 		{
+			thirdPersonCamera = mainCamera.gameObject.AddComponent<ThirdPersonCamera>();
 			thirdPersonCamera.m_DistanceAway = 12;
 			thirdPersonCamera.m_DistanceUp = 5;
 			thirdPersonCamera.m_SmoothFactor = 3.0f;
@@ -88,6 +84,14 @@ public class GameChase : MonoBehaviour
 			thirdPersonCamera.m_FollowPositionMask.x = 0.0f;
 			thirdPersonCamera.m_FollowPositionMask.y = 0.0f;
 			thirdPersonCamera.m_FollowPositionMask.z = 1.0f;
+		}
+		
+		//@FIXME get player character type from player profile?
+		
+		CharacterSpawner playerSpawner = CharacterSpawner.FindCharacterSpawner(m_PlayerCharacterType);
+		
+		if ( playerSpawner )
+		{
 			thirdPersonCamera.SetFollowTarget(playerSpawner.gameObject.transform);
 		}
 	}
