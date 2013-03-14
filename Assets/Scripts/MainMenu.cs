@@ -211,7 +211,14 @@ public class MainMenu : MonoBehaviour
 			if ( m_TimeSinceLastServerListUpdate >= m_ServerListUpdateTimeIntervalInSeconds)
 			{
 				List<NetworkServerSearch.ServerSearchData> serverList = networkServerSearch.GetServerList();
-				m_DisplayServerList = serverList.Select(x => x.m_ServerName).ToArray();
+				if (serverList != null)
+				{
+					m_DisplayServerList = serverList.Select(x => x.m_ServerName).ToArray();
+				}
+				else
+				{
+					m_DisplayServerList = null;
+				}
 				
 				m_TimeSinceLastServerListUpdate = 0.0f;
 			}
@@ -219,6 +226,7 @@ public class MainMenu : MonoBehaviour
 		else
 		{
 			m_TimeSinceLastServerListUpdate = m_ServerListUpdateTimeIntervalInSeconds;
+			m_DisplayServerList = null;
 		}
 	}
 	
