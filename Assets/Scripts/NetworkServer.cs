@@ -78,6 +78,9 @@ public class NetworkServer : MonoBehaviour
 	public delegate void ServerEventDelegate();
 	private ServerEventDelegate m_ServerStartedDelegate = null;
 	private ServerEventDelegate m_ServerStoppedDelegate = null;
+	public delegate void ServerConnectionDelegate(NetworkPlayer _Player);
+	private ServerConnectionDelegate m_ClientConnectedDelegate = null;
+	private ServerConnectionDelegate m_ClientDisconnectedDelegate = null;
 	
 	private string m_PublicServerName = null;
 	
@@ -124,7 +127,9 @@ public class NetworkServer : MonoBehaviour
 		ProcessPendingListenForClientsRequests();
 	}
 	
-	public void StartServer(NetworkMode _NetworkMode, int _ConnectionCountMax, int _ConnectPort, string _ServerName, ServerEventDelegate _ServerStartedDelegate, ServerEventDelegate _ServerStoppedDelegate)
+	public void StartServer(NetworkMode _NetworkMode, int _ConnectionCountMax, int _ConnectPort, string _ServerName,
+		ServerEventDelegate _ServerStartedDelegate, ServerEventDelegate _ServerStoppedDelegate,
+		ServerConnectionDelegate _ClientConnectedDelegate, ServerConnectionDelegate _ClientDisconnectedDelegate)
 	{
 		Debug.Log("Starting Server...");
 		
@@ -142,6 +147,8 @@ public class NetworkServer : MonoBehaviour
 		
 		m_ServerStartedDelegate = _ServerStartedDelegate;
 		m_ServerStoppedDelegate = _ServerStoppedDelegate;
+		m_ClientConnectedDelegate = _ClientConnectedDelegate;
+		m_ClientDisconnectedDelegate = _ClientDisconnectedDelegate;
 		
 		ChangeServerState(ServerState.E_ServerPendingStart);
 		
@@ -175,18 +182,29 @@ public class NetworkServer : MonoBehaviour
 		
 		ChangeServerState(ServerState.E_ServerPendingStop);
 		
+		m_ServerStartedDelegate = null;
+		m_ServerStoppedDelegate = null;
+		m_ClientConnectedDelegate = null;
+		m_ClientDisconnectedDelegate = null;
+		
 		StopServerAdvertising();
 		
 		//@FIXME: nothing provided in Unity3d Network API to specifically stop the server
 		Network.Disconnect(_DisconnectTimeOutInMilliseconds);
 	}
 	
-	void OnDisconnectedFromServer(NetworkDisconnection info)
+	void OnDisconnectedFromServer(NetworkDisconnection _NetDisconnectionInfo)
 	{
-		Debug.Log("Server connection disconnected: " + info.ToString());
+		Debug.Log("Server connection disconnected: " + _NetDisconnectionInfo.ToString());
 		Debug.Log("Current network peer type is " + Network.peerType.ToString());
 		
+		m_ServerStartedDelegate = null;
+		m_ServerStoppedDelegate = null;
+		m_ClientConnectedDelegate = null;
+		m_ClientDisconnectedDelegate = null;
+		
 		StopServerAdvertising();
+		
 		ChangeServerState(ServerState.E_ServerStopped);
 		
 		if (m_ServerStoppedDelegate != null)
@@ -194,6 +212,31 @@ public class NetworkServer : MonoBehaviour
 			m_ServerStoppedDelegate();
 			m_ServerStoppedDelegate = null;
 		}
+    }
+	
+	void OnPlayerConnected(NetworkPlayer _NetPlayer) 
+	{
+		Debug.Log("New client connected: " + _NetPlayer.ipAddress + ":" + _NetPlayer.port);
+		
+		if (m_ClientConnectedDelegate != null)
+		{
+			m_ClientConnectedDelegate(_NetPlayer);
+			m_ClientConnectedDelegate = null;
+		}
+    }
+	
+	void OnPlayerDisconnected(NetworkPlayer _NetPlayer) 
+	{
+		Debug.Log("Client disconnected: " + _NetPlayer.ipAddress + ":" + _NetPlayer.port);
+		
+		if (m_ClientDisconnectedDelegate != null)
+		{
+			m_ClientDisconnectedDelegate(_NetPlayer);
+			m_ClientDisconnectedDelegate = null;
+		}
+		
+        Network.RemoveRPCs(_NetPlayer);
+        Network.DestroyPlayerObjects(_NetPlayer);
     }
 	
 	public void StartServerAdvertising(int _AdvertisingPort)

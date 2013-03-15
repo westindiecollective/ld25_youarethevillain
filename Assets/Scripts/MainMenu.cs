@@ -136,7 +136,7 @@ public class MainMenu : MonoBehaviour
 				if (m_NetworkManager != null)
 				{
 					m_NetworkManager.StopServerSearch();
-					m_NetworkManager.StartServer();
+					m_NetworkManager.StartServer(null, null);
 				}
 				
 				TransitionToLevel(m_FirstLevelSceneIndex);

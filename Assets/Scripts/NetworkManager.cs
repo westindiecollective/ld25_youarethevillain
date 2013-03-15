@@ -24,14 +24,15 @@ public class NetworkManager : MonoBehaviour
 	
 	}
 	
-	public void StartServer()
+	public void StartServer(NetworkServer.ServerConnectionDelegate _ClientConnectedDelegate, NetworkServer.ServerConnectionDelegate _ClientDisconnectedDelegate)
 	{
 		System.Diagnostics.Debug.Assert( GetServer() == null );
 		
 		if (m_NetworkMode != NetworkMode.E_NetworkNone)
 		{
 			NetworkServer server = gameObject.AddComponent<NetworkServer>();
-			server.StartServer(m_NetworkMode, m_ConnectionCountMax, m_ConnectPort, m_ServerName, OnServerStarted, OnServerStopped);
+			server.StartServer(m_NetworkMode, m_ConnectionCountMax, m_ConnectPort, m_ServerName,
+				OnServerStarted, OnServerStopped, _ClientConnectedDelegate, _ClientDisconnectedDelegate);
 		}
 	}
 	
