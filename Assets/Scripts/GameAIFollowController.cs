@@ -14,7 +14,7 @@ public class GameAIFollowController : GameCharacterController
 	int m_FrameCountSinceLastPath = 0;
 	NavMeshAgent m_NavAgent = null;
 
-	//FIXME: duplicated code from GamePlayerController
+	//@FIXME: duplicated code from GamePlayerController
 	public CharacterAction[] m_SupportedActions;
 	LinkedList<CharacterAction> m_ActiveActions = null;
 	List<CharacterActionType> m_Actions = null;
@@ -138,7 +138,7 @@ public class GameAIFollowController : GameCharacterController
 		}
 	}
 
-	//FIXME: duplicated code from GamePlayerController
+	//@FIXME: duplicated code from GamePlayerController
 	public override List<CharacterActionType> GetActions()
 	{
 		return m_Actions;	//new List<CharacterActionType>();
@@ -207,7 +207,7 @@ public class GameAIFollowController : GameCharacterController
 				m_FrameCountSinceLastPath = 0;
 			}
 
-			//FIXME: duplicated code from GamePlayerController
+			//@FIXME: duplicated code from GamePlayerController
 			ClearActions();
 
 			if (m_CanStartAction)
