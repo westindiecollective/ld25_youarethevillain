@@ -1,5 +1,3 @@
-#define DEBUG_PLAY_GAME_IN_SLOW_MOTION
-
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,13 +25,6 @@ public class GamePlayerController : GameCharacterController
 	float m_InputLeftRigthDirection = 0.0f;
 
 	CharacterController m_CharacterController = null;
-
-#if DEBUG_PLAY_GAME_IN_SLOW_MOTION
-	public string m_SlowMotionInputButton = "";
-	public float m_SlowMotionTimeScale = 0.5f;
-	float m_FixedDeltaTimeRatio = 0.0f;
-	public bool m_PlayInSlowMotion = false;
-#endif
 
 	public override float GetInputSpeed()
 	{
@@ -200,6 +191,16 @@ public class GamePlayerController : GameCharacterController
 	{
 		m_PendingActions.Clear();
 	}
+	
+	public void EnablePlayerControllerUpdate()
+	{
+		enabled = true;	
+	}
+	
+	public void DisablePlayerControllerUpdate()
+	{
+		enabled = false;
+	}
 
 	void Start()
 	{
@@ -209,15 +210,8 @@ public class GamePlayerController : GameCharacterController
 		m_CharacterController = GetComponent<CharacterController>();
 		
 		AuthorizeUpdatingCollisionCenter();
-
-#if DEBUG_PLAY_GAME_IN_SLOW_MOTION
-		m_FixedDeltaTimeRatio = Time.fixedDeltaTime / Time.timeScale;
-		if (m_PlayInSlowMotion)
-		{
-			Time.timeScale = m_PlayInSlowMotion? m_SlowMotionTimeScale : 1.0f;
-			Time.fixedDeltaTime = m_FixedDeltaTimeRatio * Time.timeScale;
-		}
-#endif
+		
+		DisablePlayerControllerUpdate();
 	}
 	
 	void OnGUI ()
@@ -230,16 +224,13 @@ public class GamePlayerController : GameCharacterController
 	
 	void Update()
 	{
-#if DEBUG_PLAY_GAME_IN_SLOW_MOTION
-		bool switchSlowMotionMode = (m_SlowMotionInputButton.Length > 0) && Input.GetButtonDown(m_SlowMotionInputButton);
-		if (switchSlowMotionMode)
-		{
-			m_PlayInSlowMotion = !m_PlayInSlowMotion;
-			Time.timeScale = m_PlayInSlowMotion? m_SlowMotionTimeScale : 1.0f;
-			Time.fixedDeltaTime = m_FixedDeltaTimeRatio * Time.timeScale;
-		}
-#endif
-
+		//float deltaTime = Time.deltaTime;
+		
+		UpdatePlayerController();
+	}
+	
+	private void UpdatePlayerController()
+	{
 		ClearActions();
 
 		if (m_CanStartAction)
