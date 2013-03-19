@@ -12,17 +12,21 @@ public class NetworkServerSearch : MonoBehaviour
 	
 	public class ServerSearchData
 	{
-		public int m_ServerConnectionMaxCount;
+		public IPAddress m_ServerIpAddress;
 		public int m_ServerConnectPort;
-		public string m_ServerIpAdress;
+		public int m_ServerConnectionMaxCount;
 		public string m_ServerName;
 		
-		public ServerSearchData(int _ServerConnectionMaxCount, int _ServerConnectPort, string _ServerIpAdress, string _ServerName)
+		public string m_ServerIpAddressString;
+		
+		public ServerSearchData(IPAddress _ServerIpAddress, int _ServerConnectPort, int _ServerConnectionMaxCount,  string _ServerName)
 		{
-			m_ServerConnectionMaxCount = _ServerConnectionMaxCount;
+			m_ServerIpAddress = _ServerIpAddress;
 			m_ServerConnectPort = _ServerConnectPort;
-			m_ServerIpAdress = _ServerIpAdress;
+			m_ServerConnectionMaxCount = _ServerConnectionMaxCount;
 			m_ServerName = _ServerName;
+			
+			m_ServerIpAddressString = _ServerIpAddress.ToString();
 		}
 	}
 	
@@ -73,14 +77,26 @@ public class NetworkServerSearch : MonoBehaviour
 		m_ServerList.Add(_ServerData);
 	}
 	
-	private ServerSearchData BuildServerSearchData(NetworkServer.ServerAdvertisingData _ServerData, IPAddress _ServerIpAddress)
+	private bool IsServerListed(IPAddress _IpAddress, int _ConnectPort)
 	{
-		int connectionMaxCount = _ServerData.m_ServerConnectionMaxCount;
-		int connectPort = _ServerData.m_ServerConnectPort;
-		string publicName = _ServerData.m_ServerName;
-		string ipAdress = _ServerIpAddress.ToString();
+		bool isListed = false;
+		foreach(ServerSearchData server in m_ServerList)
+		{
+			bool sameIpAddress = server.m_ServerIpAddress.Equals(_IpAddress);
+			bool sameConnectPort = (server.m_ServerConnectPort == _ConnectPort);
+			if (sameIpAddress && sameConnectPort)
+			{
+				isListed = true;
+				break;
+			}
+		}
 		
-		return new ServerSearchData(connectionMaxCount, connectPort, ipAdress, publicName);
+		return isListed;
+	}
+	
+	private ServerSearchData BuildServerSearchData(IPAddress _IpAddress, int _ConnectPort, int _ConnectionMaxCount, string _PublicName)
+	{	
+		return new ServerSearchData(_IpAddress, _ConnectPort, _ConnectionMaxCount, _PublicName);
 	}
 	
 	public void StartSearch(int _BroadcastPort, ServerSearchEventDelegate _SearchStoppedDelegate)
@@ -148,9 +164,19 @@ public class NetworkServerSearch : MonoBehaviour
 		IPEndPoint ep1 = ucs1.e;
 		byte[] receivedBytes = uc1.EndReceive(_AsyncResult, ref ep1);
 		
+		IPAddress ipAddress = ep1.Address;
 		NetworkServer.ServerAdvertisingData serverData = NetworkServer.ServerAdvertisingData.Desserialize(receivedBytes);
-		ServerSearchData serverSearchData = BuildServerSearchData(serverData, ep1.Address);
-		AddServer(serverSearchData);
+		int connectPort = serverData.m_ServerConnectPort;
+		int connectionMaxCount = serverData.m_ServerConnectionMaxCount;
+		string publicName = serverData.m_ServerName;
+		
+		bool isServerListed = IsServerListed(ipAddress, connectPort);
+		if (isServerListed == false)
+		{
+			Debug.Log("Adding new server: " + ipAddress.ToString() + ": " + connectPort);
+			ServerSearchData serverSearchData = BuildServerSearchData(ipAddress, connectPort, connectionMaxCount, publicName);
+			AddServer(serverSearchData);
+		}
 		
 		Debug.Log("Server responded to find server message over broadcast listener");
 		

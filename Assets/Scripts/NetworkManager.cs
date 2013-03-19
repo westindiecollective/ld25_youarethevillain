@@ -24,6 +24,8 @@ public class NetworkManager : MonoBehaviour
 	
 	}
 	
+	public NetworkPlayer GetLocalNetClient() { return Network.player; }
+	
 	public void StartServer(NetworkServer.ServerConnectionDelegate _ClientConnectedDelegate, NetworkServer.ServerConnectionDelegate _ClientDisconnectedDelegate)
 	{
 		System.Diagnostics.Debug.Assert( GetServer() == null );
@@ -108,14 +110,14 @@ public class NetworkManager : MonoBehaviour
 		return serverFinder;
 	}
 	
-	public void ConnectToServer(string _ServerIpAdress, int _ConnectPort)
+	public void ConnectToServer(string _ServerIpAddress, int _ConnectPort)
 	{
 		System.Diagnostics.Debug.Assert( GetClient() == null );
 		
 		if (m_NetworkMode != NetworkMode.E_NetworkNone)
 		{
 			NetworkClient client = gameObject.AddComponent<NetworkClient>();
-			client.ConnectToServer(_ServerIpAdress, _ConnectPort, OnClientConnected, OnClientDisconnected);
+			client.ConnectToServer(_ServerIpAddress, _ConnectPort, OnClientConnected, OnClientDisconnected);
 		}
 	}
 	
@@ -127,6 +129,8 @@ public class NetworkManager : MonoBehaviour
 	{
 		NetworkClient client = GetClient();
 		Destroy(client);
+		
+		//@FIXME: load fallback 'menu level' or sthg if client is in a different level
 	}
 	
 	public NetworkClient GetClient()

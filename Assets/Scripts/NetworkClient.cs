@@ -6,12 +6,14 @@ public class NetworkClient : MonoBehaviour
 	public enum ClientState { E_ClientNone, E_ClientPendingConnect, E_ClientConnected, E_ClientPendingDisconnect, E_ClientDisconnected };
 	private ClientState m_ClientState = ClientState.E_ClientNone;
 	
-	public delegate void ClientEventDelegate();
-	private ClientEventDelegate m_ClientConnectedDelegate = null;
-	private ClientEventDelegate m_ClientDisconnectedDelegate = null;
+	public delegate void ClientConnectionDelegate();
+	private ClientConnectionDelegate m_ClientConnectedDelegate = null;
+	private ClientConnectionDelegate m_ClientDisconnectedDelegate = null;
 	
 	private void ChangeClientState(ClientState _NewClientState) { m_ClientState = _NewClientState; }
 	private bool CanConnectToServer() { return m_ClientState == ClientState.E_ClientNone; }
+	
+	public bool IsConnectedToServer() { return m_ClientState == ClientState.E_ClientConnected; }
 
 	void Start()
 	{
@@ -23,9 +25,9 @@ public class NetworkClient : MonoBehaviour
 	
 	}
 	
-	public void ConnectToServer(string _ServerIpAdress, int _ConnectPort, ClientEventDelegate _ClientConnectedDelegate, ClientEventDelegate _ClientDisconnectedDelegate)
+	public void ConnectToServer(string _ServerIpAddress, int _ConnectPort, ClientConnectionDelegate _ClientConnectedDelegate, ClientConnectionDelegate _ClientDisconnectedDelegate)
 	{
-		Debug.Log("Connecting to server " + _ServerIpAdress + ":" + _ConnectPort);
+		Debug.Log("Connecting to server " + _ServerIpAddress + ":" + _ConnectPort);
 		
 		System.Diagnostics.Debug.Assert(Network.peerType == NetworkPeerType.Disconnected);
 		System.Diagnostics.Debug.Assert(CanConnectToServer());
@@ -35,7 +37,7 @@ public class NetworkClient : MonoBehaviour
 		
 		ChangeClientState(ClientState.E_ClientPendingConnect);
 		
-    	NetworkConnectionError connectionResult = Network.Connect(_ServerIpAdress, _ConnectPort);
+    	NetworkConnectionError connectionResult = Network.Connect(_ServerIpAddress, _ConnectPort);
 		if (connectionResult != NetworkConnectionError.NoError)
 		{
 			Debug.Log("Connection failed:" + connectionResult);
