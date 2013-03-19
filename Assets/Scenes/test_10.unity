@@ -397,6 +397,7 @@ GameObject:
   - 124: {fileID: 99683958}
   - 81: {fileID: 99683957}
   - 114: {fileID: 99683962}
+  - 148: {fileID: 99683964}
   - 114: {fileID: 99683963}
   m_Layer: 0
   m_Name: Main Camera
@@ -475,8 +476,21 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ac363f64014e964fb3190a68fa85a6e, type: 3}
   m_Name: 
+  m_VillainCountMax: 1
   m_GameManagerPrefab: {fileID: 100000, guid: 780a9d21ade02194494975a82ca9b129, type: 2}
-  m_PlayerCharacterType: 1
+  m_WaitingTimeOutInSeconds: 5
+  m_PreparingTimeOutInSeconds: 5
+  m_PlayerIsWaitingMessageReSendTimeInSeconds: .5
+  m_StartGameWaitTimeInSeconds: 10
+  m_CameraInitFollowTarget: {fileID: 1649405528}
+  m_SlowMotionInputButton: SlowMotion
+  m_SlowMotionTimeScale: .5
+  m_PlayInSlowMotion: 0
+  m_VillainPlayerPrefab: {fileID: 100082, guid: 366a85bb46b8e2343bbd0ecbcedb79fe,
+    type: 2}
+  m_HeroPlayerPrefab: {fileID: 100202, guid: 92ef3709abef81f469b08ae123c50e8f, type: 2}
+  m_VillainAIPrefab: {fileID: 0}
+  m_HeroAIPrefab: {fileID: 0}
 --- !u!114 &99683963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -494,6 +508,18 @@ MonoBehaviour:
   m_UseFollowPositionMask: 1
   m_LookDir: {x: 0, y: 0, z: -1}
   m_FollowPositionMask: {x: 0, y: 0, z: 1}
+--- !u!148 &99683964
+NetworkView:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 99683956}
+  m_Enabled: 1
+  m_StateSynchronization: 0
+  m_Observed: {fileID: 0}
+  m_ViewID:
+    m_ID: 1
+    m_Type: 1
 --- !u!1 &111750828
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,7 +633,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5dca049815adb904c83bebdcee160cb9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5dca049815adb904c83bebdcee160cb9, type: 3}
       propertyPath: m_LocalRotation.x
@@ -6701,6 +6727,44 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 218291628}
+--- !u!1 &1294510607
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1294510609}
+  - 114: {fileID: 1294510608}
+  m_Layer: 0
+  m_Name: SpawnerVillain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1294510608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1294510607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60119b9e36e18dc4e92446052150380e, type: 3}
+  m_Name: 
+  m_CharacterType: 1
+--- !u!4 &1294510609
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1294510607}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: .100000001, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1 &1302232925
 GameObject:
   m_ObjectHideFlags: 0
@@ -8075,7 +8139,7 @@ Transform:
   m_PrefabInternal: {fileID: 131482402}
   m_GameObject: {fileID: 1583201520}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1094314746}
@@ -8340,7 +8404,7 @@ GameObject:
   - 4: {fileID: 1649405528}
   - 114: {fileID: 1649405529}
   m_Layer: 0
-  m_Name: SpawnerVillain
+  m_Name: SpawnerHero
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8353,7 +8417,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1649405527}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: .100000001, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -8367,7 +8431,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60119b9e36e18dc4e92446052150380e, type: 3}
   m_Name: 
-  m_CharacterType: 1
+  m_CharacterType: 0
 --- !u!1 &1653462372
 GameObject:
   m_ObjectHideFlags: 0

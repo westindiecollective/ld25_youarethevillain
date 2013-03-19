@@ -8,10 +8,10 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  - 114: {fileID: 11400000}
-  - 114: {fileID: 11400002}
   - 114: {fileID: 11400004}
   - 148: {fileID: 14800000}
+  - 114: {fileID: 11400000}
+  - 114: {fileID: 11400006}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Persistent
@@ -40,21 +40,6 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3801dcd0426dfa4f8c151b360fc01f3, type: 3}
   m_Name: 
---- !u!114 &11400002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68e5758fbb724eb48bc5bf0d66825396, type: 3}
-  m_Name: 
-  m_VillainPlayerPrefab: {fileID: 100082, guid: 366a85bb46b8e2343bbd0ecbcedb79fe,
-    type: 2}
-  m_HeroPlayerPrefab: {fileID: 0}
-  m_VillainAIPrefab: {fileID: 0}
-  m_HeroAIPrefab: {fileID: 0}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -72,6 +57,16 @@ MonoBehaviour:
   m_DisconnectTimeOutInMilliseconds: 200
   m_AdvertiseServer: 1
   m_ServerName: MyGameServer
+--- !u!114 &11400006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7064a79e5f8b8f48ab47b5c06cf49c8, type: 3}
+  m_Name: 
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1

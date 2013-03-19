@@ -3,25 +3,11 @@ using System.Collections;
 
 public class CharacterSpawner : MonoBehaviour
 {
-	public CharacterSpawnType m_CharacterType = CharacterSpawnType.E_SpawnHero;
+	public GameSpawnCharacterType m_CharacterType = GameSpawnCharacterType.E_GameHero;
 	
-	public CharacterSpawnType GetCharacterSpawnType() { return m_CharacterType; }
+	public GameSpawnCharacterType GetCharacterSpawnType() { return m_CharacterType; }
 	
-	public GameObject SpawnCharacter( bool _SpawnPlayerCharacter )
-	{
-		GameObject spawnedCharacter = null;
-		
-		SpawnManager spawnManager = (SpawnManager)FindObjectOfType( typeof(SpawnManager) );
-		if (spawnManager != null)
-		{
-			bool spawnHero = (m_CharacterType == CharacterSpawnType.E_SpawnHero);
-			spawnedCharacter = spawnManager.SpawnCharacter(_SpawnPlayerCharacter, spawnHero, gameObject.transform.position, gameObject.transform.rotation);
-		}
-		
-		return spawnedCharacter;
-	}
-	
-	public static CharacterSpawner FindCharacterSpawner( CharacterSpawnType _CharacterType )
+	public static CharacterSpawner FindCharacterSpawner( GameSpawnCharacterType _CharacterType )
 	{
 		CharacterSpawner matchingSpawner = null;
 		
@@ -29,7 +15,9 @@ public class CharacterSpawner : MonoBehaviour
 		foreach ( Object spawner in spawners )
 		{
 			CharacterSpawner characterSpawner = spawner as CharacterSpawner;
-			if (characterSpawner.GetCharacterSpawnType() == _CharacterType)
+			GameSpawnCharacterType characterSpawnerType = characterSpawner.GetCharacterSpawnType();
+			
+			if (characterSpawnerType == _CharacterType)
 			{
 				matchingSpawner = characterSpawner;
 				break;
@@ -37,6 +25,26 @@ public class CharacterSpawner : MonoBehaviour
 		}
 		
 		return matchingSpawner;
+	}
+	
+	public static CharacterSpawner FindCharacterSpawnerAny( bool _PickRandomly )
+	{
+		CharacterSpawner spawner = null;
+		
+		Object[] spawners = FindObjectsOfType(typeof(CharacterSpawner));
+		
+		int spawnerCount = spawners.Length;
+		if (spawnerCount > 0)
+		{
+			int spawnerIndex = 0;
+			if (_PickRandomly)
+			{
+				spawnerIndex = UnityEngine.Random.Range(0, spawnerCount);
+			}
+			spawner = spawners[spawnerIndex] as CharacterSpawner;
+		}
+
+		return spawner;
 	}
 	
 	void Start()
