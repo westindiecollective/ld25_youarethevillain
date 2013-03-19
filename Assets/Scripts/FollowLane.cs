@@ -50,15 +50,32 @@ public class FollowLane : MonoBehaviour
 	public int m_DebugLaneChangeStartFrame = 0;
 #endif
 	
+	public void EnableFollowLaneUpdate()
+	{
+		enabled = true;	
+	}
+	
+	public void DisableFollowLaneUpdate()
+	{
+		enabled = false;
+	}
+	
 	void Start ()
 	{
 		m_GameCharacterController = GetComponent<GameCharacterController>();
+		
+		DisableFollowLaneUpdate();
 	}
 
 	void Update ()
 	{
 		float deltaTime = Time.deltaTime;
-
+		
+		UpdateFollowLane(deltaTime);
+	}
+	
+	private void UpdateFollowLane(float _DeltaTime)
+	{
 		if (m_CanChangeLane && m_GameCharacterController)
 		{
 			GameObject character = m_GameCharacterController.gameObject;
@@ -98,7 +115,7 @@ public class FollowLane : MonoBehaviour
 
 			if ( (changeLeft || changeRight) && (frame_count >= frame_count_min) )
 			{
-				ChangeLane( changeLeft, h, deltaTime );
+				ChangeLane( changeLeft, h, _DeltaTime );
 				m_CanChangeLane = false;
 				
 				//@NOTE: preventing players changing lane from performing an action is too restrictive
@@ -174,7 +191,7 @@ public class FollowLane : MonoBehaviour
 				float angularVelocityY = m_CharacterAngularVelocity.y;
 				float curRotY = currentRot.eulerAngles.y;
 				float targetRotY = targetRot.eulerAngles.y;
-				float newRot2Y = Mathf.SmoothDampAngle(curRotY, targetRotY, ref angularVelocityY, smoothTime, m_MaxAngularSpeed, deltaTime);
+				float newRot2Y = Mathf.SmoothDampAngle(curRotY, targetRotY, ref angularVelocityY, smoothTime, m_MaxAngularSpeed, _DeltaTime);
 #if DEBUG_FOLLOW_LANE
 				//float targetAngleRotY = curRotY + Mathf.DeltaAngle(curRotY, targetRotY);
 				//Debug.Log(string.Format("Rot Y - cur:{0}, target:{1}, targetangle:{2}, new:{3}", curRotY, targetRotY, targetAngleRotY, newRot2Y));
