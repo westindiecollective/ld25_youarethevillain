@@ -17,6 +17,10 @@ public class HeroAnimController : CharacterAnimController
 
 	int m_SpeedId = 0;
 	int m_DirectionId = 0;
+	
+	private float m_BaseCapsuleHeight;
+	private Vector3 m_BaseCapsuleCenter;
+	int m_CollisionHeightScaleCurveId = 0;
 
 	int FindAnimParamId( CharacterActionType _actionType )
 	{
@@ -57,6 +61,15 @@ public class HeroAnimController : CharacterAnimController
 			m_Animator.SetBool( animParamId, false );
 		}
 	}
+	
+	void InitCharacterCollisionUpdate()
+	{
+		CharacterController  charController = GetComponent<CharacterController>();
+		m_BaseCapsuleHeight = charController.height;
+		m_BaseCapsuleCenter = charController.center;
+		
+		m_CollisionHeightScaleCurveId = Animator.StringToHash("CollisionHeightScaleCurve");
+	}
 
 	void Start ()
 	{
@@ -77,6 +90,8 @@ public class HeroAnimController : CharacterAnimController
 	void SetupGameCharacterController(GameCharacterController _GameCharacterController)
 	{
 		m_GameCharacterController = _GameCharacterController;
+		
+		InitCharacterCollisionUpdate();
 	}
 
 	void Update()
@@ -85,6 +100,8 @@ public class HeroAnimController : CharacterAnimController
 
 		if (m_Animator && m_GameCharacterController)
 		{
+			UpdateCharacterCollisionFromAnimCurves(m_Animator, m_GameCharacterController, m_BaseCapsuleCenter, m_BaseCapsuleHeight);
+			
 			ResetActions();
 
 			List<CharacterActionType> startedActions = m_GameCharacterController.GetActions();
@@ -107,6 +124,22 @@ public class HeroAnimController : CharacterAnimController
 				m_Animator.SetFloat(m_DirectionId, direction, m_DirectionDampTime, deltaTime);
 			}
 		}
+	}
+	
+	void UpdateCharacterCollisionFromAnimCurves(
+		Animator _Animator,
+		GameCharacterController _GameCharacterController,
+		Vector3 _BaseCollisionCenter,
+		float _BaseCollisionHeight)
+	{
+		if (_GameCharacterController.CanUpdateCollisionCenter())
+		{
+			Vector3 center = _BaseCollisionCenter;
+			_GameCharacterController.UpdateCollisionCenter(center);
+		}
+		
+		float height = _BaseCollisionHeight * _Animator.GetFloat(m_CollisionHeightScaleCurveId);
+		_GameCharacterController.UpdateCollisionHeight(height);
 	}
 
 	public override bool IsJumping()
