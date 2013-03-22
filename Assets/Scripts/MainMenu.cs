@@ -148,7 +148,7 @@ public class MainMenu : MonoBehaviour
 				}
 				else if (m_PlayerManager.IsLocalPlayerJoining(localNetClient, localPlayerInput) == false)
 				{
-					bool isAuthority = (Network.isServer || Network.isClient == false);
+					bool isAuthority = m_NetworkManager.IsNetworkAuthorithy();
 					//@FIXME handle the case where the RPC call to server got lost/discarded?
 					m_PlayerManager.AddLocalPlayerToJoin(localNetClient, localPlayerInput, isAuthority);
 				}
@@ -173,7 +173,7 @@ public class MainMenu : MonoBehaviour
 				}
 				else if (m_PlayerManager.IsLocalPlayerJoining(localNetClient, localPlayerInput) == false)
 				{
-					bool isAuthority = (Network.isServer || Network.isClient == false);
+					bool isAuthority = m_NetworkManager.IsNetworkAuthorithy();
 					System.Diagnostics.Debug.Assert(isAuthority == false);
 					//@FIXME handle the case where the RPC call to server got lost/discarded?
 					m_PlayerManager.AddLocalPlayerToJoin(localNetClient, localPlayerInput, isAuthority);

@@ -26,6 +26,8 @@ public class NetworkManager : MonoBehaviour
 	
 	public NetworkPlayer GetLocalNetClient() { return Network.player; }
 	
+	public bool IsNetworkAuthorithy() { return (Network.isServer || (Network.isClient == false)); }
+	
 	public void StartServer(NetworkServer.ServerConnectionDelegate _ClientConnectedDelegate, NetworkServer.ServerConnectionDelegate _ClientDisconnectedDelegate)
 	{
 		System.Diagnostics.Debug.Assert( GetServer() == null );
