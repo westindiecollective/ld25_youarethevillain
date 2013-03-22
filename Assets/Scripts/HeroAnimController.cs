@@ -5,6 +5,9 @@ using System.Collections.Generic;
 public class HeroAnimController : CharacterAnimController
 {
 	public CharacterAnimAction[] m_SupportedAnimActions;
+	public string[] m_baseAnimatorStates;
+	
+	int[] m_baseAnimatorStateIds = null;
 
 	Animator m_Animator = null;
 	GameCharacterController m_GameCharacterController = null;
@@ -45,6 +48,15 @@ public class HeroAnimController : CharacterAnimController
 		{
 			CharacterAnimAction action = m_SupportedAnimActions[actionIndex];
 			action.InitParamId();
+		}
+		
+		int animStateCount = m_baseAnimatorStates.Length;
+		
+		m_baseAnimatorStateIds = new int[animStateCount];
+		for (int animStateIndex = 0; animStateIndex < animStateCount; ++animStateIndex)
+		{
+			int animStateId = Animator.StringToHash(m_baseAnimatorStates[animStateIndex]);
+			m_baseAnimatorStateIds[animStateIndex] = animStateId;
 		}
 
 		m_SpeedId = Animator.StringToHash("Speed");
@@ -138,48 +150,49 @@ public class HeroAnimController : CharacterAnimController
 			_GameCharacterController.UpdateCollisionCenter(center);
 		}
 		
-		float height = _BaseCollisionHeight * _Animator.GetFloat(m_CollisionHeightScaleCurveId);
-		_GameCharacterController.UpdateCollisionHeight(height);
-	}
-
-	public override bool IsJumping()
-	{
-		AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
-		bool isJumping = stateInfo.IsName("Base Layer.Jump");
-
-		AnimatorStateInfo nextStateInfo = m_Animator.GetNextAnimatorStateInfo(0);
-		bool isGoingToJump = nextStateInfo.IsName("Base Layer.Jump");
-
-		return (isJumping || isGoingToJump);
-	}
-
-	public override bool IsRunning()
-	{
-		AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
-		bool isRunning = stateInfo.IsName("Base Layer.Run");
-
-		return isRunning;
-	}
-
-	public override bool IsThrowing()
-	{
-		AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
-		bool isThrowing = stateInfo.IsName("Base Layer.Throw");
-
-		return isThrowing;
+		//float height = _BaseCollisionHeight * _Animator.GetFloat(m_CollisionHeightScaleCurveId);
+		//_GameCharacterController.UpdateCollisionHeight(height);
 	}
 	
-	public override bool CanOrientationBeModified()
+	public override bool IsInAction()
 	{
-		AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(0);
-		bool isRunning = stateInfo.IsName("Base Layer.Run");
-		bool isIdle = stateInfo.IsName("Base Layer.Idle");
+		int actionAnimLayerIndex = 0;
+		
+		AnimatorStateInfo stateInfo = m_Animator.GetCurrentAnimatorStateInfo(actionAnimLayerIndex);
+		int currentAnimStateId = stateInfo.nameHash;
+		
+		bool isInBaseAnimState = false;
+		foreach(int baseAnimStateId in m_baseAnimatorStateIds)
+		{
+			if (currentAnimStateId == baseAnimStateId)
+			{
+				isInBaseAnimState = true;
+				break;
+			}
+		}
+		
+		//bool isRunning = stateInfo.IsName("Base Layer.Run");
+		//bool isIdle = stateInfo.IsName("Base Layer.Idle");
 
-		AnimatorStateInfo nextStateInfo = m_Animator.GetNextAnimatorStateInfo(0);
-		bool isGoingToJump = nextStateInfo.IsName("Base Layer.Jump");
-		bool isGoingToDive = nextStateInfo.IsName("Base Layer.Dive");
-		bool isGoingToVault = nextStateInfo.IsName("Base Layer.Vault");
+		AnimatorStateInfo nextStateInfo = m_Animator.GetNextAnimatorStateInfo(actionAnimLayerIndex);
+		int nextAnimStateId = nextStateInfo.nameHash;
+		
+		bool willBeInBaseAnimState = isInBaseAnimState;
+		
+		bool hasNextAnimState = (nextAnimStateId != 0);
+		if (hasNextAnimState)
+		{
+			willBeInBaseAnimState = false;
+			foreach(int baseAnimStateId in m_baseAnimatorStateIds)
+			{
+				if (nextAnimStateId == baseAnimStateId)
+				{
+					willBeInBaseAnimState = true;
+					break;
+				}
+			}
+		}
 
-		return (isRunning || isIdle) && !(isGoingToJump || isGoingToDive || isGoingToVault);
+		return (isInBaseAnimState == false) || (willBeInBaseAnimState == false);
 	}
 }

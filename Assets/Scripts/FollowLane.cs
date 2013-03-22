@@ -131,7 +131,7 @@ public class FollowLane : MonoBehaviour
 		//@HACK: since jump anims aren't perfectly aligned/straight,
 		//correcting player orientation during a jump anim introduce visible anim jigger artifacts
 		CharacterAnimController animComponent = GetComponent<CharacterAnimController>();
-		bool canModifyOrientation = (animComponent != null && animComponent.CanOrientationBeModified());
+		bool canModifyOrientation = ((animComponent != null) && (animComponent.IsInAction() == false));
 		bool updateFollowLane = (m_LaneCount > 0) && canModifyOrientation;
 
 		if (updateFollowLane)

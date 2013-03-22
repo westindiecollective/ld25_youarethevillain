@@ -35,6 +35,17 @@ public class GamePlayerController : GameCharacterController
 	{
 		return m_InputLeftRigthDirection;
 	}
+	
+	//overriding inputs can be used for network sync
+	public override void OverrideInputSpeed(float _InputSpeed)
+	{
+		m_InputSpeed = _InputSpeed;
+	}
+	
+	public override void OverrideInputLeftRightDirection(float _InputLeftRigthDirection)
+	{
+		m_InputLeftRigthDirection = _InputLeftRigthDirection;
+	}
 
 	public override Vector3 GetPosition()
 	{
@@ -131,6 +142,20 @@ public class GamePlayerController : GameCharacterController
 	public override List<CharacterActionType> GetActions()
 	{
 		return m_Actions;
+	}
+	
+	//overriding inputs can be used for network sync
+	public override void OverrideActions(List<CharacterActionType> _actions)
+	{
+		ClearActions();
+		
+		if (_actions != null)
+		{
+			foreach(CharacterActionType action in _actions)
+			{
+				m_Actions.Add(action);	
+			}
+		}
 	}
 
 	void InitActions()

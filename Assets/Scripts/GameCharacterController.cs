@@ -44,6 +44,11 @@ public abstract class GameCharacterController : MonoBehaviour
 	public abstract void DisableAction(CharacterActionType _Action);
 	public abstract List<CharacterActionType> GetActions();
 	public abstract void TriggerPendingAction(CharacterActionType _Action);
+	
+	//overriding inputs can be used for network sync
+	public abstract void OverrideInputSpeed(float _InputSpeed);
+	public abstract void OverrideInputLeftRightDirection(float _InputLeftRightDirection);
+	public abstract void OverrideActions(List<CharacterActionType> _actions);
 
 	public abstract void HandleHit();
 

@@ -13,6 +13,9 @@ public class GameAIFollowController : GameCharacterController
 	public int m_UpdatePathFrameFrequency = 1;
 	int m_FrameCountSinceLastPath = 0;
 	NavMeshAgent m_NavAgent = null;
+	
+	float m_InputSpeed = 0.0f;
+	float m_InputLeftRigthDirection = 0.0f;
 
 	//@FIXME: duplicated code from GamePlayerController
 	public CharacterAction[] m_SupportedActions;
@@ -31,16 +34,39 @@ public class GameAIFollowController : GameCharacterController
 
 	public override float GetInputSpeed()
 	{
-		return m_NavAgent? m_FollowSpeed : 0.0f;
+		return m_InputSpeed;
 	}
 
 	public override float GetInputLeftRightDirection()
 	{
-		Vector3 desiredForwardDir = (m_NavAgent && m_NavAgent.hasPath)? Vector3.Normalize(m_NavAgent.path.corners[1] - gameObject.transform.position) : Vector3.zero;
-		Vector3 rightDir = m_FollowRightDir;
+		return m_InputLeftRigthDirection;
+	}
+	
+	private void UpdateInputSpeed(NavMeshAgent _NavAgent, float _FollowSpeed)
+	{
+		System.Diagnostics.Debug.Assert(_NavAgent != null && _NavAgent.hasPath);
+		m_InputSpeed = _FollowSpeed;
+	}
+	
+	private void UpdateInputLeftRightDirection(NavMeshAgent _NavAgent, Vector3 _FollowRightDir, Vector3 _CurrentPosition)
+	{
+		System.Diagnostics.Debug.Assert(_NavAgent != null && _NavAgent.hasPath);
+		Vector3 desiredForwardDir = Vector3.Normalize(_NavAgent.path.corners[1] - _CurrentPosition);
+		Vector3 rightDir = _FollowRightDir;
 		float leftRightDir = Vector3.Dot(desiredForwardDir, rightDir);
-
-		return leftRightDir;
+		
+		m_InputLeftRigthDirection = leftRightDir;
+	}
+	
+	//overriding inputs can be used for network sync
+	public override void OverrideInputSpeed(float _InputSpeed)
+	{
+		m_InputSpeed = _InputSpeed;
+	}
+	
+	public override void OverrideInputLeftRightDirection(float _InputLeftRigthDirection)
+	{
+		m_InputLeftRigthDirection = _InputLeftRigthDirection;
 	}
 
 	void UpdateFollowDir( Vector3 _followUpDir, Vector3 _followForwardDir)
@@ -143,6 +169,17 @@ public class GameAIFollowController : GameCharacterController
 	{
 		return m_Actions;	//new List<CharacterActionType>();
 	}
+	
+	//overriding inputs can be used for network sync
+	public override void OverrideActions(List<CharacterActionType> _actions)
+	{
+		m_Actions.Clear();
+		
+		foreach(CharacterActionType action in _actions)
+		{
+			m_Actions.Add(action);	
+		}
+	}
 
 	void InitActions()
 	{
@@ -199,6 +236,13 @@ public class GameAIFollowController : GameCharacterController
 				}
 			}
 #endif
+			bool validNavData = m_NavAgent.hasPath;
+			if (validNavData)
+			{
+				UpdateInputSpeed(m_NavAgent, m_FollowSpeed);
+				UpdateInputLeftRightDirection(m_NavAgent, m_FollowRightDir, gameObject.transform.position);
+			}
+			
 			++m_FrameCountSinceLastPath;
 			bool updatePath = (m_FrameCountSinceLastPath >= m_UpdatePathFrameFrequency) && CanUpdatePath();
 			if (updatePath)

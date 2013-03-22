@@ -20,12 +20,6 @@ public abstract class CharacterAnimController : AnimationController
 			return m_AnimParamId;
 		}
 	}
-
-	public abstract bool IsJumping();
-
-	public abstract bool IsRunning();
-
-	public abstract bool IsThrowing();
 	
-	public abstract bool CanOrientationBeModified();
+	public abstract bool IsInAction();
 }
