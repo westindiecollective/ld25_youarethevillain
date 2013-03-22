@@ -62,6 +62,8 @@ public class GameChase : MonoBehaviour
 		if (m_NetworkManager.GetServer() != null)
 		{
 			m_IsGameAuthority = true;
+			//NetworkViewID authorityViewID = Network.AllocateViewID();
+			//SetGameAuthorityViewID(authorityViewID);
 		}
 		else if (m_NetworkManager.GetClient() != null)
 		{
@@ -236,12 +238,16 @@ public class GameChase : MonoBehaviour
 	[RPC]
 	void PlayerIsWaitingAuthority(NetworkPlayer _NetClient, NetworkViewID _NetViewID)
 	{
+		//NetworkViewID authorityViewID = networkView.viewID;
+		
 		Player playerWaiting = m_PlayerManager.FindPlayer(_NetViewID);
 		if (playerWaiting != null && playerWaiting.m_PlayerInstance == null)
 		{
 			if (m_WaitingPlayers.Contains(playerWaiting) == false)
 			{
 				m_WaitingPlayers.Add(playerWaiting);
+				
+				//networkView.RPC("SetGameAuthorityViewID", _NetClient, authorityViewID);
 			}
 			else
 			{
@@ -254,6 +260,13 @@ public class GameChase : MonoBehaviour
 			//maybe somehow check it's from a player that left / disconnected?
 			Debug.Log("Trying to add a player waiting which isn't listed/connected anymore!");
 		}
+	}
+	
+	[RPC]
+	void SetGameAuthorityViewID(NetworkViewID _NetViewID)
+	{
+		NetworkView netView = GetComponent<NetworkView>();
+		netView.viewID = _NetViewID;
 	}
 	
 	void PrepareForStartAuthority()
@@ -300,15 +313,30 @@ public class GameChase : MonoBehaviour
 	{
 		ChangeGameState(GameState.E_GamePlaying);
 		
-		bool isNetworkGame = IsNetworkGame();
-		if (isNetworkGame)
+		NetworkPlayer localNetClient = m_NetworkManager.GetLocalNetClient();
+			
+		List<NetworkPlayer> netClients = new List<NetworkPlayer>();
+		
+		List<Player> players = m_PlayerManager.GetPlayers();
+		foreach (Player player in players)
 		{
-			networkView.RPC("StartGame", RPCMode.All);
+			bool playerSpawned = (player.m_PlayerInstance != null);
+			bool netClientNotListed = (netClients.Contains(player.m_NetClient) == false);
+			bool notAuthority = (player.m_NetClient != localNetClient);
+			if (playerSpawned && netClientNotListed && notAuthority)
+			{
+				netClients.Add(player.m_NetClient);	
+			}
 		}
-		else
+		
+		StartGame();
+		
+		foreach(NetworkPlayer netClient in netClients)
 		{
-			StartGame();
+			networkView.RPC("StartGame", netClient);
 		}
+		
+		netClients.Clear();
 	}
 	
 	[RPC]
@@ -558,7 +586,31 @@ public class GameChase : MonoBehaviour
 		
 		int waitingPlayerCount = waitingPlayers.Count;
 		if (waitingPlayerCount > 0)
-		{		
+		{
+			NetworkPlayer localNetClient = m_NetworkManager.GetLocalNetClient();
+			
+			List<NetworkPlayer> netClients = new List<NetworkPlayer>();
+			foreach (Player player in players)
+			{
+				bool playerSpawned = (player.m_PlayerInstance != null);
+				bool netClientNotListed = (netClients.Contains(player.m_NetClient) == false);
+				bool notAuthority = (player.m_NetClient != localNetClient);
+				if (playerSpawned && netClientNotListed && notAuthority)
+				{
+					netClients.Add(player.m_NetClient);	
+				}
+			}
+			
+			foreach (Player waitingPlayer in m_WaitingPlayers)
+			{
+				bool netClientNotListed = (netClients.Contains(waitingPlayer.m_NetClient) == false);
+				bool notAuthority = (waitingPlayer.m_NetClient != localNetClient);
+				if (netClientNotListed && notAuthority)
+				{
+					netClients.Add(waitingPlayer.m_NetClient);	
+				}
+			}
+			
 			int villainCount = 0;
 			
 			foreach (Player player in players)
@@ -583,8 +635,14 @@ public class GameChase : MonoBehaviour
 					Transform spawnTransform = spawner.gameObject.transform;
 					int spawnTypeInt = (int)spawnType;
 					
+					//Spawn on authority
 					SpawnPlayer(waitingPlayer.m_NetViewID, spawnTypeInt, spawnTransform.position, spawnTransform.rotation);
-					networkView.RPC("SpawnPlayer", RPCMode.Others, waitingPlayer.m_NetViewID, spawnTypeInt, spawnTransform.position, spawnTransform.rotation);
+					
+					foreach(NetworkPlayer netClient in netClients)
+					{
+						networkView.RPC("SpawnPlayer", netClient, waitingPlayer.m_NetViewID, spawnTypeInt, spawnTransform.position, spawnTransform.rotation);
+					}
+					
 					villainCount = spawnVillain? villainCount+1 : villainCount;
 				}
 				else
@@ -592,6 +650,8 @@ public class GameChase : MonoBehaviour
 					Debug.Log("Failed to spawn player " + waitingPlayer.m_NetViewID.ToString() + ": coudln't find spawner for character type " + spawnType.ToString());	
 				}
 			}
+			
+			netClients.Clear();
 		}
 	}
 	
